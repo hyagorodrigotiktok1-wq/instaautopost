@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InstaAutoPost</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
+  --text:#e6edf3;--text2:#8b949e;--accent:#7c3aed;--accent2:#6d28d9;
+  --ok:#3fb950;--warn:#d29922;--err:#f85149;--info:#58a6ff;
+  --radius:10px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--info);text-decoration:none}
+
+/* NAV */
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:12px;height:56px;position:sticky;top:0;z-index:50}
+.nav h1{font-size:18px;font-weight:700;white-space:nowrap}
+.nav h1 span{color:var(--accent)}
+.nav-tabs{display:flex;gap:4px;margin-left:auto;overflow-x:auto}
+.nav-tab{background:none;border:none;color:var(--text2);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;white-space:nowrap;transition:.15s}
+.nav-tab:hover{color:var(--text);background:var(--bg3)}
+.nav-tab.active{color:var(--accent);background:rgba(124,58,237,.12)}
+
+/* LAYOUT */
+.container{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+.page{display:none}.page.active{display:block}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h2{font-size:16px;margin-bottom:12px}
+.card h3{font-size:14px;color:var(--text2);margin-bottom:8px}
+
+/* FORM */
+label{display:block;font-size:13px;color:var(--text2);margin-bottom:4px;margin-top:12px}
+label:first-child{margin-top:0}
+input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+textarea{resize:vertical;min-height:80px}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b949e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent2)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg3);color:var(--text)}
+.btn-danger{background:var(--err);color:#fff}.btn-danger:hover{background:#da3633}
+.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.badge{display:inline-block;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.badge-pending{background:rgba(88,166,255,.15);color:var(--info)}
+.badge-posted{background:rgba(63,185,80,.15);color:var(--ok)}
+.badge-failed{background:rgba(248,81,73,.15);color:var(--err)}
+.badge-processing{background:rgba(210,153,34,.15);color:var(--warn)}
+
+/* QUEUE */
+.post-item{display:flex;gap:12px;padding:14px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;background:var(--bg2);transition:.15s;align-items:flex-start}
+.post-item:hover{border-color:var(--accent);background:rgba(124,58,237,.04)}
+.post-info{flex:1;min-width:0}
+.post-caption{font-size:14px;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.post-meta{font-size:12px;color:var(--text2);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.post-actions{display:flex;gap:6px;flex-shrink:0}
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty svg{margin-bottom:12px;opacity:.4}
+.empty p{font-size:14px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.stat-value{font-size:28px;font-weight:700}
+.stat-label{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* SETUP */
+.step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.step-content{flex:1;font-size:14px;line-height:1.6}
+.step-content code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:13px}
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.alert-info{background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.2);color:var(--info)}
+.alert-warn{background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.2);color:var(--warn)}
+.alert-ok{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);color:var(--ok)}
+
+/* TOAST */
+.toast-container{position:fixed;top:68px;right:16px;z-index:100;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500;animation:slideIn .2s;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.toast-ok{background:var(--ok);color:#fff}
+.toast-err{background:var(--err);color:#fff}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:.15s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(124,58,237,.1)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .nav{padding:0 10px}.nav h1{font-size:15px}
+  .nav-tab{padding:6px 10px;font-size:13px}
+  .container{padding:14px 10px 80px}
+  .post-item{flex-direction:column}
+  .post-actions{align-self:flex-end}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <h1><span>Insta</span>AutoPost</h1>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-page="queue">Fila</button>
+    <button class="nav-tab" data-page="new">+ Novo</button>
+    <button class="nav-tab" data-page="setup">Config</button>
+  </div>
+</nav>
+
+<div class="toast-container" id="toasts"></div>
+
+<div class="container">
+
+  <!-- ==================== QUEUE ==================== -->
+  <div class="page active" id="page-queue">
+    <div class="stats" id="stats">
+      <div class="stat"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total</div></div>
+      <div class="stat"><div class="stat-value" id="stat-pending" style="color:var(--info)">0</div><div class="stat-label">Pendentes</div></div>
+      <div class="stat"><div class="stat-value" id="stat-posted" style="color:var(--ok)">0</div><div class="stat-label">Postados</div></div>
+      <div class="stat"><div class="stat-value" id="stat-failed" style="color:var(--err)">0</div><div class="stat-label">Falhas</div></div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="pending">Pendentes</button>
+      <button class="filter-btn" data-filter="posted">Postados</button>
+      <button class="filter-btn" data-filter="failed">Falhas</button>
+    </div>
+
+    <div id="post-list"></div>
+  </div>
+
+  <!-- ==================== NEW POST ==================== -->
+  <div class="page" id="page-new">
+    <div class="card">
+      <h2>Novo Reel</h2>
+
+      <label for="f-account">Conta</label>
+      <select id="f-account">
+        <option value="default">default</option>
+      </select>
+
+      <label for="f-video">URL do video</label>
+      <input id="f-video" type="url" placeholder="https://... (link publico do video)">
+      <div style="font-size:11px;color:var(--text2);margin-top:4px">Google Drive, Dropbox, Cloudflare R2, ou qualquer link direto para o .mp4</div>
+
+      <label for="f-caption">Legenda</label>
+      <textarea id="f-caption" rows="4" placeholder="Sua legenda aqui..."></textarea>
+
+      <label for="f-hashtags">Hashtags</label>
+      <input id="f-hashtags" placeholder="#exemplo #reels #viral">
+
+      <label for="f-cover">URL da capa (opcional)</label>
+      <input id="f-cover" type="url" placeholder="https://... (imagem .jpg/.png)">
+
+      <label for="f-date">Data e hora de publicacao</label>
+      <input id="f-date" type="datetime-local">
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="addPost()">Agendar Reel</button>
+      </div>
+    </div>
+
+    <!-- EDIT MODAL (reuses same form area) -->
+    <div class="card" id="edit-card" style="display:none">
+      <h2>Editar Reel</h2>
+
+      <label for="e-video">URL do video</label>
+      <input id="e-video" type="url">
+
+      <label for="e-caption">Legenda</label>
+      <textarea id="e-caption" rows="4"></textarea>
+
+      <label for="e-hashtags">Hashtags</label>
+      <input id="e-hashtags">
+
+      <label for="e-cover">URL da capa (opcional)</label>
+      <input id="e-cover" type="url">
+
+      <label for="e-date">Data e hora</label>
+      <input id="e-date" type="datetime-local">
+
+      <input type="hidden" id="e-id">
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveEdit()">Salvar</button>
+        <button class="btn btn-ghost" onclick="cancelEdit()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SETUP ==================== -->
+  <div class="page" id="page-setup">
+
+    <div class="card">
+      <h2>1. Conectar ao GitHub</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">O dashboard salva os posts no seu repositorio via GitHub API.</p>
+
+      <label for="s-token">GitHub Personal Access Token</label>
+      <input id="s-token" type="password" placeholder="ghp_xxxxxxxxxxxx">
+      <div style="font-size:11px;color:var(--text2);margin-top:4px">
+        Crie em <a href="https://github.com/settings/tokens?type=beta" target="_blank">github.com/settings/tokens</a> com permissao <code>Contents: Read and write</code>
+      </div>
+
+      <label for="s-repo">Repositorio (dono/nome)</label>
+      <input id="s-repo" placeholder="seu-usuario/instaautopost">
+
+      <label for="s-branch">Branch</label>
+      <input id="s-branch" placeholder="main" value="main">
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveConfig()">Salvar e Conectar</button>
+        <button class="btn btn-ghost" onclick="testConnection()">Testar Conexao</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Configurar o Instagram</h2>
+      <div class="alert alert-info">Cada conta do Instagram precisa ser Business ou Creator e estar conectada a uma Pagina do Facebook.</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">Acesse <a href="https://developers.facebook.com" target="_blank">developers.facebook.com</a> e crie um App do tipo <strong>Business</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">No App, adicione o produto <strong>Instagram Graph API</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">Em <strong>Graph API Explorer</strong>, gere um token com as permissoes:<br><code>instagram_basic</code> <code>instagram_content_publish</code> <code>pages_read_engagement</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">Troque o token de curta duracao por um <strong>Long-Lived Token</strong> (dura 60 dias):<br>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id={APP_ID}&client_secret={APP_SECRET}&fb_exchange_token={SHORT_TOKEN}</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">Descubra seu <strong>Instagram User ID</strong>:<br>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/me/accounts?access_token={TOKEN}</code><br>
+        Pegue o <code>id</code> da Pagina, depois:<br>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/{PAGE_ID}?fields=instagram_business_account&access_token={TOKEN}</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">No seu repositorio GitHub, va em <strong>Settings > Secrets > Actions</strong> e adicione:
+          <ul style="margin-top:6px;padding-left:20px">
+            <li><code>INSTAGRAM_ACCESS_TOKEN</code> = seu token</li>
+            <li><code>INSTAGRAM_USER_ID</code> = seu user ID</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert alert-warn" style="margin-top:16px">O token expira em 60 dias. Coloque um lembrete pra renovar! Futuramente podemos adicionar auto-refresh.</div>
+    </div>
+
+    <div class="card">
+      <h2>3. Contas extras (opcional)</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:8px">Para mais contas, adicione secrets neste formato:</p>
+      <div style="background:var(--bg);padding:12px;border-radius:8px;font-size:12px;font-family:monospace;line-height:1.8">
+        INSTA_ACCOUNT_<strong>MINHACONTA</strong>_TOKEN<br>
+        INSTA_ACCOUNT_<strong>MINHACONTA</strong>_USER_ID
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-top:8px">Depois selecione o nome da conta (ex: "minhaconta") ao agendar um post.</p>
+
+      <label for="s-accounts" style="margin-top:16px">Nomes das contas (separados por virgula)</label>
+      <input id="s-accounts" placeholder="default, conta2, conta3">
+      <div style="font-size:11px;color:var(--text2);margin-top:4px">Isso atualiza o dropdown de contas no formulario de novo post.</div>
+      <div class="btn-row">
+        <button class="btn btn-ghost btn-sm" onclick="saveAccounts()">Salvar Contas</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Sobre</h2>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6">
+        <strong>InstaAutoPost</strong> e uma ferramenta gratuita que agenda e publica Reels no Instagram automaticamente via GitHub Actions + Instagram Graph API.<br><br>
+        Custo: R$ 0,00 (GitHub Actions gratuito para repositorios publicos).<br>
+        O workflow roda a cada 30 minutos e publica os Reels agendados.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const POSTS_PATH = 'data/posts.json';
+let posts = [];
+let fileSha = null;
+let currentFilter = 'all';
+
+// ===== CONFIG =====
+
+function getConfig() {
+  return JSON.parse(localStorage.getItem('iap_config') || '{}');
+}
+
+function saveConfig() {
+  const cfg = {
+    token: document.getElementById('s-token').value.trim(),
+    repo: document.getElementById('s-repo').value.trim(),
+    branch: document.getElementById('s-branch').value.trim() || 'main',
+  };
+  if (!cfg.token || !cfg.repo) return toast('Preencha token e repositorio', 'err');
+  localStorage.setItem('iap_config', JSON.stringify(cfg));
+  toast('Configuracao salva!', 'ok');
+  loadPosts();
+}
+
+function loadConfig() {
+  const cfg = getConfig();
+  if (cfg.token) document.getElementById('s-token').value = cfg.token;
+  if (cfg.repo) document.getElementById('s-repo').value = cfg.repo;
+  if (cfg.branch) document.getElementById('s-branch').value = cfg.branch;
+
+  const accs = JSON.parse(localStorage.getItem('iap_accounts') || '["default"]');
+  updateAccountDropdown(accs);
+  document.getElementById('s-accounts').value = accs.join(', ');
+}
+
+function saveAccounts() {
+  const raw = document.getElementById('s-accounts').value;
+  const accs = raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  if (!accs.length) accs.push('default');
+  localStorage.setItem('iap_accounts', JSON.stringify(accs));
+  updateAccountDropdown(accs);
+  toast('Contas atualizadas', 'ok');
+}
+
+function updateAccountDropdown(accs) {
+  const sel = document.getElementById('f-account');
+  sel.innerHTML = accs.map(a => `<option value="${a}">${a}</option>`).join('');
+}
+
+// ===== GITHUB API =====
+
+async function ghFetch(path, opts = {}) {
+  const cfg = getConfig();
+  if (!cfg.token || !cfg.repo) throw new Error('Configure o GitHub primeiro (aba Config)');
+  const url = `https://api.github.com/repos/${cfg.repo}/contents/${path}?ref=${cfg.branch || 'main'}`;
+  const res = await fetch(url, {
+    ...opts,
+    headers: {
+      'Authorization': `Bearer ${cfg.token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub API ${res.status}`);
+  }
+  return res.json();
+}
+
+async function loadPosts() {
+  try {
+    const data = await ghFetch(POSTS_PATH);
+    fileSha = data.sha;
+    posts = JSON.parse(atob(data.content));
+    renderQueue();
+    renderStats();
+  } catch (e) {
+    if (e.message.includes('Configure')) {
+      document.getElementById('post-list').innerHTML = `<div class="empty"><p>Configure a conexao com o GitHub na aba <strong>Config</strong> para comecar.</p></div>`;
+    } else {
+      toast('Erro ao carregar: ' + e.message, 'err');
+    }
+  }
+}
+
+async function savePosts() {
+  const cfg = getConfig();
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+  const url = `https://api.github.com/repos/${cfg.repo}/contents/${POSTS_PATH}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${cfg.token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: 'update queue [dashboard]',
+      content,
+      sha: fileSha,
+      branch: cfg.branch || 'main',
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Save failed ${res.status}`);
+  }
+  const result = await res.json();
+  fileSha = result.content.sha;
+}
+
+async function testConnection() {
+  try {
+    saveConfig();
+    const cfg = getConfig();
+    const res = await fetch(`https://api.github.com/repos/${cfg.repo}`, {
+      headers: { 'Authorization': `Bearer ${cfg.token}` },
+    });
+    if (res.ok) {
+      toast('Conexao OK! Repositorio encontrado.', 'ok');
+    } else {
+      toast('Falha: repositorio nao encontrado ou token invalido', 'err');
+    }
+  } catch (e) {
+    toast('Erro: ' + e.message, 'err');
+  }
+}
+
+// ===== POSTS =====
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+async function addPost() {
+  const video = document.getElementById('f-video').value.trim();
+  const caption = document.getElementById('f-caption').value.trim();
+  const dateVal = document.getElementById('f-date').value;
+
+  if (!video) return toast('Informe a URL do video', 'err');
+  if (!caption) return toast('Escreva uma legenda', 'err');
+  if (!dateVal) return toast('Selecione data e hora', 'err');
+
+  const post = {
+    id: uid(),
+    account: document.getElementById('f-account').value,
+    video_url: video,
+    caption,
+    hashtags: document.getElementById('f-hashtags').value.trim(),
+    cover_url: document.getElementById('f-cover').value.trim() || null,
+    scheduled_at: new Date(dateVal).toISOString(),
+    status: 'pending',
+    posted_at: null,
+    media_id: null,
+    error: null,
+  };
+
+  posts.push(post);
+  posts.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+
+  try {
+    await savePosts();
+    toast('Reel agendado!', 'ok');
+    document.getElementById('f-video').value = '';
+    document.getElementById('f-caption').value = '';
+    document.getElementById('f-hashtags').value = '';
+    document.getElementById('f-cover').value = '';
+    document.getElementById('f-date').value = '';
+    switchPage('queue');
+    renderQueue();
+    renderStats();
+  } catch (e) {
+    posts.pop();
+    toast('Erro ao salvar: ' + e.message, 'err');
+  }
+}
+
+function editPost(id) {
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+
+  switchPage('new');
+  document.getElementById('edit-card').style.display = 'block';
+  document.getElementById('e-id').value = id;
+  document.getElementById('e-video').value = post.video_url;
+  document.getElementById('e-caption').value = post.caption;
+  document.getElementById('e-hashtags').value = post.hashtags || '';
+  document.getElementById('e-cover').value = post.cover_url || '';
+
+  const d = new Date(post.scheduled_at);
+  const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  document.getElementById('e-date').value = local;
+}
+
+async function saveEdit() {
+  const id = document.getElementById('e-id').value;
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+
+  post.video_url = document.getElementById('e-video').value.trim();
+  post.caption = document.getElementById('e-caption').value.trim();
+  post.hashtags = document.getElementById('e-hashtags').value.trim();
+  post.cover_url = document.getElementById('e-cover').value.trim() || null;
+  post.scheduled_at = new Date(document.getElementById('e-date').value).toISOString();
+
+  try {
+    await savePosts();
+    toast('Post atualizado!', 'ok');
+    cancelEdit();
+    switchPage('queue');
+    renderQueue();
+    renderStats();
+  } catch (e) {
+    toast('Erro: ' + e.message, 'err');
+  }
+}
+
+function cancelEdit() {
+  document.getElementById('edit-card').style.display = 'none';
+}
+
+async function deletePost(id) {
+  if (!confirm('Remover este post da fila?')) return;
+  posts = posts.filter(p => p.id !== id);
+  try {
+    await savePosts();
+    toast('Removido', 'ok');
+    renderQueue();
+    renderStats();
+  } catch (e) {
+    toast('Erro: ' + e.message, 'err');
+  }
+}
+
+async function retryPost(id) {
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+  post.status = 'pending';
+  post.error = null;
+  post.scheduled_at = new Date().toISOString();
+  try {
+    await savePosts();
+    toast('Reagendado para agora', 'ok');
+    renderQueue();
+    renderStats();
+  } catch (e) {
+    toast('Erro: ' + e.message, 'err');
+  }
+}
+
+// ===== RENDER =====
+
+function renderStats() {
+  document.getElementById('stat-total').textContent = posts.length;
+  document.getElementById('stat-pending').textContent = posts.filter(p => p.status === 'pending').length;
+  document.getElementById('stat-posted').textContent = posts.filter(p => p.status === 'posted').length;
+  document.getElementById('stat-failed').textContent = posts.filter(p => p.status === 'failed').length;
+}
+
+function renderQueue() {
+  const list = document.getElementById('post-list');
+  let filtered = currentFilter === 'all' ? posts : posts.filter(p => p.status === currentFilter);
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4m0 4h.01"/></svg>
+      <p>${currentFilter === 'all' ? 'Nenhum post na fila. Clique em <strong>+ Novo</strong> para comecar.' : 'Nenhum post com este status.'}</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(post => {
+    const d = new Date(post.scheduled_at);
+    const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const statusClass = `badge-${post.status}`;
+
+    const actions = post.status === 'pending'
+      ? `<button class="btn btn-ghost btn-sm" onclick="editPost('${post.id}')">Editar</button>
+         <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
+      : post.status === 'failed'
+      ? `<button class="btn btn-ghost btn-sm" onclick="retryPost('${post.id}')">Tentar de novo</button>
+         <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
+      : `<button class="btn btn-ghost btn-sm" onclick="deletePost('${post.id}')">X</button>`;
+
+    return `<div class="post-item">
+      <div class="post-info">
+        <div class="post-caption">${esc(post.caption)}</div>
+        <div class="post-meta">
+          <span class="badge ${statusClass}">${post.status}</span>
+          <span>${dateStr}</span>
+          <span>@${post.account || 'default'}</span>
+          ${post.error ? `<span style="color:var(--err)" title="${esc(post.error)}">Erro</span>` : ''}
+        </div>
+      </div>
+      <div class="post-actions">${actions}</div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+// ===== UI =====
+
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelector(`[data-page="${name}"]`).classList.add('active');
+}
+
+function toast(msg, type = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+// NAV
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchPage(tab.dataset.page));
+});
+
+// FILTERS
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderQueue();
+  });
+});
+
+// SET DEFAULT DATE TO NOW + 1h
+function setDefaultDate() {
+  const now = new Date();
+  now.setHours(now.getHours() + 1, 0, 0, 0);
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  document.getElementById('f-date').value = local;
+}
+
+// INIT
+loadConfig();
+loadPosts();
+setDefaultDate();
+</script>
+</body>
+</html>
