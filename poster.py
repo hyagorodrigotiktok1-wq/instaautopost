@@ -12,6 +12,12 @@ DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "po
 
 def get_accounts():
     accounts = {}
+
+    token = os.environ.get("INSTAGRAM_ACCESS_TOKEN")
+    uid = os.environ.get("INSTAGRAM_USER_ID")
+    if token and uid:
+        accounts["default"] = {"token": token, "user_id": uid}
+
     prefix = "INSTA_ACCOUNT_"
     for key in os.environ:
         if key.startswith(prefix) and key.endswith("_TOKEN"):
@@ -20,12 +26,6 @@ def get_accounts():
             uid = os.environ.get(uid_key)
             if uid:
                 accounts[name] = {"token": os.environ[key], "user_id": uid}
-
-    if not accounts:
-        token = os.environ.get("INSTAGRAM_ACCESS_TOKEN")
-        uid = os.environ.get("INSTAGRAM_USER_ID")
-        if token and uid:
-            accounts["default"] = {"token": token, "user_id": uid}
 
     return accounts
 
