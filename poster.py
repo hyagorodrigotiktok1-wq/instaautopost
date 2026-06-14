@@ -85,19 +85,28 @@ def main():
         print("No Instagram accounts configured. Set INSTAGRAM_ACCESS_TOKEN + INSTAGRAM_USER_ID as secrets.")
         return
 
-    now = datetime.now(timezone.utc)
+    WAIT_WINDOW = 900  # wait up to 15 min for upcoming posts
+
     modified = False
     posted_count = 0
 
-    for post in posts:
-        if post.get("status") != "pending":
-            continue
+    pending = [p for p in posts if p.get("status") == "pending"]
+    pending.sort(key=lambda p: p["scheduled_at"])
 
+    for post in pending:
         scheduled = datetime.fromisoformat(post["scheduled_at"])
         if scheduled.tzinfo is None:
             scheduled = scheduled.replace(tzinfo=timezone.utc)
-        if scheduled > now:
+
+        now = datetime.now(timezone.utc)
+        diff = (scheduled - now).total_seconds()
+
+        if diff > WAIT_WINDOW:
             continue
+
+        if diff > 0:
+            print(f"[WAIT] {post['id']} scheduled in {int(diff)}s, waiting...")
+            time.sleep(diff)
 
         account_name = post.get("account", "default")
         if account_name not in accounts:
