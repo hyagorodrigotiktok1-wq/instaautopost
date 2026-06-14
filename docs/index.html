@@ -635,6 +635,36 @@ function resetUploadZone() {
   bar.style.background = 'var(--accent)';
 }
 
+// ===== TIMEZONE (BRT = UTC-3) =====
+const BRT_OFFSET = -3;
+
+function brtToUTC(dateTimeLocalStr) {
+  const [datePart, timePart] = dateTimeLocalStr.split('T');
+  return new Date(dateTimeLocalStr + ':00.000Z').getTime() - BRT_OFFSET * 3600000;
+}
+
+function localInputToISO(dateTimeLocalStr) {
+  const ms = brtToUTC(dateTimeLocalStr);
+  return new Date(ms).toISOString();
+}
+
+function utcToBRTInput(isoStr) {
+  const d = new Date(isoStr);
+  const brt = new Date(d.getTime() + BRT_OFFSET * 3600000);
+  return brt.toISOString().slice(0, 16);
+}
+
+function utcToBRTDisplay(isoStr) {
+  const d = new Date(isoStr);
+  const brt = new Date(d.getTime() + BRT_OFFSET * 3600000);
+  const dd = String(brt.getUTCDate()).padStart(2, '0');
+  const mm = String(brt.getUTCMonth() + 1).padStart(2, '0');
+  const yy = String(brt.getUTCFullYear()).slice(2);
+  const hh = String(brt.getUTCHours()).padStart(2, '0');
+  const mi = String(brt.getUTCMinutes()).padStart(2, '0');
+  return `${dd}/${mm}/${yy}, ${hh}:${mi}`;
+}
+
 // ===== POSTS =====
 
 function uid() {
@@ -657,7 +687,7 @@ async function addPost() {
     caption,
     hashtags: document.getElementById('f-hashtags').value.trim(),
     cover_url: document.getElementById('f-cover').value.trim() || null,
-    scheduled_at: new Date(dateVal).toISOString(),
+    scheduled_at: localInputToISO(dateVal),
     status: 'pending',
     posted_at: null,
     media_id: null,
@@ -697,9 +727,7 @@ function editPost(id) {
   document.getElementById('e-hashtags').value = post.hashtags || '';
   document.getElementById('e-cover').value = post.cover_url || '';
 
-  const d = new Date(post.scheduled_at);
-  const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-  document.getElementById('e-date').value = local;
+  document.getElementById('e-date').value = utcToBRTInput(post.scheduled_at);
 }
 
 async function saveEdit() {
@@ -711,7 +739,7 @@ async function saveEdit() {
   post.caption = document.getElementById('e-caption').value.trim();
   post.hashtags = document.getElementById('e-hashtags').value.trim();
   post.cover_url = document.getElementById('e-cover').value.trim() || null;
-  post.scheduled_at = new Date(document.getElementById('e-date').value).toISOString();
+  post.scheduled_at = localInputToISO(document.getElementById('e-date').value);
 
   try {
     await savePosts();
@@ -780,8 +808,7 @@ function renderQueue() {
   }
 
   list.innerHTML = filtered.map(post => {
-    const d = new Date(post.scheduled_at);
-    const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const dateStr = utcToBRTDisplay(post.scheduled_at);
     const statusClass = `badge-${post.status}`;
 
     const actions = post.status === 'pending'
@@ -848,9 +875,9 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // SET DEFAULT DATE TO NOW + 1h
 function setDefaultDate() {
   const now = new Date();
-  now.setHours(now.getHours() + 1, 0, 0, 0);
-  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-  document.getElementById('f-date').value = local;
+  now.setTime(now.getTime() + 3600000);
+  now.setMinutes(0, 0, 0);
+  document.getElementById('f-date').value = utcToBRTInput(now.toISOString());
 }
 
 // INIT
