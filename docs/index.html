@@ -460,28 +460,54 @@ async function loadPosts() {
 
 async function savePosts() {
   const cfg = getConfig();
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
   const url = `https://api.github.com/repos/${cfg.repo}/contents/${POSTS_PATH}`;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${cfg.token}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      message: 'update queue [dashboard]',
-      content,
-      sha: fileSha,
-      branch: cfg.branch || 'main',
-    }),
-  });
-  if (!res.ok) {
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) {
+      const freshData = await ghFetch(POSTS_PATH);
+      fileSha = freshData.sha;
+      const remotePosts = JSON.parse(atob(freshData.content));
+      const localIds = new Set(remotePosts.map(p => p.id));
+      for (const p of posts) {
+        if (!localIds.has(p.id)) remotePosts.push(p);
+        else {
+          const idx = remotePosts.findIndex(r => r.id === p.id);
+          if (idx !== -1) remotePosts[idx] = p;
+        }
+      }
+      posts = remotePosts;
+      posts.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+    }
+
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: 'update queue [dashboard]',
+        content,
+        sha: fileSha,
+        branch: cfg.branch || 'main',
+      }),
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+      fileSha = result.content.sha;
+      renderQueue();
+      renderStats();
+      return;
+    }
+
+    if (res.status === 409 && attempt < 2) continue;
+
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || `Save failed ${res.status}`);
   }
-  const result = await res.json();
-  fileSha = result.content.sha;
 }
 
 async function testConnection() {
