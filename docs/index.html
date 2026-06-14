@@ -89,6 +89,21 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:.15s}
 .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(124,58,237,.1)}
 
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:8px}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:rgba(124,58,237,.06)}
+.upload-zone.uploading{pointer-events:none;opacity:.7}
+.upload-zone svg{margin-bottom:8px;opacity:.5}
+.upload-zone p{font-size:13px;color:var(--text2)}
+.upload-zone .file-name{font-size:12px;color:var(--accent);margin-top:6px;word-break:break-all}
+.upload-progress{height:4px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden;display:none}
+.upload-progress.active{display:block}
+.upload-progress-bar{height:100%;background:var(--accent);border-radius:2px;width:0;transition:width .3s}
+.upload-status{font-size:11px;color:var(--text2);margin-top:4px;display:none}
+.upload-status.active{display:block}
+.divider{display:flex;align-items:center;gap:12px;margin:12px 0;font-size:12px;color:var(--text2)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   .nav{padding:0 10px}.nav h1{font-size:15px}
@@ -144,9 +159,21 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <option value="default">default</option>
       </select>
 
+      <label>Video</label>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('f-file').click()">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p id="upload-label">Arraste o video aqui ou clique para selecionar</p>
+        <div class="file-name" id="upload-filename"></div>
+        <input type="file" id="f-file" accept="video/*" style="display:none">
+      </div>
+      <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-bar"></div></div>
+      <div class="upload-status" id="upload-status"></div>
+
+      <div class="divider">ou cole a URL diretamente</div>
+
       <label for="f-video">URL do video</label>
       <input id="f-video" type="url" placeholder="https://... (link publico do video)">
-      <div style="font-size:11px;color:var(--text2);margin-top:4px">Google Drive, Dropbox, Cloudflare R2, ou qualquer link direto para o .mp4</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px">Se ja tem o link do video, cole aqui. Senao, use o upload acima.</div>
 
       <label for="f-caption">Legenda</label>
       <textarea id="f-caption" rows="4" placeholder="Sua legenda aqui..."></textarea>
@@ -219,7 +246,29 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     </div>
 
     <div class="card">
-      <h2>2. Configurar o Instagram</h2>
+      <h2>2. Cloudinary (upload de videos)</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Permite fazer upload de videos direto do seu computador. Gratuito ate 25GB.</p>
+
+      <label for="s-cloud-name">Cloud Name</label>
+      <input id="s-cloud-name" placeholder="seu-cloud-name">
+
+      <label for="s-upload-preset">Upload Preset (unsigned)</label>
+      <input id="s-upload-preset" placeholder="nome-do-preset">
+
+      <div style="font-size:11px;color:var(--text2);margin-top:8px;line-height:1.6">
+        1. Crie uma conta gratis em <a href="https://cloudinary.com/users/register_free" target="_blank">cloudinary.com</a><br>
+        2. O <strong>Cloud Name</strong> aparece no Dashboard logo apos o login<br>
+        3. Va em <strong>Settings > Upload > Upload presets</strong> e crie um preset com <strong>Signing Mode: Unsigned</strong>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveCloudinary()">Salvar Cloudinary</button>
+        <button class="btn btn-ghost" onclick="testCloudinary()">Testar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Configurar o Instagram</h2>
       <div class="alert alert-info">Cada conta do Instagram precisa ser Business ou Creator e estar conectada a uma Pagina do Facebook.</div>
 
       <div class="step">
@@ -260,7 +309,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     </div>
 
     <div class="card">
-      <h2>3. Contas extras (opcional)</h2>
+      <h2>4. Contas extras (opcional)</h2>
       <p style="font-size:13px;color:var(--text2);margin-bottom:8px">Para mais contas, adicione secrets neste formato:</p>
       <div style="background:var(--bg);padding:12px;border-radius:8px;font-size:12px;font-family:monospace;line-height:1.8">
         INSTA_ACCOUNT_<strong>MINHACONTA</strong>_TOKEN<br>
@@ -300,6 +349,10 @@ function getConfig() {
   return JSON.parse(localStorage.getItem('iap_config') || '{}');
 }
 
+function getCloudConfig() {
+  return JSON.parse(localStorage.getItem('iap_cloudinary') || '{}');
+}
+
 function saveConfig() {
   const cfg = {
     token: document.getElementById('s-token').value.trim(),
@@ -312,11 +365,41 @@ function saveConfig() {
   loadPosts();
 }
 
+function saveCloudinary() {
+  const cloud = {
+    cloudName: document.getElementById('s-cloud-name').value.trim(),
+    uploadPreset: document.getElementById('s-upload-preset').value.trim(),
+  };
+  if (!cloud.cloudName || !cloud.uploadPreset) return toast('Preencha Cloud Name e Upload Preset', 'err');
+  localStorage.setItem('iap_cloudinary', JSON.stringify(cloud));
+  toast('Cloudinary salvo!', 'ok');
+}
+
+async function testCloudinary() {
+  saveCloudinary();
+  const cloud = getCloudConfig();
+  if (!cloud.cloudName) return;
+  try {
+    const res = await fetch(`https://res.cloudinary.com/${cloud.cloudName}/image/upload/sample.jpg`, { method: 'HEAD' });
+    if (res.ok) {
+      toast('Cloudinary OK! Cloud Name valido.', 'ok');
+    } else {
+      toast('Cloud Name nao encontrado. Verifique.', 'err');
+    }
+  } catch (e) {
+    toast('Erro ao testar: ' + e.message, 'err');
+  }
+}
+
 function loadConfig() {
   const cfg = getConfig();
   if (cfg.token) document.getElementById('s-token').value = cfg.token;
   if (cfg.repo) document.getElementById('s-repo').value = cfg.repo;
   if (cfg.branch) document.getElementById('s-branch').value = cfg.branch;
+
+  const cloud = getCloudConfig();
+  if (cloud.cloudName) document.getElementById('s-cloud-name').value = cloud.cloudName;
+  if (cloud.uploadPreset) document.getElementById('s-upload-preset').value = cloud.uploadPreset;
 
   const accs = JSON.parse(localStorage.getItem('iap_accounts') || '["default"]');
   updateAccountDropdown(accs);
@@ -418,6 +501,114 @@ async function testConnection() {
   }
 }
 
+// ===== CLOUDINARY UPLOAD =====
+
+let uploadedVideoUrl = null;
+
+function initUploadZone() {
+  const zone = document.getElementById('upload-zone');
+  const fileInput = document.getElementById('f-file');
+
+  ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('dragover'); }));
+  ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('dragover'); }));
+
+  zone.addEventListener('drop', e => {
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('video/')) handleFileSelect(file);
+    else toast('Selecione um arquivo de video', 'err');
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFileSelect(fileInput.files[0]);
+  });
+}
+
+function handleFileSelect(file) {
+  const maxSize = 500 * 1024 * 1024; // 500MB
+  if (file.size > maxSize) return toast('Video muito grande (max 500MB)', 'err');
+
+  const cloud = getCloudConfig();
+  if (!cloud.cloudName || !cloud.uploadPreset) {
+    toast('Configure o Cloudinary primeiro (aba Config)', 'err');
+    return;
+  }
+
+  document.getElementById('upload-filename').textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+  uploadToCloudinary(file, cloud);
+}
+
+function uploadToCloudinary(file, cloud) {
+  const zone = document.getElementById('upload-zone');
+  const progressDiv = document.getElementById('upload-progress');
+  const bar = document.getElementById('upload-bar');
+  const status = document.getElementById('upload-status');
+
+  zone.classList.add('uploading');
+  progressDiv.classList.add('active');
+  status.classList.add('active');
+  bar.style.width = '0%';
+  status.textContent = 'Enviando para Cloudinary...';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', cloud.uploadPreset);
+  formData.append('resource_type', 'video');
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud.cloudName}/video/upload`);
+
+  xhr.upload.addEventListener('progress', e => {
+    if (e.lengthComputable) {
+      const pct = Math.round((e.loaded / e.total) * 100);
+      bar.style.width = pct + '%';
+      status.textContent = `Enviando... ${pct}% (${(e.loaded / 1024 / 1024).toFixed(1)} / ${(e.total / 1024 / 1024).toFixed(1)} MB)`;
+    }
+  });
+
+  xhr.addEventListener('load', () => {
+    zone.classList.remove('uploading');
+    if (xhr.status >= 200 && xhr.status < 300) {
+      const data = JSON.parse(xhr.responseText);
+      uploadedVideoUrl = data.secure_url;
+      document.getElementById('f-video').value = data.secure_url;
+      bar.style.width = '100%';
+      bar.style.background = 'var(--ok)';
+      status.textContent = 'Upload concluido!';
+      document.getElementById('upload-label').textContent = 'Video enviado! Clique para trocar';
+      toast('Video enviado com sucesso!', 'ok');
+    } else {
+      let msg = 'Erro no upload';
+      try { msg = JSON.parse(xhr.responseText).error.message; } catch {}
+      bar.style.background = 'var(--err)';
+      status.textContent = 'Falha: ' + msg;
+      toast('Erro no upload: ' + msg, 'err');
+    }
+  });
+
+  xhr.addEventListener('error', () => {
+    zone.classList.remove('uploading');
+    bar.style.background = 'var(--err)';
+    status.textContent = 'Erro de rede';
+    toast('Erro de rede ao enviar video', 'err');
+  });
+
+  xhr.send(formData);
+}
+
+function resetUploadZone() {
+  uploadedVideoUrl = null;
+  document.getElementById('f-file').value = '';
+  document.getElementById('upload-filename').textContent = '';
+  document.getElementById('upload-label').textContent = 'Arraste o video aqui ou clique para selecionar';
+  const progressDiv = document.getElementById('upload-progress');
+  const bar = document.getElementById('upload-bar');
+  const status = document.getElementById('upload-status');
+  progressDiv.classList.remove('active');
+  status.classList.remove('active');
+  bar.style.width = '0%';
+  bar.style.background = 'var(--accent)';
+}
+
 // ===== POSTS =====
 
 function uid() {
@@ -458,6 +649,7 @@ async function addPost() {
     document.getElementById('f-hashtags').value = '';
     document.getElementById('f-cover').value = '';
     document.getElementById('f-date').value = '';
+    resetUploadZone();
     switchPage('queue');
     renderQueue();
     renderStats();
@@ -639,6 +831,7 @@ function setDefaultDate() {
 loadConfig();
 loadPosts();
 setDefaultDate();
+initUploadZone();
 </script>
 </body>
 </html>
