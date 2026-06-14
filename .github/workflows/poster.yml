@@ -24,6 +24,8 @@ jobs:
         env:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTA_ACCOUNT_CONSERVADORA_TOKEN: ${{ secrets.INSTA_ACCOUNT_CONSERVADORA_TOKEN }}
+          INSTA_ACCOUNT_CONSERVADORA_USER_ID: ${{ secrets.INSTA_ACCOUNT_CONSERVADORA_USER_ID }}
 
       - name: Commit status updates
         run: |
