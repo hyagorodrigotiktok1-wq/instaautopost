@@ -85,8 +85,7 @@ def main():
         print("No Instagram accounts configured. Set INSTAGRAM_ACCESS_TOKEN + INSTAGRAM_USER_ID as secrets.")
         return
 
-    WAIT_WINDOW = 10800  # wait up to 3h for upcoming posts
-    JOB_MAX = 18000      # hard stop after 5h to stay under GitHub's 6h limit
+    JOB_MAX = 18000  # hard stop after 5h to stay under GitHub's 6h limit
 
     job_start = time.time()
     modified = False
@@ -96,10 +95,6 @@ def main():
     pending.sort(key=lambda p: p["scheduled_at"])
 
     for post in pending:
-        if time.time() - job_start > JOB_MAX:
-            print("[STOP] Job time limit reached, leaving remaining posts for next run.")
-            break
-
         scheduled = datetime.fromisoformat(post["scheduled_at"])
         if scheduled.tzinfo is None:
             scheduled = scheduled.replace(tzinfo=timezone.utc)
@@ -107,11 +102,16 @@ def main():
         now = datetime.now(timezone.utc)
         diff = (scheduled - now).total_seconds()
 
-        if diff > WAIT_WINDOW:
-            continue
+        if diff > 0 and (time.time() - job_start + diff) > JOB_MAX:
+            print(f"[STOP] Not enough time left for {post['id']} (in {int(diff//60)}min). Next run will handle it.")
+            break
 
         if diff > 0:
             print(f"[WAIT] {post['id']} scheduled in {int(diff)}s ({int(diff//60)}min), waiting...")
+            if modified:
+                with open(DATA_FILE, "w", encoding="utf-8") as f:
+                    json.dump(posts, f, ensure_ascii=False, indent=2)
+                print("[SAVE] Saved progress before waiting.")
             time.sleep(diff)
 
         account_name = post.get("account", "default")
