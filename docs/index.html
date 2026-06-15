@@ -104,6 +104,49 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .divider{display:flex;align-items:center;gap:12px;margin:12px 0;font-size:12px;color:var(--text2)}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* THUMBNAIL */
+.post-thumb{width:64px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+
+/* CALENDAR */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav{display:flex;gap:8px;align-items:center}
+.cal-nav button{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+.cal-nav button:hover{border-color:var(--accent)}
+.cal-nav span{font-size:15px;font-weight:600;min-width:180px;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day-header{text-align:center;font-size:11px;color:var(--text2);padding:8px 0;font-weight:600;text-transform:uppercase}
+.cal-day{min-height:100px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:6px;font-size:11px}
+.cal-day.today{border-color:var(--accent)}
+.cal-day.other-month{opacity:.4}
+.cal-day-num{font-weight:600;margin-bottom:4px;font-size:12px}
+.cal-post{background:var(--bg3);border-radius:4px;padding:3px 5px;margin-bottom:3px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.cal-post.posted{border-left:2px solid var(--ok)}
+.cal-post.pending{border-left:2px solid var(--info)}
+.cal-post.failed{border-left:2px solid var(--err)}
+
+/* BULK */
+.bulk-files{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:300px;overflow-y:auto}
+.bulk-file{display:flex;align-items:center;gap:10px;background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--border);font-size:13px}
+.bulk-file .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bulk-file .size{color:var(--text2);font-size:11px;flex-shrink:0}
+.bulk-file .remove{color:var(--err);cursor:pointer;background:none;border:none;font-size:16px;padding:0 4px}
+.bulk-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.bulk-preview-item{display:flex;gap:8px;align-items:center;padding:8px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:12px}
+.bulk-preview-item .num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* LOGS */
+.log-entry{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.log-time{font-size:13px;font-weight:600}
+.log-badges{display:flex;gap:6px}
+.log-badge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.log-badge-ok{background:rgba(63,185,80,.15);color:var(--ok)}
+.log-badge-err{background:rgba(248,81,73,.15);color:var(--err)}
+.log-badge-skip{background:rgba(88,166,255,.15);color:var(--info)}
+.log-details{font-size:12px;color:var(--text2);font-family:monospace;line-height:1.6;margin-top:8px;max-height:0;overflow:hidden;transition:max-height .3s}
+.log-details.open{max-height:500px}
+.log-toggle{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;margin-top:6px}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   .nav{padding:0 10px}.nav h1{font-size:15px}
@@ -112,6 +155,11 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   .post-item{flex-direction:column}
   .post-actions{align-self:flex-end}
   .stats{grid-template-columns:repeat(2,1fr)}
+  .cal-day{min-height:60px;padding:3px;font-size:9px}
+  .cal-day-num{font-size:10px}
+  .cal-post{font-size:8px;padding:2px 3px}
+  .cal-header{flex-direction:column;gap:8px}
+  .bulk-settings{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -121,7 +169,10 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   <h1><span>Insta</span>AutoPost</h1>
   <div class="nav-tabs">
     <button class="nav-tab active" data-page="queue">Fila</button>
+    <button class="nav-tab" data-page="calendar">Calendario</button>
     <button class="nav-tab" data-page="new">+ Novo</button>
+    <button class="nav-tab" data-page="bulk">Em Massa</button>
+    <button class="nav-tab" data-page="logs">Logs</button>
     <button class="nav-tab" data-page="setup">Config</button>
   </div>
 </nav>
@@ -147,6 +198,21 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     </div>
 
     <div id="post-list"></div>
+  </div>
+
+  <!-- ==================== CALENDAR ==================== -->
+  <div class="page" id="page-calendar">
+    <div class="card">
+      <div class="cal-header">
+        <h2>Calendario</h2>
+        <div class="cal-nav">
+          <button onclick="calNav(-1)">&larr;</button>
+          <span id="cal-month-label"></span>
+          <button onclick="calNav(1)">&rarr;</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
   </div>
 
   <!-- ==================== NEW POST ==================== -->
@@ -216,6 +282,74 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="btn-row">
         <button class="btn btn-primary" onclick="saveEdit()">Salvar</button>
         <button class="btn btn-ghost" onclick="cancelEdit()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BULK ==================== -->
+  <div class="page" id="page-bulk">
+    <div class="card">
+      <h2>Agendamento em Massa</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Selecione varios videos e defina o intervalo entre as publicacoes.</p>
+
+      <label for="b-account">Conta</label>
+      <select id="b-account">
+        <option value="default">default</option>
+      </select>
+
+      <label>Videos</label>
+      <div class="upload-zone" id="bulk-upload-zone" onclick="document.getElementById('b-files').click()">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Arraste videos aqui ou clique para selecionar (multiplos)</p>
+        <input type="file" id="b-files" accept="video/*" multiple style="display:none">
+      </div>
+      <div id="bulk-file-list" class="bulk-files"></div>
+
+      <div class="bulk-settings">
+        <div>
+          <label for="b-start-date">Primeiro post em</label>
+          <input id="b-start-date" type="datetime-local">
+        </div>
+        <div>
+          <label for="b-interval">Intervalo entre posts</label>
+          <select id="b-interval">
+            <option value="60">1 hora</option>
+            <option value="120">2 horas</option>
+            <option value="180">3 horas</option>
+            <option value="360">6 horas</option>
+            <option value="720">12 horas</option>
+            <option value="1440" selected>1 dia</option>
+            <option value="2880">2 dias</option>
+            <option value="4320">3 dias</option>
+            <option value="10080">1 semana</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="b-caption">Legenda padrao (opcional)</label>
+      <textarea id="b-caption" rows="3" placeholder="Legenda aplicada a todos os videos (pode editar individualmente depois)"></textarea>
+
+      <label for="b-hashtags">Hashtags padrao (opcional)</label>
+      <input id="b-hashtags" placeholder="#exemplo #reels">
+
+      <div id="bulk-preview" style="margin-top:16px"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="bulkSchedule()" id="bulk-schedule-btn" disabled>Agendar Todos</button>
+        <button class="btn btn-ghost" onclick="bulkClear()">Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGS ==================== -->
+  <div class="page" id="page-logs">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2>Historico de Execucoes</h2>
+        <button class="btn btn-ghost btn-sm" onclick="loadLogs()">Atualizar</button>
+      </div>
+      <div id="logs-list">
+        <div class="empty"><p>Carregando logs...</p></div>
       </div>
     </div>
   </div>
@@ -416,8 +550,10 @@ function saveAccounts() {
 }
 
 function updateAccountDropdown(accs) {
-  const sel = document.getElementById('f-account');
-  sel.innerHTML = accs.map(a => `<option value="${a}">${a}</option>`).join('');
+  const opts = accs.map(a => `<option value="${a}">${a}</option>`).join('');
+  document.getElementById('f-account').innerHTML = opts;
+  const bulk = document.getElementById('b-account');
+  if (bulk) bulk.innerHTML = opts;
 }
 
 // ===== GITHUB API =====
@@ -449,6 +585,7 @@ async function loadPosts() {
     posts = JSON.parse(decodeURIComponent(escape(atob(data.content))));
     renderQueue();
     renderStats();
+    renderCalendar();
   } catch (e) {
     if (e.message.includes('Configure')) {
       document.getElementById('post-list').innerHTML = `<div class="empty"><p>Configure a conexao com o GitHub na aba <strong>Config</strong> para comecar.</p></div>`;
@@ -500,6 +637,7 @@ async function savePosts() {
       fileSha = result.content.sha;
       renderQueue();
       renderStats();
+      renderCalendar();
       return;
     }
 
@@ -819,7 +957,9 @@ function renderQueue() {
          <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
       : `<button class="btn btn-ghost btn-sm" onclick="deletePost('${post.id}')">X</button>`;
 
+    const thumb = getVideoThumb(post.video_url);
     return `<div class="post-item">
+      ${thumb ? `<img class="post-thumb" src="${thumb}" alt="" onerror="this.style.display='none'" loading="lazy">` : ''}
       <div class="post-info">
         <div class="post-caption">${esc(post.caption)}</div>
         <div class="post-meta">
@@ -838,6 +978,305 @@ function esc(s) {
   const d = document.createElement('div');
   d.textContent = s || '';
   return d.innerHTML;
+}
+
+// ===== VIDEO THUMBNAIL =====
+
+function getVideoThumb(url) {
+  if (!url || !url.includes('cloudinary.com') || !url.includes('/video/upload/')) return '';
+  return url.replace('/video/upload/', '/video/upload/w_64,h_80,c_fill,so_1/').replace(/\.\w+$/, '.jpg');
+}
+
+// ===== CALENDAR =====
+
+let calDate = new Date();
+
+function calNav(delta) {
+  calDate.setMonth(calDate.getMonth() + delta);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  const label = document.getElementById('cal-month-label');
+  const months = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
+  label.textContent = `${months[month]} ${year}`;
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  const startDate = new Date(year, month, 1 - firstDay);
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+  for (let i = 0; i < totalCells; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+    const isOther = d.getMonth() !== month;
+    const isToday = d.toDateString() === today.toDateString();
+
+    const dayPosts = posts.filter(p => {
+      const pd = new Date(new Date(p.scheduled_at).getTime() + (-3) * 3600000);
+      return pd.getUTCFullYear() === d.getFullYear() && pd.getUTCMonth() === d.getMonth() && pd.getUTCDate() === d.getDate();
+    });
+
+    const postsHtml = dayPosts.slice(0, 3).map(p => {
+      const time = utcToBRTDisplay(p.scheduled_at).split(', ')[1];
+      return `<div class="cal-post ${p.status}" title="${esc(p.caption)}" onclick="editPost('${p.id}')">${time} ${esc((p.caption||'').slice(0,15))}</div>`;
+    }).join('');
+    const more = dayPosts.length > 3 ? `<div style="font-size:10px;color:var(--text2)">+${dayPosts.length - 3} mais</div>` : '';
+
+    html += `<div class="cal-day${isToday ? ' today' : ''}${isOther ? ' other-month' : ''}">
+      <div class="cal-day-num">${d.getDate()}</div>
+      ${postsHtml}${more}
+    </div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+// ===== BULK SCHEDULING =====
+
+let bulkFiles = [];
+let bulkUploadedUrls = [];
+
+function initBulkUpload() {
+  const zone = document.getElementById('bulk-upload-zone');
+  const fileInput = document.getElementById('b-files');
+
+  ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('dragover'); }));
+  ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('dragover'); }));
+
+  zone.addEventListener('drop', e => {
+    const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('video/'));
+    if (files.length) addBulkFiles(files);
+    else toast('Selecione arquivos de video', 'err');
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) addBulkFiles([...fileInput.files]);
+    fileInput.value = '';
+  });
+
+  const startInput = document.getElementById('b-start-date');
+  const now = new Date();
+  now.setTime(now.getTime() + 3600000);
+  now.setMinutes(0, 0, 0);
+  startInput.value = utcToBRTInput(now.toISOString());
+
+  document.getElementById('b-start-date').addEventListener('change', renderBulkPreview);
+  document.getElementById('b-interval').addEventListener('change', renderBulkPreview);
+}
+
+function addBulkFiles(files) {
+  for (const f of files) {
+    if (f.size > 500 * 1024 * 1024) { toast(`${f.name} muito grande (max 500MB)`, 'err'); continue; }
+    bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false });
+  }
+  renderBulkFileList();
+  renderBulkPreview();
+  document.getElementById('bulk-schedule-btn').disabled = true;
+  uploadBulkFiles();
+}
+
+function removeBulkFile(idx) {
+  bulkFiles.splice(idx, 1);
+  renderBulkFileList();
+  renderBulkPreview();
+  checkBulkReady();
+}
+
+function renderBulkFileList() {
+  const list = document.getElementById('bulk-file-list');
+  if (!bulkFiles.length) { list.innerHTML = ''; return; }
+  list.innerHTML = bulkFiles.map((f, i) => `<div class="bulk-file">
+    <span class="name">${esc(f.name)}</span>
+    <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
+    <span style="font-size:11px;color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
+    <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
+  </div>`).join('');
+}
+
+function renderBulkPreview() {
+  const preview = document.getElementById('bulk-preview');
+  if (!bulkFiles.length) { preview.innerHTML = ''; return; }
+
+  const startVal = document.getElementById('b-start-date').value;
+  const interval = parseInt(document.getElementById('b-interval').value);
+  if (!startVal) { preview.innerHTML = ''; return; }
+
+  const startMs = brtToUTC(startVal);
+  let html = '<h3 style="font-size:13px;color:var(--text2);margin-bottom:8px">Previsao de agendamento:</h3>';
+
+  bulkFiles.forEach((f, i) => {
+    const postTime = new Date(startMs + i * interval * 60000);
+    const brt = new Date(postTime.getTime() + (-3) * 3600000);
+    const dd = String(brt.getUTCDate()).padStart(2, '0');
+    const mm = String(brt.getUTCMonth() + 1).padStart(2, '0');
+    const hh = String(brt.getUTCHours()).padStart(2, '0');
+    const mi = String(brt.getUTCMinutes()).padStart(2, '0');
+    html += `<div class="bulk-preview-item">
+      <div class="num">${i + 1}</div>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</span>
+      <span style="color:var(--accent);flex-shrink:0">${dd}/${mm} ${hh}:${mi}</span>
+    </div>`;
+  });
+
+  preview.innerHTML = html;
+}
+
+async function uploadBulkFiles() {
+  const cloud = getCloudConfig();
+  if (!cloud.cloudName || !cloud.uploadPreset) {
+    toast('Configure o Cloudinary primeiro (aba Config)', 'err');
+    return;
+  }
+
+  for (let i = 0; i < bulkFiles.length; i++) {
+    const bf = bulkFiles[i];
+    if (bf.done || bf.uploading) continue;
+
+    bf.uploading = true;
+    renderBulkFileList();
+
+    try {
+      const formData = new FormData();
+      formData.append('file', bf.file);
+      formData.append('upload_preset', cloud.uploadPreset);
+      formData.append('resource_type', 'video');
+
+      const resp = await fetch(`https://api.cloudinary.com/v1_1/${cloud.cloudName}/video/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!resp.ok) throw new Error('Upload failed');
+      const data = await resp.json();
+      bf.url = data.secure_url;
+      bf.done = true;
+      bf.uploading = false;
+    } catch (e) {
+      bf.uploading = false;
+      toast(`Erro ao enviar ${bf.name}: ${e.message}`, 'err');
+    }
+    renderBulkFileList();
+  }
+  checkBulkReady();
+}
+
+function checkBulkReady() {
+  const allDone = bulkFiles.length > 0 && bulkFiles.every(f => f.done);
+  document.getElementById('bulk-schedule-btn').disabled = !allDone;
+}
+
+async function bulkSchedule() {
+  const startVal = document.getElementById('b-start-date').value;
+  const interval = parseInt(document.getElementById('b-interval').value);
+  const caption = document.getElementById('b-caption').value.trim();
+  const hashtags = document.getElementById('b-hashtags').value.trim();
+  const account = document.getElementById('b-account').value;
+
+  if (!startVal) return toast('Selecione a data do primeiro post', 'err');
+  if (!bulkFiles.length) return toast('Adicione videos primeiro', 'err');
+  if (!bulkFiles.every(f => f.done)) return toast('Aguarde todos os uploads terminarem', 'err');
+
+  const startMs = brtToUTC(startVal);
+
+  for (let i = 0; i < bulkFiles.length; i++) {
+    const bf = bulkFiles[i];
+    const postTime = new Date(startMs + i * interval * 60000);
+    posts.push({
+      id: uid(),
+      account,
+      video_url: bf.url,
+      caption: caption || bf.name.replace(/\.\w+$/, ''),
+      hashtags,
+      cover_url: null,
+      scheduled_at: postTime.toISOString(),
+      status: 'pending',
+      posted_at: null,
+      media_id: null,
+      error: null,
+    });
+  }
+
+  posts.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+
+  try {
+    await savePosts();
+    toast(`${bulkFiles.length} posts agendados!`, 'ok');
+    bulkClear();
+    switchPage('queue');
+    renderQueue();
+    renderStats();
+    renderCalendar();
+  } catch (e) {
+    toast('Erro ao salvar: ' + e.message, 'err');
+  }
+}
+
+function bulkClear() {
+  bulkFiles = [];
+  document.getElementById('bulk-file-list').innerHTML = '';
+  document.getElementById('bulk-preview').innerHTML = '';
+  document.getElementById('b-caption').value = '';
+  document.getElementById('b-hashtags').value = '';
+  document.getElementById('bulk-schedule-btn').disabled = true;
+}
+
+// ===== LOGS =====
+
+const LOGS_PATH = 'data/logs.json';
+
+async function loadLogs() {
+  const list = document.getElementById('logs-list');
+  try {
+    const data = await ghFetch(LOGS_PATH);
+    const logs = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    renderLogs(logs);
+  } catch (e) {
+    if (e.message.includes('404') || e.message.includes('Not Found')) {
+      list.innerHTML = '<div class="empty"><p>Nenhum log encontrado ainda. Os logs aparecem apos a primeira execucao do workflow.</p></div>';
+    } else if (e.message.includes('Configure')) {
+      list.innerHTML = '<div class="empty"><p>Configure o GitHub na aba Config.</p></div>';
+    } else {
+      list.innerHTML = `<div class="empty"><p>Erro ao carregar logs: ${esc(e.message)}</p></div>`;
+    }
+  }
+}
+
+function renderLogs(logs) {
+  const list = document.getElementById('logs-list');
+  if (!logs.length) {
+    list.innerHTML = '<div class="empty"><p>Nenhum log encontrado ainda.</p></div>';
+    return;
+  }
+
+  list.innerHTML = logs.map((log, i) => {
+    const badges = [];
+    if (log.posted > 0) badges.push(`<span class="log-badge log-badge-ok">${log.posted} postado${log.posted > 1 ? 's' : ''}</span>`);
+    if (log.failed > 0) badges.push(`<span class="log-badge log-badge-err">${log.failed} falha${log.failed > 1 ? 's' : ''}</span>`);
+    if (log.skipped > 0) badges.push(`<span class="log-badge log-badge-skip">${log.skipped} aguardando</span>`);
+
+    const details = (log.details || []).map(d => esc(d)).join('<br>');
+    const hasDetails = log.details && log.details.length > 0;
+
+    return `<div class="log-entry">
+      <div class="log-header">
+        <span class="log-time">${esc(log.timestamp_brt || log.timestamp)}</span>
+        <div class="log-badges">${badges.join('')}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text2)">${log.total_pending ?? '?'} pendente${(log.total_pending ?? 0) !== 1 ? 's' : ''} restante${(log.total_pending ?? 0) !== 1 ? 's' : ''}</div>
+      ${hasDetails ? `<button class="log-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Esconder detalhes':'Ver detalhes'">Ver detalhes</button>
+      <div class="log-details">${details}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 // ===== UI =====
@@ -885,6 +1324,9 @@ loadConfig();
 loadPosts();
 setDefaultDate();
 initUploadZone();
+initBulkUpload();
+loadLogs();
+renderCalendar();
 </script>
 </body>
 </html>
