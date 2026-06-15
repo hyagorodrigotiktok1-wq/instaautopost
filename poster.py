@@ -85,8 +85,10 @@ def main():
         print("No Instagram accounts configured. Set INSTAGRAM_ACCESS_TOKEN + INSTAGRAM_USER_ID as secrets.")
         return
 
-    WAIT_WINDOW = 900  # wait up to 15 min for upcoming posts
+    WAIT_WINDOW = 10800  # wait up to 3h for upcoming posts
+    JOB_MAX = 18000      # hard stop after 5h to stay under GitHub's 6h limit
 
+    job_start = time.time()
     modified = False
     posted_count = 0
 
@@ -94,6 +96,10 @@ def main():
     pending.sort(key=lambda p: p["scheduled_at"])
 
     for post in pending:
+        if time.time() - job_start > JOB_MAX:
+            print("[STOP] Job time limit reached, leaving remaining posts for next run.")
+            break
+
         scheduled = datetime.fromisoformat(post["scheduled_at"])
         if scheduled.tzinfo is None:
             scheduled = scheduled.replace(tzinfo=timezone.utc)
@@ -105,7 +111,7 @@ def main():
             continue
 
         if diff > 0:
-            print(f"[WAIT] {post['id']} scheduled in {int(diff)}s, waiting...")
+            print(f"[WAIT] {post['id']} scheduled in {int(diff)}s ({int(diff//60)}min), waiting...")
             time.sleep(diff)
 
         account_name = post.get("account", "default")
