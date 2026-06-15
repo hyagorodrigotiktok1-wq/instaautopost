@@ -82,12 +82,10 @@ def main():
 
     accounts = get_accounts()
     if not accounts:
-        print("No Instagram accounts configured. Set INSTAGRAM_ACCESS_TOKEN + INSTAGRAM_USER_ID as secrets.")
+        print("No Instagram accounts configured.")
         return
 
-    JOB_MAX = 18000  # hard stop after 5h to stay under GitHub's 6h limit
-
-    job_start = time.time()
+    now = datetime.now(timezone.utc)
     modified = False
     posted_count = 0
 
@@ -99,20 +97,9 @@ def main():
         if scheduled.tzinfo is None:
             scheduled = scheduled.replace(tzinfo=timezone.utc)
 
-        now = datetime.now(timezone.utc)
-        diff = (scheduled - now).total_seconds()
-
-        if diff > 0 and (time.time() - job_start + diff) > JOB_MAX:
-            print(f"[STOP] Not enough time left for {post['id']} (in {int(diff//60)}min). Next run will handle it.")
-            break
-
-        if diff > 0:
-            print(f"[WAIT] {post['id']} scheduled in {int(diff)}s ({int(diff//60)}min), waiting...")
-            if modified:
-                with open(DATA_FILE, "w", encoding="utf-8") as f:
-                    json.dump(posts, f, ensure_ascii=False, indent=2)
-                print("[SAVE] Saved progress before waiting.")
-            time.sleep(diff)
+        if scheduled > now:
+            print(f"[SKIP] {post['id']} scheduled for later, next run will handle it.")
+            continue
 
         account_name = post.get("account", "default")
         if account_name not in accounts:
