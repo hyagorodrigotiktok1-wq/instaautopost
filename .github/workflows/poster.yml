@@ -3,6 +3,10 @@ name: Post Scheduled Reels
 on:
   workflow_dispatch:
 
+concurrency:
+  group: poster
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
