@@ -1,5 +1,21 @@
 [
   {
+    "timestamp": "2026-06-15T21:45:33.534595+00:00",
+    "timestamp_brt": "15/06/2026 18:45",
+    "posted": 0,
+    "failed": 0,
+    "skipped": 6,
+    "total_pending": 6,
+    "details": [
+      "[SKIP] mqf9gksey2l8m agendado para depois",
+      "[SKIP] mqf9h82ud5uqi agendado para depois",
+      "[SKIP] mqfmremg155at agendado para depois",
+      "[SKIP] mqfms5dm81v44 agendado para depois",
+      "[SKIP] mqfmxxx5qakn4 agendado para depois",
+      "[SKIP] mqfmylhmntxfq agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-15T21:30:34.999510+00:00",
     "timestamp_brt": "15/06/2026 18:30",
     "posted": 0,
