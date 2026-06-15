@@ -446,7 +446,7 @@ async function loadPosts() {
   try {
     const data = await ghFetch(POSTS_PATH);
     fileSha = data.sha;
-    posts = JSON.parse(atob(data.content));
+    posts = JSON.parse(decodeURIComponent(escape(atob(data.content))));
     renderQueue();
     renderStats();
   } catch (e) {
@@ -466,7 +466,7 @@ async function savePosts() {
     if (attempt > 0) {
       const freshData = await ghFetch(POSTS_PATH);
       fileSha = freshData.sha;
-      const remotePosts = JSON.parse(atob(freshData.content));
+      const remotePosts = JSON.parse(decodeURIComponent(escape(atob(freshData.content))));
       const localIds = new Set(remotePosts.map(p => p.id));
       for (const p of posts) {
         if (!localIds.has(p.id)) remotePosts.push(p);
