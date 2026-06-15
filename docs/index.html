@@ -130,6 +130,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .bulk-file .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bulk-file .size{color:var(--text2);font-size:11px;flex-shrink:0}
 .bulk-file .remove{color:var(--err);cursor:pointer;background:none;border:none;font-size:16px;padding:0 4px}
+.bulk-file-fields{margin-top:6px;display:flex;flex-direction:column;gap:4px}
+.bulk-file-fields textarea{min-height:50px;font-size:12px;padding:6px 8px}
+.bulk-file-fields input{font-size:12px;padding:6px 8px}
 .bulk-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .bulk-preview-item{display:flex;gap:8px;align-items:center;padding:8px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:12px}
 .bulk-preview-item .num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
@@ -325,12 +328,6 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           </select>
         </div>
       </div>
-
-      <label for="b-caption">Legenda padrao (opcional)</label>
-      <textarea id="b-caption" rows="3" placeholder="Legenda aplicada a todos os videos (pode editar individualmente depois)"></textarea>
-
-      <label for="b-hashtags">Hashtags padrao (opcional)</label>
-      <input id="b-hashtags" placeholder="#exemplo #reels">
 
       <div id="bulk-preview" style="margin-top:16px"></div>
 
@@ -1085,7 +1082,17 @@ function addBulkFiles(files) {
   uploadBulkFiles();
 }
 
+function saveBulkCaptions() {
+  bulkFiles.forEach((f, i) => {
+    const cap = document.getElementById(`b-cap-${i}`);
+    const hash = document.getElementById(`b-hash-${i}`);
+    if (cap) f.caption = cap.value;
+    if (hash) f.hashtags = hash.value;
+  });
+}
+
 function removeBulkFile(idx) {
+  saveBulkCaptions();
   bulkFiles.splice(idx, 1);
   renderBulkFileList();
   renderBulkPreview();
@@ -1095,11 +1102,18 @@ function removeBulkFile(idx) {
 function renderBulkFileList() {
   const list = document.getElementById('bulk-file-list');
   if (!bulkFiles.length) { list.innerHTML = ''; return; }
-  list.innerHTML = bulkFiles.map((f, i) => `<div class="bulk-file">
-    <span class="name">${esc(f.name)}</span>
-    <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
-    <span style="font-size:11px;color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
-    <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
+  list.innerHTML = bulkFiles.map((f, i) => `<div class="bulk-file" style="flex-direction:column;align-items:stretch">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-weight:600;color:var(--accent);flex-shrink:0">#${i+1}</span>
+      <span class="name">${esc(f.name)}</span>
+      <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
+      <span style="font-size:11px;color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
+      <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
+    </div>
+    <div class="bulk-file-fields">
+      <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="2">${esc(f.caption || '')}</textarea>
+      <input placeholder="#hashtags" id="b-hash-${i}" value="${esc(f.hashtags || '')}">
+    </div>
   </div>`).join('');
 }
 
@@ -1176,15 +1190,17 @@ function checkBulkReady() {
 }
 
 async function bulkSchedule() {
+  saveBulkCaptions();
   const startVal = document.getElementById('b-start-date').value;
   const interval = parseInt(document.getElementById('b-interval').value);
-  const caption = document.getElementById('b-caption').value.trim();
-  const hashtags = document.getElementById('b-hashtags').value.trim();
   const account = document.getElementById('b-account').value;
 
   if (!startVal) return toast('Selecione a data do primeiro post', 'err');
   if (!bulkFiles.length) return toast('Adicione videos primeiro', 'err');
   if (!bulkFiles.every(f => f.done)) return toast('Aguarde todos os uploads terminarem', 'err');
+
+  const missing = bulkFiles.some(f => !f.caption || !f.caption.trim());
+  if (missing) return toast('Preencha a legenda de todos os videos', 'err');
 
   const startMs = brtToUTC(startVal);
 
@@ -1195,8 +1211,8 @@ async function bulkSchedule() {
       id: uid(),
       account,
       video_url: bf.url,
-      caption: caption || bf.name.replace(/\.\w+$/, ''),
-      hashtags,
+      caption: bf.caption.trim(),
+      hashtags: (bf.hashtags || '').trim(),
       cover_url: null,
       scheduled_at: postTime.toISOString(),
       status: 'pending',
@@ -1225,8 +1241,6 @@ function bulkClear() {
   bulkFiles = [];
   document.getElementById('bulk-file-list').innerHTML = '';
   document.getElementById('bulk-preview').innerHTML = '';
-  document.getElementById('b-caption').value = '';
-  document.getElementById('b-hashtags').value = '';
   document.getElementById('bulk-schedule-btn').disabled = true;
 }
 
