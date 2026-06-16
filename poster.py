@@ -2,9 +2,9 @@ import os
 import json
 import time
 import base64
-import urllib.parse
 import requests
 from datetime import datetime, timezone, timedelta
+from utils import send_whatsapp
 
 try:
     from nacl.public import PublicKey, SealedBox
@@ -18,9 +18,11 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_FILE = os.path.join(DATA_DIR, "posts.json")
 LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
 ANALYTICS_FILE = os.path.join(DATA_DIR, "analytics.json")
+ARCHIVE_FILE = os.path.join(DATA_DIR, "archive.json")
 MAX_LOGS = 50
 MAX_RETRIES = 3
 COOLDOWN_MINUTES = 120
+ARCHIVE_DAYS = 30
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
 
 
@@ -39,25 +41,6 @@ def get_accounts():
             if uid:
                 accounts[name] = {"token": os.environ[key], "user_id": uid}
     return accounts
-
-
-def send_whatsapp(message):
-    phone = os.environ.get("CALLMEBOT_PHONE")
-    apikey = os.environ.get("CALLMEBOT_APIKEY")
-    if not phone or not apikey:
-        return False
-    try:
-        encoded = urllib.parse.quote_plus(message)
-        url = f"https://api.callmebot.com/whatsapp.php?phone={phone}&text={encoded}&apikey={apikey}"
-        resp = requests.get(url, timeout=15)
-        if resp.status_code == 200:
-            print("[WHATSAPP] Notificacao enviada")
-            return True
-        print(f"[WHATSAPP] Falha: {resp.status_code}")
-        return False
-    except Exception as e:
-        print(f"[WHATSAPP] Erro: {e}")
-        return False
 
 
 def check_token_health(account_name, token):
@@ -350,7 +333,6 @@ def check_viral_reels(analytics):
 # ===== SILENT FAILURE ALERT =====
 
 def check_missed_posts(posts, now):
-    brt = now + timedelta(hours=-3)
     missed = []
     for p in posts:
         if p.get("status") != "pending":
@@ -389,6 +371,54 @@ def save_log(entry):
     logs = logs[:MAX_LOGS]
     with open(LOGS_FILE, "w", encoding="utf-8") as f:
         json.dump(logs, f, ensure_ascii=False, indent=2)
+
+
+# ===== ARCHIVE =====
+
+def archive_old_posts(posts, now):
+    cutoff = now - timedelta(days=ARCHIVE_DAYS)
+    to_archive = []
+    to_keep = []
+    for p in posts:
+        if p.get("status") in ("posted", "failed"):
+            ts = p.get("posted_at") or p.get("scheduled_at")
+            if ts:
+                try:
+                    dt = datetime.fromisoformat(ts)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    if dt < cutoff:
+                        to_archive.append(p)
+                        continue
+                except ValueError:
+                    pass
+        to_keep.append(p)
+
+    if not to_archive:
+        return
+
+    archive = []
+    if os.path.exists(ARCHIVE_FILE):
+        try:
+            with open(ARCHIVE_FILE, "r", encoding="utf-8") as f:
+                archive = json.load(f)
+        except (json.JSONDecodeError, IOError):
+            archive = []
+
+    existing_ids = {a["id"] for a in archive if "id" in a}
+    for p in to_archive:
+        if p.get("id") not in existing_ids:
+            archive.append(p)
+
+    with open(ARCHIVE_FILE, "w", encoding="utf-8") as f:
+        json.dump(archive, f, ensure_ascii=False, indent=2)
+
+    posts.clear()
+    posts.extend(to_keep)
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(posts, f, ensure_ascii=False, indent=2)
+
+    print(f"[ARCHIVE] {len(to_archive)} posts arquivados (total no arquivo: {len(archive)})")
 
 
 # ===== MAIN =====
@@ -545,7 +575,10 @@ def main():
     # 6. Check for missed/overdue posts
     check_missed_posts(posts, now)
 
-    # 7. Save execution log
+    # 7. Archive old posts
+    archive_old_posts(posts, now)
+
+    # 8. Save execution log
     brt_now = now + timedelta(hours=-3)
     log_entry = {
         "timestamp": now.isoformat(),

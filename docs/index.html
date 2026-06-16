@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <title>InstaAutoPost</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -483,7 +487,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         </div>
       </div>
 
-      <div class="alert alert-warn" style="margin-top:16px">O token expira em 60 dias. Coloque um lembrete pra renovar! Futuramente podemos adicionar auto-refresh.</div>
+      <div class="alert alert-ok" style="margin-top:16px">O token expira em 60 dias, mas o sistema renova automaticamente se voce configurou os secrets FB_APP_ID e FB_APP_SECRET. Voce recebe um alerta no WhatsApp quando a renovacao acontece.</div>
     </div>
 
     <div class="card">
@@ -1776,6 +1780,10 @@ initBulkUpload();
 loadLogs();
 loadAnalytics();
 renderCalendar();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
 </body>
 </html>

@@ -38,6 +38,13 @@ jobs:
         run: |
           git config user.name "InstaAutoPost"
           git config user.email "bot@instaautopost.local"
-          git add data/posts.json data/logs.json data/analytics.json
-          git diff --cached --quiet || git commit -m "update post statuses [bot]"
-          git push
+          git add data/posts.json data/logs.json data/analytics.json data/archive.json
+          git diff --cached --quiet && exit 0
+          git commit -m "update post statuses [bot]"
+          for i in 1 2 3; do
+            git push && exit 0
+            echo "Push falhou (tentativa $i/3), fazendo pull --rebase..."
+            git pull --rebase origin main
+          done
+          echo "Push falhou apos 3 tentativas"
+          exit 1
