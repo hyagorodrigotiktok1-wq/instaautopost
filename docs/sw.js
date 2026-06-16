@@ -1,4 +1,4 @@
-const CACHE_NAME = 'instaautopost-v1';
+const CACHE_NAME = 'instaautopost-v2';
 const SHELL = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
