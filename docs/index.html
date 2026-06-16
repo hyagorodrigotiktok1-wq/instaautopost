@@ -165,6 +165,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .analytics-metric{text-align:center;padding:8px;background:var(--bg);border-radius:8px}
 .analytics-metric .value{font-size:18px;font-weight:700}
 .analytics-metric .label{font-size:10px;color:var(--text2);margin-top:2px}
+.hashtag-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.hashtag-row:last-child{border-bottom:none}
+.hashtag-rank{font-size:14px;font-weight:700;color:var(--text2);min-width:24px;text-align:center}
+.hashtag-name{font-size:14px;font-weight:600;color:var(--accent);flex:1}
+.hashtag-bar{height:6px;border-radius:3px;background:var(--accent);transition:width .3s}
+.hashtag-stats{font-size:11px;color:var(--text2);text-align:right;min-width:120px}
 @media(max-width:600px){.analytics-metrics{grid-template-columns:repeat(2,1fr)}}
 
 /* RESPONSIVE */
@@ -343,6 +349,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Metricas dos ultimos 30 dias. Atualizado a cada execucao do workflow.</p>
       <div id="analytics-list">
         <div class="empty"><p>Carregando analytics...</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Ranking de Hashtags</h2>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Quais hashtags geram mais alcance? Baseado nos reels dos ultimos 30 dias.</p>
+      <div id="hashtag-ranking">
+        <div class="empty"><p>Carregando...</p></div>
       </div>
     </div>
   </div>
@@ -693,8 +706,29 @@ function initUploadZone() {
   });
 }
 
-function handleFileSelect(file) {
-  const maxSize = 500 * 1024 * 1024; // 500MB
+function validateVideo(file) {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(video.src);
+      const duration = video.duration;
+      const w = video.videoWidth;
+      const h = video.videoHeight;
+      const issues = [];
+      if (duration > 90) issues.push(`Duracao ${Math.round(duration)}s (max 90s para Reels)`);
+      if (duration < 3) issues.push(`Duracao ${duration.toFixed(1)}s (min 3s)`);
+      if (w > h * 1.2) issues.push(`Video horizontal (${w}x${h}). Reels precisa ser vertical 9:16`);
+      if (w < 500) issues.push(`Resolucao muito baixa (${w}x${h}). Minimo 500px de largura`);
+      resolve({ ok: issues.length === 0, issues, duration, w, h });
+    };
+    video.onerror = () => { URL.revokeObjectURL(video.src); resolve({ ok: true, issues: [], duration: 0, w: 0, h: 0 }); };
+    video.src = URL.createObjectURL(file);
+  });
+}
+
+async function handleFileSelect(file) {
+  const maxSize = 500 * 1024 * 1024;
   if (file.size > maxSize) return toast('Video muito grande (max 500MB)', 'err');
 
   const cloud = getCloudConfig();
@@ -703,7 +737,15 @@ function handleFileSelect(file) {
     return;
   }
 
-  document.getElementById('upload-filename').textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+  const check = await validateVideo(file);
+  if (!check.ok) {
+    const msg = check.issues.join('. ');
+    toast('⚠️ ' + msg, 'err');
+    if (!confirm('Problemas detectados:\n\n' + check.issues.join('\n') + '\n\nEnviar mesmo assim?')) return;
+  }
+
+  const info = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB` + (check.duration ? `, ${Math.round(check.duration)}s, ${check.w}x${check.h}` : '') + ')';
+  document.getElementById('upload-filename').textContent = info;
   uploadToCloudinary(file, cloud);
 }
 
@@ -1071,10 +1113,21 @@ function initBulkUpload() {
   });
 }
 
-function addBulkFiles(files) {
+async function addBulkFiles(files) {
+  let warnings = [];
   for (const f of files) {
     if (f.size > 500 * 1024 * 1024) { toast(`${f.name} muito grande (max 500MB)`, 'err'); continue; }
-    bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false });
+    const check = await validateVideo(f);
+    if (!check.ok) warnings.push(`${f.name}: ${check.issues.join(', ')}`);
+    bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false, duration: check.duration, resolution: check.w && check.h ? `${check.w}x${check.h}` : '' });
+  }
+  if (warnings.length) {
+    toast(`⚠️ ${warnings.length} video(s) com problemas`, 'warn');
+    if (!confirm('Problemas detectados:\n\n' + warnings.join('\n') + '\n\nContinuar mesmo assim?')) {
+      bulkFiles = bulkFiles.filter(f => f.done || f.uploading);
+      renderBulkFileList();
+      return;
+    }
   }
   renderBulkFileList();
   renderBulkPreview();
@@ -1239,6 +1292,7 @@ async function loadAnalytics() {
     const data = await ghFetch(ANALYTICS_PATH);
     const analytics = JSON.parse(decodeURIComponent(escape(atob(data.content))));
     renderAnalytics(analytics);
+    renderHashtagRanking(analytics);
   } catch (e) {
     if (e.message.includes('404') || e.message.includes('Not Found')) {
       list.innerHTML = '<div class="empty"><p>Nenhum dado ainda. Os analytics aparecem apos os reels serem postados.</p></div>';
@@ -1278,6 +1332,49 @@ function renderAnalytics(analytics) {
         <div class="analytics-metric"><div class="value">${fmt(a.saved)}</div><div class="label">Salvos</div></div>
       </div>
       <div style="font-size:10px;color:var(--text2);margin-top:8px;text-align:right">Atualizado: ${esc(a.updated_brt || '-')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHashtagRanking(analytics) {
+  const container = document.getElementById('hashtag-ranking');
+  const entries = Object.values(analytics);
+  const hashMap = {};
+
+  for (const a of entries) {
+    const caption = a.caption || '';
+    const tags = caption.match(/#[\wÀ-ɏ]+/g);
+    if (!tags) continue;
+    const reach = a.reach || 0;
+    const plays = a.plays || 0;
+    for (const tag of tags) {
+      const t = tag.toLowerCase();
+      if (!hashMap[t]) hashMap[t] = { tag: t, totalReach: 0, totalPlays: 0, count: 0 };
+      hashMap[t].totalReach += reach;
+      hashMap[t].totalPlays += plays;
+      hashMap[t].count++;
+    }
+  }
+
+  const ranked = Object.values(hashMap).filter(h => h.count >= 1);
+  if (!ranked.length) {
+    container.innerHTML = '<div class="empty"><p>Sem dados suficientes. Use hashtags nas legendas dos reels.</p></div>';
+    return;
+  }
+
+  ranked.sort((a, b) => (b.totalReach / b.count) - (a.totalReach / a.count));
+  const top = ranked.slice(0, 15);
+  const maxAvg = top[0] ? top[0].totalReach / top[0].count : 1;
+  const fmt = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n;
+
+  container.innerHTML = top.map((h, i) => {
+    const avgReach = Math.round(h.totalReach / h.count);
+    const pct = Math.round((avgReach / maxAvg) * 100);
+    return `<div class="hashtag-row">
+      <span class="hashtag-rank">${i + 1}</span>
+      <span class="hashtag-name">${esc(h.tag)}</span>
+      <div style="flex:2;padding:0 8px"><div class="hashtag-bar" style="width:${pct}%"></div></div>
+      <span class="hashtag-stats">alcance medio: ${fmt(avgReach)} (${h.count}x)</span>
     </div>`;
   }).join('');
 }

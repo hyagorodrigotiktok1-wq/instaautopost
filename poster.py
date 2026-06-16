@@ -20,6 +20,7 @@ LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
 ANALYTICS_FILE = os.path.join(DATA_DIR, "analytics.json")
 MAX_LOGS = 50
 MAX_RETRIES = 3
+COOLDOWN_MINUTES = 120
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
 
 
@@ -292,6 +293,88 @@ def update_analytics(posts, accounts):
             json.dump(analytics, f, ensure_ascii=False, indent=2)
 
 
+# ===== COOLDOWN =====
+
+def get_last_post_time(posts, account_name):
+    times = []
+    for p in posts:
+        if p.get("status") == "posted" and p.get("posted_at") and p.get("account", "default") == account_name:
+            try:
+                dt = datetime.fromisoformat(p["posted_at"])
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                times.append(dt)
+            except ValueError:
+                pass
+    return max(times) if times else None
+
+
+def check_cooldown(posts, account_name, now):
+    last = get_last_post_time(posts, account_name)
+    if not last:
+        return True, 0
+    elapsed = (now - last).total_seconds() / 60
+    if elapsed < COOLDOWN_MINUTES:
+        return False, int(COOLDOWN_MINUTES - elapsed)
+    return True, 0
+
+
+# ===== VIRAL ALERT =====
+
+def check_viral_reels(analytics):
+    entries = list(analytics.values())
+    if len(entries) < 3:
+        return
+    plays = [e.get("plays", 0) for e in entries if e.get("plays", 0) > 0]
+    if not plays:
+        return
+    avg_plays = sum(plays) / len(plays)
+    if avg_plays == 0:
+        return
+    for entry in entries:
+        p = entry.get("plays", 0)
+        if p >= avg_plays * 3 and not entry.get("viral_alerted"):
+            caption = (entry.get("caption", "Sem legenda"))[:50]
+            account = entry.get("account", "default")
+            send_whatsapp(
+                f"🔥 REEL VIRAL DETECTADO!\n"
+                f"Conta: @{account}\n"
+                f'"{caption}"\n'
+                f"▶️ {p} plays (media: {int(avg_plays)})\n"
+                f"Responda os comentarios AGORA para amplificar o alcance!"
+            )
+            entry["viral_alerted"] = True
+            print(f"[VIRAL] Alerta enviado: {caption} ({p} plays, media {int(avg_plays)})")
+
+
+# ===== SILENT FAILURE ALERT =====
+
+def check_missed_posts(posts, now):
+    brt = now + timedelta(hours=-3)
+    missed = []
+    for p in posts:
+        if p.get("status") != "pending":
+            continue
+        try:
+            scheduled = datetime.fromisoformat(p["scheduled_at"])
+            if scheduled.tzinfo is None:
+                scheduled = scheduled.replace(tzinfo=timezone.utc)
+        except (ValueError, KeyError):
+            continue
+        hours_overdue = (now - scheduled).total_seconds() / 3600
+        if hours_overdue > 1:
+            missed.append({"id": p["id"], "account": p.get("account", "default"), "hours": int(hours_overdue)})
+    if missed:
+        lines = [f"⚠️ ALERTA: {len(missed)} post(s) atrasado(s)!\n"]
+        for m in missed[:5]:
+            lines.append(f"• {m['id']} (@{m['account']}) - {m['hours']}h atrasado")
+        if len(missed) > 5:
+            lines.append(f"... e mais {len(missed) - 5}")
+        lines.append("\nVerifique se o cron-job.org esta funcionando!")
+        send_whatsapp("\n".join(lines))
+        print(f"[ALERT] {len(missed)} posts atrasados detectados")
+
+
 # ===== LOGS =====
 
 def save_log(entry):
@@ -383,6 +466,13 @@ def main():
             log_details.append(f"[DEDUP] {post['id']}: video ja publicado")
             continue
 
+        can_post, wait_min = check_cooldown(posts, account_name, now)
+        if not can_post:
+            skipped_count += 1
+            log_details.append(f"[COOLDOWN] {post['id']}: aguardando {wait_min}min para @{account_name}")
+            print(f"[COOLDOWN] {post['id']}: faltam {wait_min}min de intervalo para @{account_name}")
+            continue
+
         acct = accounts[account_name]
         caption = post.get("caption", "")
         if post.get("hashtags"):
@@ -441,7 +531,21 @@ def main():
     # 4. Fetch analytics for posted reels
     update_analytics(posts, accounts)
 
-    # 5. Save execution log
+    # 5. Detect viral reels
+    if os.path.exists(ANALYTICS_FILE):
+        try:
+            with open(ANALYTICS_FILE, "r", encoding="utf-8") as f:
+                analytics = json.load(f)
+            check_viral_reels(analytics)
+            with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
+                json.dump(analytics, f, ensure_ascii=False, indent=2)
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    # 6. Check for missed/overdue posts
+    check_missed_posts(posts, now)
+
+    # 7. Save execution log
     brt_now = now + timedelta(hours=-3)
     log_entry = {
         "timestamp": now.isoformat(),
