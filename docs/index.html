@@ -953,6 +953,7 @@ function editPost(id) {
   document.getElementById('e-cover').value = post.cover_url || '';
 
   document.getElementById('e-date').value = utcToBRTInput(post.scheduled_at);
+  document.getElementById('edit-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 async function saveEdit() {
@@ -1002,6 +1003,7 @@ async function retryPost(id) {
   post.status = 'pending';
   post.error = null;
   post.retry_count = 0;
+  delete post.missed_alert_sent;
   post.scheduled_at = localInputToISO(utcToBRTInput(new Date().toISOString()));
   try {
     await savePosts();
@@ -1125,7 +1127,8 @@ function renderCalendar() {
 
     const postsHtml = dayPosts.slice(0, 3).map(p => {
       const time = utcToBRTDisplay(p.scheduled_at).split(', ')[1];
-      return `<div class="cal-post ${p.status}" title="${esc(p.caption)}" onclick="editPost('${p.id}')">${time} ${esc((p.caption||'').slice(0,15))}</div>`;
+      const click = p.status === 'pending' ? `onclick="editPost('${p.id}')"` : '';
+      return `<div class="cal-post ${p.status}" title="${esc(p.caption)}" ${click} style="${p.status === 'pending' ? 'cursor:pointer' : 'cursor:default'}">${time} ${esc((p.caption||'').slice(0,15))}</div>`;
     }).join('');
     const more = dayPosts.length > 3 ? `<div style="font-size:10px;color:var(--text2)">+${dayPosts.length - 3} mais</div>` : '';
 
@@ -1203,6 +1206,7 @@ function removeBulkFile(idx) {
 
 function renderBulkFileList() {
   const list = document.getElementById('bulk-file-list');
+  if (list.children.length) saveBulkCaptions();
   if (!bulkFiles.length) { list.innerHTML = ''; return; }
   list.innerHTML = bulkFiles.map((f, i) => {
     return `<div class="bulk-file">

@@ -258,6 +258,7 @@ def update_analytics(posts, accounts):
     if old_keys:
         print(f"[ANALYTICS] {len(old_keys)} entradas antigas removidas")
 
+    fresh_cutoff = now - timedelta(days=7)
     posted = [p for p in posts if p.get("status") == "posted" and p.get("media_id")]
     for post in posted:
         posted_at = None
@@ -266,6 +267,9 @@ def update_analytics(posts, accounts):
             if posted_at.tzinfo is None:
                 posted_at = posted_at.replace(tzinfo=timezone.utc)
         if not posted_at or posted_at < cutoff:
+            continue
+
+        if posted_at < fresh_cutoff and post["id"] in analytics:
             continue
 
         account_name = post.get("account", "default")
@@ -357,6 +361,8 @@ def check_missed_posts(posts, now):
     for p in posts:
         if p.get("status") != "pending":
             continue
+        if p.get("missed_alert_sent"):
+            continue
         try:
             scheduled = datetime.fromisoformat(p["scheduled_at"])
             if scheduled.tzinfo is None:
@@ -365,15 +371,18 @@ def check_missed_posts(posts, now):
             continue
         hours_overdue = (now - scheduled).total_seconds() / 3600
         if hours_overdue > 1:
-            missed.append({"id": p["id"], "account": p.get("account", "default"), "hours": int(hours_overdue)})
+            missed.append(p)
     if missed:
         lines = [f"⚠️ ALERTA: {len(missed)} post(s) atrasado(s)!\n"]
-        for m in missed[:5]:
-            lines.append(f"• {m['id']} (@{m['account']}) - {m['hours']}h atrasado")
+        for p in missed[:5]:
+            hours = int((now - datetime.fromisoformat(p["scheduled_at"]).replace(tzinfo=timezone.utc)).total_seconds() / 3600)
+            lines.append(f"• {p['id']} (@{p.get('account', 'default')}) - {hours}h atrasado")
         if len(missed) > 5:
             lines.append(f"... e mais {len(missed) - 5}")
         lines.append("\nVerifique se o cron-job.org esta funcionando!")
         send_whatsapp("\n".join(lines))
+        for p in missed:
+            p["missed_alert_sent"] = True
         print(f"[ALERT] {len(missed)} posts atrasados detectados")
 
 
