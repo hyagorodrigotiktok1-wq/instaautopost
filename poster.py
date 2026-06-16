@@ -1,25 +1,34 @@
 import os
 import json
 import time
+import base64
 import urllib.parse
 import requests
 from datetime import datetime, timezone, timedelta
 
+try:
+    from nacl.public import PublicKey, SealedBox
+    HAS_NACL = True
+except ImportError:
+    HAS_NACL = False
+
 
 GRAPH_API = "https://graph.instagram.com/v21.0"
-DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "posts.json")
-LOGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "logs.json")
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+DATA_FILE = os.path.join(DATA_DIR, "posts.json")
+LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
+ANALYTICS_FILE = os.path.join(DATA_DIR, "analytics.json")
 MAX_LOGS = 50
+MAX_RETRIES = 3
+NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
 
 
 def get_accounts():
     accounts = {}
-
     token = os.environ.get("INSTAGRAM_ACCESS_TOKEN")
     uid = os.environ.get("INSTAGRAM_USER_ID")
     if token and uid:
         accounts["default"] = {"token": token, "user_id": uid}
-
     prefix = "INSTA_ACCOUNT_"
     for key in os.environ:
         if key.startswith(prefix) and key.endswith("_TOKEN"):
@@ -28,7 +37,6 @@ def get_accounts():
             uid = os.environ.get(uid_key)
             if uid:
                 accounts[name] = {"token": os.environ[key], "user_id": uid}
-
     return accounts
 
 
@@ -36,7 +44,6 @@ def send_whatsapp(message):
     phone = os.environ.get("CALLMEBOT_PHONE")
     apikey = os.environ.get("CALLMEBOT_APIKEY")
     if not phone or not apikey:
-        print("[WHATSAPP] Credenciais nao configuradas, pulando notificacao")
         return False
     try:
         encoded = urllib.parse.quote_plus(message)
@@ -62,22 +69,94 @@ def check_token_health(account_name, token):
         if resp.status_code == 200:
             username = resp.json().get("username", account_name)
             print(f"[TOKEN] {account_name} (@{username}): OK")
-        else:
-            error_msg = ""
-            try:
-                err_data = resp.json().get("error", {})
-                error_msg = err_data.get("message", "")
-            except Exception:
-                pass
-            send_whatsapp(
-                f"🔑 InstaAutoPost: Token da conta '{account_name}' INVALIDO!\n"
-                f"Erro: {error_msg or resp.status_code}\n"
-                f"Renove o token agora ou os posts vao falhar!"
-            )
-            print(f"[TOKEN] {account_name}: FALHOU ({resp.status_code}) {error_msg}")
+            return True
+        error_msg = ""
+        try:
+            error_msg = resp.json().get("error", {}).get("message", "")
+        except Exception:
+            pass
+        send_whatsapp(
+            f"🔑 InstaAutoPost: Token da conta '{account_name}' INVALIDO!\n"
+            f"Erro: {error_msg or resp.status_code}\n"
+            f"Renove o token agora ou os posts vao falhar!"
+        )
+        print(f"[TOKEN] {account_name}: FALHOU ({resp.status_code}) {error_msg}")
+        return False
     except Exception as e:
         print(f"[TOKEN] Erro ao verificar token de {account_name}: {e}")
+        return False
 
+
+# ===== AUTO-REFRESH TOKEN =====
+
+def refresh_token(account_name, token):
+    app_id = os.environ.get("FB_APP_ID")
+    app_secret = os.environ.get("FB_APP_SECRET")
+    if not app_id or not app_secret:
+        return None
+    try:
+        resp = requests.get(
+            "https://graph.facebook.com/v21.0/oauth/access_token",
+            params={
+                "grant_type": "fb_exchange_token",
+                "client_id": app_id,
+                "client_secret": app_secret,
+                "fb_exchange_token": token,
+            },
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            new_token = resp.json().get("access_token")
+            if new_token and new_token != token:
+                print(f"[REFRESH] {account_name}: token renovado!")
+                return new_token
+            print(f"[REFRESH] {account_name}: token ainda valido, sem renovacao")
+        else:
+            err = resp.json().get("error", {}).get("message", str(resp.status_code))
+            print(f"[REFRESH] {account_name}: falha - {err}")
+        return None
+    except Exception as e:
+        print(f"[REFRESH] {account_name}: erro - {e}")
+        return None
+
+
+def update_github_secret(secret_name, secret_value):
+    if not HAS_NACL:
+        print("[GITHUB] pynacl nao instalado, impossivel atualizar secret automaticamente")
+        return False
+    gh_token = os.environ.get("GH_PAT")
+    repo = os.environ.get("GITHUB_REPOSITORY")
+    if not gh_token or not repo:
+        print("[GITHUB] GH_PAT ou GITHUB_REPOSITORY nao configurado")
+        return False
+    try:
+        headers = {"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"}
+        resp = requests.get(
+            f"https://api.github.com/repos/{repo}/actions/secrets/public-key",
+            headers=headers, timeout=15,
+        )
+        resp.raise_for_status()
+        key_data = resp.json()
+
+        public_key = PublicKey(base64.b64decode(key_data["key"]))
+        sealed = SealedBox(public_key)
+        encrypted = base64.b64encode(sealed.encrypt(secret_value.encode())).decode()
+
+        resp = requests.put(
+            f"https://api.github.com/repos/{repo}/actions/secrets/{secret_name}",
+            headers=headers,
+            json={"encrypted_value": encrypted, "key_id": key_data["key_id"]},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        print(f"[GITHUB] Secret '{secret_name}' atualizado automaticamente")
+        return True
+    except Exception as e:
+        print(f"[GITHUB] Erro ao atualizar '{secret_name}': {e}")
+        return False
+
+
+# ===== POSTING =====
 
 def is_duplicate(post, posts):
     for p in posts:
@@ -88,6 +167,10 @@ def is_duplicate(post, posts):
                 and p.get("account", "default") == post.get("account", "default")):
             return True
     return False
+
+
+def is_retryable(error_str):
+    return not any(pat in error_str for pat in NON_RETRYABLE)
 
 
 def create_reel(user_id, token, video_url, caption, cover_url=None, thumb_offset=None):
@@ -102,7 +185,6 @@ def create_reel(user_id, token, video_url, caption, cover_url=None, thumb_offset
         payload["cover_url"] = cover_url
     if thumb_offset is not None:
         payload["thumb_offset"] = str(thumb_offset)
-
     resp = requests.post(f"{GRAPH_API}/{user_id}/media", data=payload, timeout=30)
     resp.raise_for_status()
     return resp.json()["id"]
@@ -136,6 +218,82 @@ def publish(user_id, token, container_id):
     return resp.json()["id"]
 
 
+# ===== ANALYTICS =====
+
+def fetch_insights(media_id, token):
+    metrics = "ig_reels_aggregated_all_plays_count,likes,comments,shares,reach,saved"
+    try:
+        resp = requests.get(
+            f"{GRAPH_API}/{media_id}/insights",
+            params={"metric": metrics, "access_token": token},
+            timeout=15,
+        )
+        if resp.status_code != 200:
+            return None
+        data = resp.json().get("data", [])
+        result = {}
+        for item in data:
+            name = item["name"]
+            if name == "ig_reels_aggregated_all_plays_count":
+                name = "plays"
+            values = item.get("values", [{}])
+            result[name] = values[0].get("value", 0) if values else 0
+        return result
+    except Exception as e:
+        print(f"[INSIGHTS] Erro para {media_id}: {e}")
+        return None
+
+
+def update_analytics(posts, accounts):
+    analytics = {}
+    if os.path.exists(ANALYTICS_FILE):
+        try:
+            with open(ANALYTICS_FILE, "r", encoding="utf-8") as f:
+                analytics = json.load(f)
+        except (json.JSONDecodeError, IOError):
+            analytics = {}
+
+    now = datetime.now(timezone.utc)
+    cutoff = now - timedelta(days=30)
+    updated = False
+
+    posted = [p for p in posts if p.get("status") == "posted" and p.get("media_id")]
+    for post in posted:
+        posted_at = None
+        if post.get("posted_at"):
+            posted_at = datetime.fromisoformat(post["posted_at"])
+            if posted_at.tzinfo is None:
+                posted_at = posted_at.replace(tzinfo=timezone.utc)
+        if not posted_at or posted_at < cutoff:
+            continue
+
+        account_name = post.get("account", "default")
+        if account_name not in accounts:
+            continue
+
+        token = accounts[account_name]["token"]
+        insights = fetch_insights(post["media_id"], token)
+        if insights:
+            brt = now + timedelta(hours=-3)
+            analytics[post["id"]] = {
+                "media_id": post["media_id"],
+                "account": account_name,
+                "caption": (post.get("caption", ""))[:100],
+                "posted_at": post.get("posted_at", ""),
+                **insights,
+                "updated_at": now.isoformat(),
+                "updated_brt": brt.strftime("%d/%m/%Y %H:%M"),
+            }
+            updated = True
+            print(f"[INSIGHTS] {post['id']}: {insights}")
+
+    if updated:
+        with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
+            json.dump(analytics, f, ensure_ascii=False, indent=2)
+
+
+# ===== LOGS =====
+
 def save_log(entry):
     logs = []
     if os.path.exists(LOGS_FILE):
@@ -150,6 +308,8 @@ def save_log(entry):
         json.dump(logs, f, ensure_ascii=False, indent=2)
 
 
+# ===== MAIN =====
+
 def main():
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         posts = json.load(f)
@@ -159,13 +319,37 @@ def main():
         print("No Instagram accounts configured.")
         return
 
+    # 1. Check token health
     for name, acct in accounts.items():
         check_token_health(name, acct["token"])
 
+    # 2. Auto-refresh tokens
+    if os.environ.get("FB_APP_ID") and os.environ.get("FB_APP_SECRET"):
+        for name, acct in accounts.items():
+            new_token = refresh_token(name, acct["token"])
+            if new_token:
+                secret_name = ("INSTAGRAM_ACCESS_TOKEN" if name == "default"
+                               else f"INSTA_ACCOUNT_{name.upper()}_TOKEN")
+                if update_github_secret(secret_name, new_token):
+                    acct["token"] = new_token
+                    send_whatsapp(
+                        f"🔄 InstaAutoPost: Token da conta '{name}' renovado automaticamente! "
+                        f"Novo prazo: +60 dias."
+                    )
+                else:
+                    send_whatsapp(
+                        f"⚠️ InstaAutoPost: Token da conta '{name}' foi renovado mas NAO foi possivel "
+                        f"salvar automaticamente. Atualize o secret manualmente!"
+                    )
+    else:
+        print("[REFRESH] FB_APP_ID/FB_APP_SECRET nao configurados, auto-refresh desativado")
+
+    # 3. Post pending reels
     now = datetime.now(timezone.utc)
     modified = False
     posted_count = 0
     failed_count = 0
+    retried_count = 0
     skipped_count = 0
     log_details = []
 
@@ -180,7 +364,6 @@ def main():
         if scheduled > now:
             skipped_count += 1
             log_details.append(f"[SKIP] {post['id']} agendado para depois")
-            print(f"[SKIP] {post['id']} scheduled for later, next run will handle it.")
             continue
 
         account_name = post.get("account", "default")
@@ -190,7 +373,6 @@ def main():
             modified = True
             failed_count += 1
             log_details.append(f"[FAIL] {post['id']}: conta '{account_name}' nao configurada")
-            print(f"[SKIP] {post['id']}: account '{account_name}' not configured")
             continue
 
         if is_duplicate(post, posts):
@@ -198,9 +380,7 @@ def main():
             post["error"] = "Duplicata detectada: mesmo video ja publicado nesta conta"
             modified = True
             failed_count += 1
-            msg = f"[DEDUP] {post['id']}: video ja publicado nesta conta"
-            log_details.append(msg)
-            print(msg)
+            log_details.append(f"[DEDUP] {post['id']}: video ja publicado")
             continue
 
         acct = accounts[account_name]
@@ -208,8 +388,10 @@ def main():
         if post.get("hashtags"):
             caption += "\n\n" + post["hashtags"]
 
+        retry_count = post.get("retry_count", 0)
         try:
-            print(f"[POST] {post['id']} -> @{account_name}")
+            print(f"[POST] {post['id']} -> @{account_name}" +
+                  (f" (tentativa {retry_count + 1})" if retry_count else ""))
             container_id = create_reel(
                 acct["user_id"], acct["token"],
                 post["video_url"], caption,
@@ -222,23 +404,33 @@ def main():
             post["status"] = "posted"
             post["posted_at"] = now.isoformat()
             post["media_id"] = media_id
+            post.pop("retry_count", None)
+            post.pop("error", None)
             posted_count += 1
             log_details.append(f"[OK] {post['id']} -> @{account_name} (media {media_id})")
             print(f"[OK]   {post['id']} -> media {media_id}")
 
         except Exception as e:
-            post["status"] = "failed"
-            post["error"] = str(e)
-            failed_count += 1
-            error_msg = str(e)[:200]
-            log_details.append(f"[FAIL] {post['id']}: {error_msg}")
-            print(f"[FAIL] {post['id']}: {e}")
-            send_whatsapp(
-                f"❌ InstaAutoPost FALHOU\n"
-                f"Post: {post['id']}\n"
-                f"Conta: @{account_name}\n"
-                f"Erro: {error_msg}"
-            )
+            error_str = str(e)
+            if is_retryable(error_str) and retry_count < MAX_RETRIES - 1:
+                post["status"] = "pending"
+                post["retry_count"] = retry_count + 1
+                post["error"] = f"Tentativa {retry_count + 1}/{MAX_RETRIES}: {error_str[:200]}"
+                retried_count += 1
+                log_details.append(f"[RETRY] {post['id']}: tentativa {retry_count + 1}")
+                print(f"[RETRY] {post['id']}: tentativa {retry_count + 1} - {e}")
+            else:
+                post["status"] = "failed"
+                post["error"] = error_str
+                failed_count += 1
+                log_details.append(f"[FAIL] {post['id']}: {error_str[:200]}")
+                print(f"[FAIL] {post['id']}: {e}")
+                send_whatsapp(
+                    f"❌ InstaAutoPost FALHOU\n"
+                    f"Post: {post['id']}\n"
+                    f"Conta: @{account_name}\n"
+                    f"Erro: {error_str[:200]}"
+                )
 
         modified = True
 
@@ -246,12 +438,17 @@ def main():
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(posts, f, ensure_ascii=False, indent=2)
 
+    # 4. Fetch analytics for posted reels
+    update_analytics(posts, accounts)
+
+    # 5. Save execution log
     brt_now = now + timedelta(hours=-3)
     log_entry = {
         "timestamp": now.isoformat(),
         "timestamp_brt": brt_now.strftime("%d/%m/%Y %H:%M"),
         "posted": posted_count,
         "failed": failed_count,
+        "retried": retried_count,
         "skipped": skipped_count,
         "total_pending": sum(1 for p in posts if p["status"] == "pending"),
         "details": log_details,
@@ -259,6 +456,7 @@ def main():
     save_log(log_entry)
 
     print(f"\nDone. {posted_count} posted, {failed_count} failed, "
+          f"{retried_count} retrying, "
           f"{sum(1 for p in posts if p['status'] == 'pending')} still pending.")
 
 
