@@ -143,6 +143,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .bulk-file-fields textarea{min-height:60px}
 .bulk-file-fields .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:600px){.bulk-file-fields .row{grid-template-columns:1fr}}
+.bulk-file-preview{width:100%;max-height:280px;border-radius:8px;background:var(--bg3);margin-bottom:10px;object-fit:contain}
 .bulk-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .bulk-preview-item{display:flex;gap:8px;align-items:center;padding:8px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:12px}
 .bulk-preview-item .num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
@@ -1156,7 +1157,7 @@ async function addBulkFiles(files) {
     if (f.size > 500 * 1024 * 1024) { toast(`${f.name} muito grande (max 500MB)`, 'err'); continue; }
     const check = await validateVideo(f);
     if (!check.ok) warnings.push(`${f.name}: ${check.issues.join(', ')}`);
-    bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false, duration: check.duration, resolution: check.w && check.h ? `${check.w}x${check.h}` : '' });
+    bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false, duration: check.duration, resolution: check.w && check.h ? `${check.w}x${check.h}` : '', blobUrl: URL.createObjectURL(f) });
   }
   if (warnings.length) {
     toast(`⚠️ ${warnings.length} video(s) com problemas`, 'warn');
@@ -1184,6 +1185,7 @@ function saveBulkCaptions() {
 
 function removeBulkFile(idx) {
   saveBulkCaptions();
+  if (bulkFiles[idx].blobUrl) URL.revokeObjectURL(bulkFiles[idx].blobUrl);
   bulkFiles.splice(idx, 1);
   renderBulkFileList();
   checkBulkReady();
@@ -1201,6 +1203,7 @@ function renderBulkFileList() {
         <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
         <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
       </div>
+      ${f.blobUrl ? `<video class="bulk-file-preview" src="${f.blobUrl}" controls muted preload="metadata"></video>` : ''}
       <div class="bulk-file-fields">
         <label>Legenda</label>
         <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="3">${esc(f.caption || '')}</textarea>
@@ -1309,6 +1312,7 @@ async function bulkSchedule() {
 }
 
 function bulkClear() {
+  bulkFiles.forEach(f => { if (f.blobUrl) URL.revokeObjectURL(f.blobUrl); });
   bulkFiles = [];
   document.getElementById('bulk-file-list').innerHTML = '';
   document.getElementById('bulk-schedule-btn').disabled = true;
