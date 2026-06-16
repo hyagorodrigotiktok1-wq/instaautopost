@@ -293,7 +293,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   <div class="page" id="page-bulk">
     <div class="card">
       <h2>Agendamento em Massa</h2>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Selecione varios videos e defina o intervalo entre as publicacoes.</p>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Selecione varios videos e preencha a legenda, hashtags e data/hora de cada um.</p>
 
       <label for="b-account">Conta</label>
       <select id="b-account">
@@ -307,29 +307,6 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <input type="file" id="b-files" accept="video/*" multiple style="display:none">
       </div>
       <div id="bulk-file-list" class="bulk-files"></div>
-
-      <div class="bulk-settings">
-        <div>
-          <label for="b-start-date">Primeiro post em</label>
-          <input id="b-start-date" type="datetime-local">
-        </div>
-        <div>
-          <label for="b-interval">Intervalo entre posts</label>
-          <select id="b-interval">
-            <option value="60">1 hora</option>
-            <option value="120">2 horas</option>
-            <option value="180">3 horas</option>
-            <option value="360">6 horas</option>
-            <option value="720">12 horas</option>
-            <option value="1440" selected>1 dia</option>
-            <option value="2880">2 dias</option>
-            <option value="4320">3 dias</option>
-            <option value="10080">1 semana</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="bulk-preview" style="margin-top:16px"></div>
 
       <div class="btn-row">
         <button class="btn btn-primary" onclick="bulkSchedule()" id="bulk-schedule-btn" disabled>Agendar Todos</button>
@@ -1060,15 +1037,6 @@ function initBulkUpload() {
     if (fileInput.files.length) addBulkFiles([...fileInput.files]);
     fileInput.value = '';
   });
-
-  const startInput = document.getElementById('b-start-date');
-  const now = new Date();
-  now.setTime(now.getTime() + 3600000);
-  now.setMinutes(0, 0, 0);
-  startInput.value = utcToBRTInput(now.toISOString());
-
-  document.getElementById('b-start-date').addEventListener('change', renderBulkPreview);
-  document.getElementById('b-interval').addEventListener('change', renderBulkPreview);
 }
 
 function addBulkFiles(files) {
@@ -1086,8 +1054,10 @@ function saveBulkCaptions() {
   bulkFiles.forEach((f, i) => {
     const cap = document.getElementById(`b-cap-${i}`);
     const hash = document.getElementById(`b-hash-${i}`);
+    const date = document.getElementById(`b-date-${i}`);
     if (cap) f.caption = cap.value;
     if (hash) f.hashtags = hash.value;
+    if (date) f.date = date.value;
   });
 }
 
@@ -1102,7 +1072,9 @@ function removeBulkFile(idx) {
 function renderBulkFileList() {
   const list = document.getElementById('bulk-file-list');
   if (!bulkFiles.length) { list.innerHTML = ''; return; }
-  list.innerHTML = bulkFiles.map((f, i) => `<div class="bulk-file" style="flex-direction:column;align-items:stretch">
+  list.innerHTML = bulkFiles.map((f, i) => {
+    const defaultDate = f.date || '';
+    return `<div class="bulk-file" style="flex-direction:column;align-items:stretch">
     <div style="display:flex;align-items:center;gap:10px">
       <span style="font-weight:600;color:var(--accent);flex-shrink:0">#${i+1}</span>
       <span class="name">${esc(f.name)}</span>
@@ -1113,37 +1085,14 @@ function renderBulkFileList() {
     <div class="bulk-file-fields">
       <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="2">${esc(f.caption || '')}</textarea>
       <input placeholder="#hashtags" id="b-hash-${i}" value="${esc(f.hashtags || '')}">
+      <label style="margin:0;font-size:11px">Data e hora</label>
+      <input type="datetime-local" id="b-date-${i}" value="${defaultDate}">
     </div>
-  </div>`).join('');
+  </div>`;
+  }).join('');
 }
 
-function renderBulkPreview() {
-  const preview = document.getElementById('bulk-preview');
-  if (!bulkFiles.length) { preview.innerHTML = ''; return; }
-
-  const startVal = document.getElementById('b-start-date').value;
-  const interval = parseInt(document.getElementById('b-interval').value);
-  if (!startVal) { preview.innerHTML = ''; return; }
-
-  const startMs = brtToUTC(startVal);
-  let html = '<h3 style="font-size:13px;color:var(--text2);margin-bottom:8px">Previsao de agendamento:</h3>';
-
-  bulkFiles.forEach((f, i) => {
-    const postTime = new Date(startMs + i * interval * 60000);
-    const brt = new Date(postTime.getTime() + (-3) * 3600000);
-    const dd = String(brt.getUTCDate()).padStart(2, '0');
-    const mm = String(brt.getUTCMonth() + 1).padStart(2, '0');
-    const hh = String(brt.getUTCHours()).padStart(2, '0');
-    const mi = String(brt.getUTCMinutes()).padStart(2, '0');
-    html += `<div class="bulk-preview-item">
-      <div class="num">${i + 1}</div>
-      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</span>
-      <span style="color:var(--accent);flex-shrink:0">${dd}/${mm} ${hh}:${mi}</span>
-    </div>`;
-  });
-
-  preview.innerHTML = html;
-}
+function renderBulkPreview() {}
 
 async function uploadBulkFiles() {
   const cloud = getCloudConfig();
@@ -1191,22 +1140,19 @@ function checkBulkReady() {
 
 async function bulkSchedule() {
   saveBulkCaptions();
-  const startVal = document.getElementById('b-start-date').value;
-  const interval = parseInt(document.getElementById('b-interval').value);
   const account = document.getElementById('b-account').value;
 
-  if (!startVal) return toast('Selecione a data do primeiro post', 'err');
   if (!bulkFiles.length) return toast('Adicione videos primeiro', 'err');
   if (!bulkFiles.every(f => f.done)) return toast('Aguarde todos os uploads terminarem', 'err');
 
-  const missing = bulkFiles.some(f => !f.caption || !f.caption.trim());
-  if (missing) return toast('Preencha a legenda de todos os videos', 'err');
+  const missingCaption = bulkFiles.some(f => !f.caption || !f.caption.trim());
+  if (missingCaption) return toast('Preencha a legenda de todos os videos', 'err');
 
-  const startMs = brtToUTC(startVal);
+  const missingDate = bulkFiles.some(f => !f.date);
+  if (missingDate) return toast('Preencha a data e hora de todos os videos', 'err');
 
   for (let i = 0; i < bulkFiles.length; i++) {
     const bf = bulkFiles[i];
-    const postTime = new Date(startMs + i * interval * 60000);
     posts.push({
       id: uid(),
       account,
@@ -1214,7 +1160,7 @@ async function bulkSchedule() {
       caption: bf.caption.trim(),
       hashtags: (bf.hashtags || '').trim(),
       cover_url: null,
-      scheduled_at: postTime.toISOString(),
+      scheduled_at: localInputToISO(bf.date),
       status: 'pending',
       posted_at: null,
       media_id: null,
