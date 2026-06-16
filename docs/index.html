@@ -221,6 +221,18 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* BUTTON LOADING */
 .btn.loading{pointer-events:none;opacity:.6}
 
+/* CHAR COUNTER */
+.char-counter{font-size:11px;margin-top:4px;text-align:right;transition:color .2s}
+.char-counter.ok{color:var(--text2)}
+.char-counter.warn{color:var(--warn)}
+.char-counter.err{color:var(--err);font-weight:600}
+
+/* AUTO INTERVAL */
+.auto-interval{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:12px}
+.auto-interval h4{font-size:13px;margin-bottom:10px;color:var(--text2)}
+.auto-interval .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:600px){.auto-interval .row{grid-template-columns:1fr}}
+
 /* ENGAGEMENT */
 .engagement-bar{height:4px;border-radius:2px;background:var(--bg3);margin-top:10px;overflow:hidden}
 .engagement-fill{height:100%;border-radius:2px;transition:width .3s}
@@ -252,6 +264,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <button class="nav-tab" data-page="bulk">Em Massa</button>
     <button class="nav-tab" data-page="analytics">Analytics</button>
     <button class="nav-tab" data-page="logs">Logs</button>
+    <button class="nav-tab" data-page="archive">Arquivo</button>
     <button class="nav-tab" data-page="setup">Config</button>
   </div>
 </nav>
@@ -269,6 +282,10 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
   <!-- ==================== QUEUE ==================== -->
   <div class="page active" id="page-queue">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:11px;color:var(--text2)" id="last-refresh-text"></span>
+      <button class="btn btn-ghost btn-sm" onclick="manualRefresh(this)" id="refresh-btn">Atualizar</button>
+    </div>
     <div class="stats" id="stats">
       <div class="stat"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total</div></div>
       <div class="stat"><div class="stat-value" id="stat-pending" style="color:var(--info)">0</div><div class="stat-label">Pendentes</div></div>
@@ -335,7 +352,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div style="font-size:11px;color:var(--text2);margin-top:4px">Se ja tem o link do video, cole aqui. Senao, use o upload acima.</div>
 
       <label for="f-caption">Legenda</label>
-      <textarea id="f-caption" rows="4" placeholder="Sua legenda aqui..."></textarea>
+      <textarea id="f-caption" rows="4" placeholder="Sua legenda aqui..." oninput="updateCharCount('f-caption','f-caption-count')"></textarea>
+      <div class="char-counter ok" id="f-caption-count">0 / 2.200</div>
 
       <label for="f-hashtags">Hashtags</label>
       <input id="f-hashtags" placeholder="#exemplo #reels #viral">
@@ -362,7 +380,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <input id="e-video" type="url">
 
       <label for="e-caption">Legenda</label>
-      <textarea id="e-caption" rows="4"></textarea>
+      <textarea id="e-caption" rows="4" oninput="updateCharCount('e-caption','e-caption-count')"></textarea>
+      <div class="char-counter ok" id="e-caption-count">0 / 2.200</div>
 
       <label for="e-hashtags">Hashtags</label>
       <input id="e-hashtags">
@@ -397,6 +416,23 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <p>Arraste videos aqui ou clique para selecionar (multiplos)</p>
         <input type="file" id="b-files" accept="video/*" multiple style="display:none">
       </div>
+      <div class="auto-interval" id="auto-interval">
+        <h4>Preencher datas automaticamente</h4>
+        <div class="row">
+          <div>
+            <label for="b-start-date">Primeiro post</label>
+            <input type="datetime-local" id="b-start-date">
+          </div>
+          <div>
+            <label for="b-interval">Intervalo (minutos)</label>
+            <input type="number" id="b-interval" value="60" min="30" step="15" placeholder="60">
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <button class="btn btn-ghost btn-sm" onclick="applyAutoInterval()" style="width:100%">Aplicar datas</button>
+          </div>
+        </div>
+      </div>
+
       <div id="bulk-file-list" class="bulk-files"></div>
 
       <div class="btn-row">
@@ -453,6 +489,20 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
       <div id="logs-list">
         <div class="empty"><p>Carregando logs...</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ARCHIVE ==================== -->
+  <div class="page" id="page-archive">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2>Posts Arquivados</h2>
+        <button class="btn btn-ghost btn-sm" onclick="loadArchive()">Atualizar</button>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Posts antigos (mais de 30 dias) sao arquivados automaticamente.</p>
+      <div id="archive-list">
+        <div class="empty"><p>Carregando arquivo...</p></div>
       </div>
     </div>
   </div>
@@ -948,6 +998,7 @@ async function addPost() {
 
   if (!video) return toast('Informe a URL do video', 'err');
   if (!caption) return toast('Escreva uma legenda', 'err');
+  if (caption.length > CAPTION_LIMIT) return toast(`Legenda muito longa (${caption.length}/${CAPTION_LIMIT})`, 'err');
   if (!dateVal) return toast('Selecione data e hora', 'err');
 
   const post = {
@@ -999,6 +1050,7 @@ function editPost(id) {
   document.getElementById('e-cover').value = post.cover_url || '';
 
   document.getElementById('e-date').value = utcToBRTInput(post.scheduled_at);
+  updateCharCount('e-caption', 'e-caption-count');
   document.getElementById('edit-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
@@ -1007,9 +1059,11 @@ async function saveEdit() {
   const post = posts.find(p => p.id === id);
   if (!post) return;
 
+  const newCaption = document.getElementById('e-caption').value.trim();
+  if (newCaption.length > CAPTION_LIMIT) return toast(`Legenda muito longa (${newCaption.length}/${CAPTION_LIMIT})`, 'err');
   post.account = document.getElementById('e-account').value;
   post.video_url = document.getElementById('e-video').value.trim();
-  post.caption = document.getElementById('e-caption').value.trim();
+  post.caption = newCaption;
   post.hashtags = document.getElementById('e-hashtags').value.trim();
   post.cover_url = document.getElementById('e-cover').value.trim() || null;
   post.scheduled_at = localInputToISO(document.getElementById('e-date').value);
@@ -1097,13 +1151,16 @@ function renderQueue() {
     const dateStr = utcToBRTDisplay(post.scheduled_at);
     const statusClass = `badge-${post.status}`;
 
+    const dupBtn = `<button class="btn btn-ghost btn-sm" onclick="duplicatePost('${post.id}')" title="Duplicar">Copiar</button>`;
     const actions = post.status === 'pending'
       ? `<button class="btn btn-ghost btn-sm" onclick="editPost('${post.id}')">Editar</button>
+         ${dupBtn}
          <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
       : post.status === 'failed'
       ? `<button class="btn btn-ghost btn-sm" onclick="retryPost('${post.id}')">Repostar</button>
+         ${dupBtn}
          <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
-      : `<button class="btn btn-ghost btn-sm" onclick="deletePost('${post.id}')">X</button>`;
+      : `${dupBtn}<button class="btn btn-ghost btn-sm" onclick="deletePost('${post.id}')">X</button>`;
 
     const idx = posts.indexOf(post);
     const reorder = post.status === 'pending'
@@ -1278,7 +1335,8 @@ function renderBulkFileList() {
       ${f.blobUrl ? `<video class="bulk-file-preview" src="${f.blobUrl}#t=1" muted preload="metadata"></video>` : ''}
       <div class="bulk-file-fields">
         <label>Legenda</label>
-        <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="3">${esc(f.caption || '')}</textarea>
+        <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="3" oninput="updateCharCount('b-cap-${i}','b-cc-${i}')">${esc(f.caption || '')}</textarea>
+        <div class="char-counter ok" id="b-cc-${i}">${(f.caption||'').length} / 2.200</div>
         <div class="row">
           <div>
             <label>Hashtags</label>
@@ -1884,6 +1942,7 @@ initUploadZone();
 initBulkUpload();
 loadLogs();
 loadAnalytics();
+loadArchive();
 renderCalendar();
 
 if ('serviceWorker' in navigator) {
@@ -2012,6 +2071,169 @@ function withLoading(btn, asyncFn) {
     btn.textContent = original;
   });
 }
+
+// ===== CHAR COUNTER =====
+
+const CAPTION_LIMIT = 2200;
+
+function updateCharCount(textareaId, counterId) {
+  const ta = document.getElementById(textareaId);
+  const counter = document.getElementById(counterId);
+  if (!ta || !counter) return;
+  const len = ta.value.length;
+  counter.textContent = `${len.toLocaleString('pt-BR')} / 2.200`;
+  if (len > CAPTION_LIMIT) { counter.className = 'char-counter err'; }
+  else if (len > CAPTION_LIMIT * 0.9) { counter.className = 'char-counter warn'; }
+  else { counter.className = 'char-counter ok'; }
+}
+
+// ===== DUPLICATE POST =====
+
+let archiveCache = [];
+
+async function duplicatePost(id) {
+  const orig = posts.find(p => p.id === id) || archiveCache.find(p => p.id === id);
+  if (!orig) return toast('Post nao encontrado', 'err');
+  const now = new Date();
+  now.setTime(now.getTime() + 3600000);
+  now.setMinutes(0, 0, 0);
+  const clone = {
+    id: uid(),
+    account: orig.account,
+    video_url: orig.video_url,
+    caption: orig.caption,
+    hashtags: orig.hashtags,
+    cover_url: orig.cover_url,
+    scheduled_at: now.toISOString(),
+    status: 'pending',
+    posted_at: null,
+    media_id: null,
+    error: null,
+  };
+  posts.push(clone);
+  posts.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+  try {
+    await savePosts();
+    toast('Post duplicado! Edite a data e conta.', 'ok');
+    editPost(clone.id);
+  } catch (e) {
+    posts = posts.filter(p => p.id !== clone.id);
+    toast('Erro ao duplicar: ' + e.message, 'err');
+  }
+}
+
+// ===== AUTO INTERVAL (BULK) =====
+
+function applyAutoInterval() {
+  if (!bulkFiles.length) return toast('Adicione videos primeiro', 'err');
+  const startInput = document.getElementById('b-start-date').value;
+  if (!startInput) return toast('Selecione a data do primeiro post', 'err');
+  const intervalMin = parseInt(document.getElementById('b-interval').value) || 60;
+  if (intervalMin < 30) return toast('Intervalo minimo: 30 minutos', 'err');
+
+  saveBulkCaptions();
+  const startMs = new Date(startInput).getTime();
+  for (let i = 0; i < bulkFiles.length; i++) {
+    const d = new Date(startMs + i * intervalMin * 60000);
+    const pad = n => String(n).padStart(2, '0');
+    bulkFiles[i].date = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+  renderBulkFileList();
+  toast(`Datas preenchidas: ${bulkFiles.length} videos a cada ${intervalMin}min`, 'ok');
+}
+
+// ===== ARCHIVE =====
+
+const ARCHIVE_PATH = 'data/archive.json';
+
+async function loadArchive() {
+  const list = document.getElementById('archive-list');
+  try {
+    const data = await ghFetch(ARCHIVE_PATH);
+    const archive = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    archiveCache = archive;
+    renderArchive(archive);
+  } catch (e) {
+    if (e.message.includes('404') || e.message.includes('Not Found')) {
+      list.innerHTML = '<div class="empty"><p>Nenhum post arquivado ainda. Posts com mais de 30 dias sao movidos para ca automaticamente.</p></div>';
+    } else if (e.message.includes('Configure')) {
+      list.innerHTML = '<div class="empty"><p>Configure o GitHub na aba Config.</p></div>';
+    } else {
+      list.innerHTML = `<div class="empty"><p>Erro: ${esc(e.message)}</p></div>`;
+    }
+  }
+}
+
+function renderArchive(archive) {
+  const list = document.getElementById('archive-list');
+  if (!archive.length) {
+    list.innerHTML = '<div class="empty"><p>Nenhum post arquivado ainda.</p></div>';
+    return;
+  }
+  const sorted = [...archive].sort((a, b) => new Date(b.posted_at || b.scheduled_at) - new Date(a.posted_at || a.scheduled_at));
+  list.innerHTML = `<div style="font-size:12px;color:var(--text2);margin-bottom:12px">${sorted.length} post${sorted.length > 1 ? 's' : ''} arquivado${sorted.length > 1 ? 's' : ''}</div>` +
+    sorted.map(post => {
+      const date = post.posted_at ? utcToBRTDisplay(post.posted_at) : utcToBRTDisplay(post.scheduled_at);
+      const statusClass = `badge-${post.status}`;
+      const thumb = getVideoThumb(post.video_url);
+      return `<div class="post-item">
+        ${thumb ? `<img class="post-thumb" src="${thumb}" alt="" onerror="this.style.display='none'" loading="lazy">` : ''}
+        <div class="post-info">
+          <div class="post-caption">${esc(post.caption)}</div>
+          <div class="post-meta">
+            <span class="badge ${statusClass}">${post.status}</span>
+            <span>${date}</span>
+            <span>@${post.account || 'default'}</span>
+          </div>
+        </div>
+        <div class="post-actions">
+          <button class="btn btn-ghost btn-sm" onclick="duplicatePost('${post.id}')" title="Reusar este post">Copiar</button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+// ===== MANUAL REFRESH =====
+
+async function manualRefresh(btn) {
+  if (btn) {
+    btn.textContent = 'Atualizando...';
+    btn.disabled = true;
+  }
+  try {
+    await loadPosts();
+    await loadLogs();
+    await updateHealthBar();
+    lastRefresh = Date.now();
+    updateRefreshText();
+    toast('Dados atualizados!', 'ok');
+  } catch (e) {
+    toast('Erro ao atualizar: ' + e.message, 'err');
+  } finally {
+    if (btn) { btn.textContent = 'Atualizar'; btn.disabled = false; }
+  }
+}
+
+function updateRefreshText() {
+  const el = document.getElementById('last-refresh-text');
+  if (!el) return;
+  const ago = Math.round((Date.now() - lastRefresh) / 60000);
+  el.textContent = ago < 1 ? 'Atualizado agora' : `Atualizado ${ago}min atras`;
+}
+
+setInterval(updateRefreshText, 30000);
+updateRefreshText();
+
+// ===== KEYBOARD SHORTCUTS =====
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'r' && !e.shiftKey) {
+    if (document.getElementById('page-queue').classList.contains('active')) {
+      e.preventDefault();
+      manualRefresh(document.getElementById('refresh-btn'));
+    }
+  }
+});
 </script>
 </body>
 </html>
