@@ -38,7 +38,7 @@ jobs:
         run: |
           git config user.name "InstaAutoPost"
           git config user.email "bot@instaautopost.local"
-          git add data/posts.json data/logs.json data/analytics.json data/archive.json
+          git add data/posts.json data/logs.json data/analytics.json data/archive.json data/replied_comments.json
           git diff --cached --quiet && exit 0
           git commit -m "update post statuses [bot]"
           for i in 1 2 3; do

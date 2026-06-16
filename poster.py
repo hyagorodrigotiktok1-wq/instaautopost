@@ -24,6 +24,9 @@ MAX_RETRIES = 3
 COOLDOWN_MINUTES = 30
 ARCHIVE_DAYS = 30
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
+REPLIES_FILE = os.path.join(DATA_DIR, "replied_comments.json")
+MAX_REPLIES_PER_CYCLE = 10
+REPLY_COOLDOWN_SECONDS = 8
 
 
 def get_accounts():
@@ -450,6 +453,248 @@ def archive_old_posts(posts, now):
     print(f"[ARCHIVE] {len(to_archive)} posts arquivados (total no arquivo: {len(archive)})")
 
 
+# ===== AUTO-REPLY COMMENTS =====
+
+import random
+import re
+
+REPLY_RULES = [
+    {
+        "keywords": ["parabéns", "parabens", "incrível", "incrivel", "sensacional", "top demais",
+                      "perfeito", "maravilhoso", "espetacular", "fenomenal", "brilhante"],
+        "replies": [
+            "Muito obrigado pelo apoio! 🙏",
+            "Valeu demais! Compartilha pra mais gente ver! 🔥",
+            "Obrigado! Esse apoio faz toda a diferença! 💪",
+            "Tmj! Fica ligado que tem muito mais por vir! 🚀",
+        ],
+    },
+    {
+        "keywords": ["verdade", "concordo", "exato", "exatamente", "isso mesmo", "com certeza",
+                      "é isso", "eh isso", "isso aí", "fato", "realidade"],
+        "replies": [
+            "Exatamente! Compartilha pra mais gente acordar! 🔥",
+            "É isso aí! O povo precisa saber! 💪",
+            "Pura verdade! Manda pros grupos! 📢",
+            "Tmj! Juntos somos mais fortes! 🇧🇷",
+        ],
+    },
+    {
+        "keywords": ["absurdo", "vergonha", "revoltante", "inadmissível", "inadmissivel",
+                      "indignação", "indignacao", "nojo", "palhaçada", "palhacada", "escândalo",
+                      "escandalo", "que lixo", "ridiculo", "ridículo"],
+        "replies": [
+            "O povo precisa reagir! Compartilha! 🔥",
+            "É revoltante mesmo! Mas a informação é nossa arma! 💪",
+            "Por isso não podemos ficar calados! Compartilha! 📢",
+            "Inacreditável né? Mas é a realidade! Manda pra todo mundo! 🇧🇷",
+        ],
+    },
+    {
+        "keywords": ["segue", "seguindo", "novo seguidor", "novo inscrito", "acabei de seguir",
+                      "comecei a seguir"],
+        "replies": [
+            "Seja bem-vindo(a)! Ativa o sininho pra não perder nada! 🔔",
+            "Tmj! Bem-vindo(a) à família! 🙏",
+            "Valeu por seguir! Compartilha com os amigos! 🔥",
+        ],
+    },
+    {
+        "keywords": ["compartilhei", "mandei", "enviei", "repostei", "passei pra frente",
+                      "compartilhando", "já mandei"],
+        "replies": [
+            "Isso aí! Quanto mais gente souber, melhor! 🔥",
+            "Valeu demais! É assim que a informação chega longe! 💪",
+            "Obrigado por espalhar! Juntos fazemos a diferença! 🙏",
+        ],
+    },
+    {
+        "keywords": ["kkk", "kkkk", "kkkkk", "haha", "hahaha", "😂", "🤣", "rsrs",
+                      "morrendo", "chorando de rir"],
+        "replies": [
+            "😂😂😂",
+            "Rir pra não chorar né! 😂",
+            "A realidade é tão absurda que vira piada! 🤣",
+            "😂🔥",
+        ],
+    },
+    {
+        "keywords": ["🔥", "💪", "👏", "❤️", "♥️", "🙌", "👍", "🇧🇷"],
+        "replies": [
+            "🔥🔥🔥",
+            "💪🇧🇷",
+            "Tmj! 🔥",
+            "Valeu! 🙏🔥",
+        ],
+    },
+    {
+        "keywords": ["?", "como", "quando", "onde", "porque", "por que", "quem", "qual",
+                      "o que", "será", "sera"],
+        "replies": [
+            "Boa pergunta! Vamos abordar isso em breve por aqui! 🔔",
+            "Fica ligado que a gente vai aprofundar esse tema! 📢",
+            "Ótima questão! Ativa o sininho pra não perder! 🔔",
+        ],
+    },
+]
+
+GENERIC_REPLIES = [
+    "Valeu pelo comentário! 🙏",
+    "Tmj! 🔥",
+    "Obrigado pelo engajamento! 💪",
+    "💪🔥",
+    "Compartilha! 📢",
+]
+
+SKIP_PATTERNS = [
+    r"@\w+",
+    r"https?://",
+    r"compre\s",
+    r"ganhe\s+dinheiro",
+    r"link\s+na\s+bio",
+    r"sigam?\s+@",
+    r"dm\b",
+    r"promoç",
+    r"promoc",
+]
+
+
+def load_replied():
+    if os.path.exists(REPLIES_FILE):
+        try:
+            with open(REPLIES_FILE, "r", encoding="utf-8") as f:
+                return set(json.load(f))
+        except (json.JSONDecodeError, IOError):
+            pass
+    return set()
+
+
+def save_replied(replied_ids):
+    recent = list(replied_ids)[-5000:]
+    with open(REPLIES_FILE, "w", encoding="utf-8") as f:
+        json.dump(recent, f)
+
+
+def should_skip_comment(text):
+    text_lower = text.lower().strip()
+    if len(text_lower) < 2:
+        return True
+    for pattern in SKIP_PATTERNS:
+        if re.search(pattern, text_lower):
+            return True
+    return False
+
+
+def pick_reply(comment_text):
+    text_lower = comment_text.lower()
+    for rule in REPLY_RULES:
+        if any(kw in text_lower for kw in rule["keywords"]):
+            return random.choice(rule["replies"])
+    return random.choice(GENERIC_REPLIES)
+
+
+def get_recent_media_ids(posts, max_age_days=7):
+    now = datetime.now(timezone.utc)
+    cutoff = now - timedelta(days=max_age_days)
+    result = []
+    for p in posts:
+        if p.get("status") != "posted" or not p.get("media_id"):
+            continue
+        if p.get("posted_at"):
+            try:
+                dt = datetime.fromisoformat(p["posted_at"])
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                if dt < cutoff:
+                    continue
+            except ValueError:
+                continue
+        result.append((p["media_id"], p.get("account", "default")))
+    return result
+
+
+def fetch_comments(media_id, token):
+    try:
+        resp = requests.get(
+            f"{GRAPH_API}/{media_id}/comments",
+            params={
+                "fields": "id,text,timestamp,username",
+                "access_token": token,
+                "limit": 50,
+            },
+            timeout=15,
+        )
+        if resp.status_code != 200:
+            return []
+        return resp.json().get("data", [])
+    except Exception as e:
+        print(f"[COMMENTS] Erro ao buscar comentarios de {media_id}: {e}")
+        return []
+
+
+def reply_to_comment(comment_id, token, message):
+    try:
+        resp = requests.post(
+            f"{GRAPH_API}/{comment_id}/replies",
+            data={"message": message, "access_token": token},
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            return True
+        print(f"[REPLY] Falha {resp.status_code}: {resp.text[:200]}")
+        return False
+    except Exception as e:
+        print(f"[REPLY] Erro: {e}")
+        return False
+
+
+def auto_reply_comments(posts, accounts):
+    replied_ids = load_replied()
+    media_list = get_recent_media_ids(posts, max_age_days=3)
+
+    if not media_list:
+        print("[COMMENTS] Nenhum reel recente para verificar comentarios")
+        return 0
+
+    total_replied = 0
+    for media_id, account_name in media_list:
+        if total_replied >= MAX_REPLIES_PER_CYCLE:
+            break
+        if account_name not in accounts:
+            continue
+        token = accounts[account_name]["token"]
+        comments = fetch_comments(media_id, token)
+
+        for comment in comments:
+            if total_replied >= MAX_REPLIES_PER_CYCLE:
+                break
+            cid = comment.get("id")
+            text = comment.get("text", "")
+            username = comment.get("username", "")
+
+            if cid in replied_ids:
+                continue
+            if should_skip_comment(text):
+                replied_ids.add(cid)
+                continue
+
+            reply_text = pick_reply(text)
+            print(f"[REPLY] @{username}: \"{text[:60]}\" -> \"{reply_text}\"")
+
+            if reply_to_comment(cid, token, reply_text):
+                total_replied += 1
+                print(f"[REPLY] OK ({total_replied}/{MAX_REPLIES_PER_CYCLE})")
+            replied_ids.add(cid)
+            time.sleep(REPLY_COOLDOWN_SECONDS)
+
+    save_replied(replied_ids)
+    if total_replied:
+        print(f"[COMMENTS] {total_replied} comentario(s) respondido(s) neste ciclo")
+    else:
+        print(f"[COMMENTS] Nenhum comentario novo para responder")
+    return total_replied
+
+
 # ===== MAIN =====
 
 def main():
@@ -596,13 +841,16 @@ def main():
         with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
             json.dump(analytics, f, ensure_ascii=False, indent=2)
 
-    # 6. Check for missed/overdue posts
+    # 6. Auto-reply to comments
+    replies_count = auto_reply_comments(posts, accounts)
+
+    # 7. Check for missed/overdue posts
     check_missed_posts(posts, now)
 
-    # 7. Archive old posts
+    # 8. Archive old posts
     archive_old_posts(posts, now)
 
-    # 8. Save execution log
+    # 9. Save execution log
     brt_now = now + timedelta(hours=-3)
     log_entry = {
         "timestamp": now.isoformat(),
@@ -612,6 +860,7 @@ def main():
         "retried": retried_count,
         "skipped": skipped_count,
         "total_pending": sum(1 for p in posts if p["status"] == "pending"),
+        "replies": replies_count,
         "details": log_details,
     }
     save_log(log_entry)

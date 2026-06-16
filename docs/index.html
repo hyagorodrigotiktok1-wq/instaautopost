@@ -1878,6 +1878,7 @@ function renderLogs(logs) {
     if (log.posted > 0) badges.push(`<span class="log-badge log-badge-ok">${log.posted} postado${log.posted > 1 ? 's' : ''}</span>`);
     if (log.failed > 0) badges.push(`<span class="log-badge log-badge-err">${log.failed} falha${log.failed > 1 ? 's' : ''}</span>`);
     if (log.skipped > 0) badges.push(`<span class="log-badge log-badge-skip">${log.skipped} aguardando</span>`);
+    if (log.replies > 0) badges.push(`<span class="log-badge" style="background:rgba(124,58,237,.15);color:var(--accent)">${log.replies} resposta${log.replies > 1 ? 's' : ''}</span>`);
 
     const details = (log.details || []).map(d => esc(d)).join('<br>');
     const hasDetails = log.details && log.details.length > 0;
