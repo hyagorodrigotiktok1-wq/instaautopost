@@ -292,6 +292,8 @@ def update_analytics(posts, accounts):
         with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
             json.dump(analytics, f, ensure_ascii=False, indent=2)
 
+    return analytics
+
 
 # ===== COOLDOWN =====
 
@@ -576,18 +578,13 @@ def main():
             json.dump(posts, f, ensure_ascii=False, indent=2)
 
     # 4. Fetch analytics for posted reels
-    update_analytics(posts, accounts)
+    analytics = update_analytics(posts, accounts)
 
     # 5. Detect viral reels
-    if os.path.exists(ANALYTICS_FILE):
-        try:
-            with open(ANALYTICS_FILE, "r", encoding="utf-8") as f:
-                analytics = json.load(f)
-            check_viral_reels(analytics)
-            with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
-                json.dump(analytics, f, ensure_ascii=False, indent=2)
-        except (json.JSONDecodeError, IOError):
-            pass
+    if analytics:
+        check_viral_reels(analytics)
+        with open(ANALYTICS_FILE, "w", encoding="utf-8") as f:
+            json.dump(analytics, f, ensure_ascii=False, indent=2)
 
     # 6. Check for missed/overdue posts
     check_missed_posts(posts, now)

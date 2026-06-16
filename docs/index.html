@@ -855,7 +855,6 @@ function resetUploadZone() {
 const BRT_OFFSET = -3;
 
 function brtToUTC(dateTimeLocalStr) {
-  const [datePart, timePart] = dateTimeLocalStr.split('T');
   return new Date(dateTimeLocalStr + ':00.000Z').getTime() - BRT_OFFSET * 3600000;
 }
 
@@ -1187,7 +1186,6 @@ function removeBulkFile(idx) {
   saveBulkCaptions();
   bulkFiles.splice(idx, 1);
   renderBulkFileList();
-  renderBulkPreview();
   checkBulkReady();
 }
 
