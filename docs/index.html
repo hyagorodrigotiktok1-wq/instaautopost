@@ -143,6 +143,10 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .bulk-file-fields textarea{min-height:60px}
 .bulk-file-fields .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:600px){.bulk-file-fields .row{grid-template-columns:1fr}}
+.bulk-accounts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.bulk-accounts label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);transition:border-color .2s}
+.bulk-accounts label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.bulk-accounts input[type=checkbox]{accent-color:var(--accent)}
 .bulk-file-body{display:flex;gap:12px;align-items:flex-start}
 .bulk-file-preview{width:64px;height:80px;border-radius:8px;background:var(--bg3);object-fit:cover;flex-shrink:0}
 .bulk-file-fields{flex:1;min-width:0}
@@ -335,10 +339,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <h2>Agendamento em Massa</h2>
       <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Selecione varios videos e preencha a legenda, hashtags e data/hora de cada um.</p>
 
-      <label for="b-account">Conta</label>
-      <select id="b-account">
-        <option value="default">default</option>
-      </select>
+      <label>Contas</label>
+      <div id="b-accounts" class="bulk-accounts"></div>
 
       <label>Videos</label>
       <div class="upload-zone" id="bulk-upload-zone" onclick="document.getElementById('b-files').click()">
@@ -604,8 +606,8 @@ function saveAccounts() {
 function updateAccountDropdown(accs) {
   const opts = accs.map(a => `<option value="${a}">${a}</option>`).join('');
   document.getElementById('f-account').innerHTML = opts;
-  const bulk = document.getElementById('b-account');
-  if (bulk) bulk.innerHTML = opts;
+  const bulk = document.getElementById('b-accounts');
+  if (bulk) bulk.innerHTML = accs.map(a => `<label><input type="checkbox" value="${a}" checked> ${a}</label>`).join('');
 }
 
 // ===== GITHUB API =====
@@ -1272,8 +1274,9 @@ function checkBulkReady() {
 
 async function bulkSchedule() {
   saveBulkCaptions();
-  const account = document.getElementById('b-account').value;
+  const accounts = [...document.querySelectorAll('#b-accounts input:checked')].map(c => c.value);
 
+  if (!accounts.length) return toast('Selecione pelo menos uma conta', 'err');
   if (!bulkFiles.length) return toast('Adicione videos primeiro', 'err');
   if (!bulkFiles.every(f => f.done)) return toast('Aguarde todos os uploads terminarem', 'err');
 
@@ -1285,26 +1288,29 @@ async function bulkSchedule() {
 
   for (let i = 0; i < bulkFiles.length; i++) {
     const bf = bulkFiles[i];
-    posts.push({
-      id: uid(),
-      account,
-      video_url: bf.url,
-      caption: bf.caption.trim(),
-      hashtags: (bf.hashtags || '').trim(),
-      cover_url: null,
-      scheduled_at: localInputToISO(bf.date),
-      status: 'pending',
-      posted_at: null,
-      media_id: null,
-      error: null,
-    });
+    for (const account of accounts) {
+      posts.push({
+        id: uid(),
+        account,
+        video_url: bf.url,
+        caption: bf.caption.trim(),
+        hashtags: (bf.hashtags || '').trim(),
+        cover_url: null,
+        scheduled_at: localInputToISO(bf.date),
+        status: 'pending',
+        posted_at: null,
+        media_id: null,
+        error: null,
+      });
+    }
   }
 
   posts.sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
 
   try {
     await savePosts();
-    toast(`${bulkFiles.length} posts agendados!`, 'ok');
+    const total = bulkFiles.length * accounts.length;
+    toast(`${total} posts agendados (${bulkFiles.length} videos x ${accounts.length} conta${accounts.length > 1 ? 's' : ''})!`, 'ok');
     bulkClear();
     switchPage('queue');
     renderQueue();
