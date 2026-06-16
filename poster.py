@@ -241,6 +241,23 @@ def update_analytics(posts, accounts):
     cutoff = now - timedelta(days=30)
     updated = False
 
+    old_keys = []
+    for key, entry in analytics.items():
+        if entry.get("posted_at"):
+            try:
+                dt = datetime.fromisoformat(entry["posted_at"])
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                if dt < cutoff:
+                    old_keys.append(key)
+            except ValueError:
+                pass
+    for key in old_keys:
+        del analytics[key]
+        updated = True
+    if old_keys:
+        print(f"[ANALYTICS] {len(old_keys)} entradas antigas removidas")
+
     posted = [p for p in posts if p.get("status") == "posted" and p.get("media_id")]
     for post in posted:
         posted_at = None

@@ -86,6 +86,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .toast{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500;animation:slideIn .2s;box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .toast-ok{background:var(--ok);color:#fff}
 .toast-err{background:var(--err);color:#fff}
+.toast-warn{background:var(--warn);color:#fff}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
 /* FILTERS */
@@ -512,7 +513,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <p style="font-size:13px;color:var(--text2);line-height:1.6">
         <strong>InstaAutoPost</strong> e uma ferramenta gratuita que agenda e publica Reels no Instagram automaticamente via GitHub Actions + Instagram Graph API.<br><br>
         Custo: R$ 0,00 (GitHub Actions gratuito para repositorios publicos).<br>
-        O workflow roda a cada 30 minutos e publica os Reels agendados.
+        O workflow roda a cada 15 minutos via cron-job.org e publica os Reels agendados.
       </p>
     </div>
   </div>
@@ -1167,7 +1168,6 @@ async function addBulkFiles(files) {
     }
   }
   renderBulkFileList();
-  renderBulkPreview();
   document.getElementById('bulk-schedule-btn').disabled = true;
   uploadBulkFiles();
 }
@@ -1220,8 +1220,6 @@ function renderBulkFileList() {
     </div>`;
   }).join('');
 }
-
-function renderBulkPreview() {}
 
 async function uploadBulkFiles() {
   const cloud = getCloudConfig();
@@ -1315,7 +1313,6 @@ async function bulkSchedule() {
 function bulkClear() {
   bulkFiles = [];
   document.getElementById('bulk-file-list').innerHTML = '';
-  document.getElementById('bulk-preview').innerHTML = '';
   document.getElementById('bulk-schedule-btn').disabled = true;
 }
 
@@ -1784,6 +1781,28 @@ renderCalendar();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
+
+const AUTO_REFRESH_MS = 5 * 60 * 1000;
+let lastRefresh = Date.now();
+
+setInterval(async () => {
+  if (document.hidden) return;
+  try {
+    await loadPosts();
+    lastRefresh = Date.now();
+  } catch {}
+}, AUTO_REFRESH_MS);
+
+document.addEventListener('visibilitychange', async () => {
+  if (!document.hidden && Date.now() - lastRefresh > AUTO_REFRESH_MS) {
+    try {
+      await loadPosts();
+      await loadAnalytics();
+      await loadLogs();
+      lastRefresh = Date.now();
+    } catch {}
+  }
+});
 </script>
 </body>
 </html>

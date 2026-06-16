@@ -44,7 +44,7 @@ jobs:
           for i in 1 2 3; do
             git push && exit 0
             echo "Push falhou (tentativa $i/3), fazendo pull --rebase..."
-            git pull --rebase origin main
+            git pull --rebase origin master
           done
           echo "Push falhou apos 3 tentativas"
           exit 1
