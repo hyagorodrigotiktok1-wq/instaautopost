@@ -1203,7 +1203,7 @@ function renderBulkFileList() {
         <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
         <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
       </div>
-      ${f.blobUrl ? `<video class="bulk-file-preview" src="${f.blobUrl}" controls muted preload="metadata"></video>` : ''}
+      ${f.blobUrl ? `<video class="bulk-file-preview" src="${f.blobUrl}#t=1" muted preload="metadata"></video>` : ''}
       <div class="bulk-file-fields">
         <label>Legenda</label>
         <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="3">${esc(f.caption || '')}</textarea>
