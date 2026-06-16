@@ -280,6 +280,7 @@ def update_analytics(posts, accounts):
                 "media_id": post["media_id"],
                 "account": account_name,
                 "caption": (post.get("caption", ""))[:100],
+                "hashtags": post.get("hashtags", ""),
                 "posted_at": post.get("posted_at", ""),
                 **insights,
                 "updated_at": now.isoformat(),

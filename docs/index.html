@@ -309,6 +309,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <div class="card" id="edit-card" style="display:none">
       <h2>Editar Reel</h2>
 
+      <label for="e-account">Conta</label>
+      <select id="e-account"></select>
+
       <label for="e-video">URL do video</label>
       <input id="e-video" type="url">
 
@@ -606,6 +609,7 @@ function saveAccounts() {
 function updateAccountDropdown(accs) {
   const opts = accs.map(a => `<option value="${a}">${a}</option>`).join('');
   document.getElementById('f-account').innerHTML = opts;
+  document.getElementById('e-account').innerHTML = opts;
   const bulk = document.getElementById('b-accounts');
   if (bulk) bulk.innerHTML = accs.map(a => `<label><input type="checkbox" value="${a}" checked> ${a}</label>`).join('');
 }
@@ -942,6 +946,7 @@ function editPost(id) {
   switchPage('new');
   document.getElementById('edit-card').style.display = 'block';
   document.getElementById('e-id').value = id;
+  document.getElementById('e-account').value = post.account || 'default';
   document.getElementById('e-video').value = post.video_url;
   document.getElementById('e-caption').value = post.caption;
   document.getElementById('e-hashtags').value = post.hashtags || '';
@@ -955,6 +960,7 @@ async function saveEdit() {
   const post = posts.find(p => p.id === id);
   if (!post) return;
 
+  post.account = document.getElementById('e-account').value;
   post.video_url = document.getElementById('e-video').value.trim();
   post.caption = document.getElementById('e-caption').value.trim();
   post.hashtags = document.getElementById('e-hashtags').value.trim();
@@ -995,7 +1001,8 @@ async function retryPost(id) {
   if (!post) return;
   post.status = 'pending';
   post.error = null;
-  post.scheduled_at = new Date().toISOString();
+  post.retry_count = 0;
+  post.scheduled_at = localInputToISO(utcToBRTInput(new Date().toISOString()));
   try {
     await savePosts();
     toast('Reagendado para agora', 'ok');
@@ -1134,7 +1141,6 @@ function renderCalendar() {
 // ===== BULK SCHEDULING =====
 
 let bulkFiles = [];
-let bulkUploadedUrls = [];
 
 function initBulkUpload() {
   const zone = document.getElementById('bulk-upload-zone');
@@ -1204,7 +1210,7 @@ function renderBulkFileList() {
         <div class="num">${i+1}</div>
         <span class="name">${esc(f.name)}</span>
         <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
-        <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
+        <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? `Enviando ${f.progress || 0}%` : 'Aguardando'}</span>
         <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
       </div>
       <div class="bulk-file-body">
@@ -1243,23 +1249,36 @@ async function uploadBulkFiles() {
     renderBulkFileList();
 
     try {
-      const formData = new FormData();
-      formData.append('file', bf.file);
-      formData.append('upload_preset', cloud.uploadPreset);
-      formData.append('resource_type', 'video');
+      await new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('file', bf.file);
+        formData.append('upload_preset', cloud.uploadPreset);
+        formData.append('resource_type', 'video');
 
-      const resp = await fetch(`https://api.cloudinary.com/v1_1/${cloud.cloudName}/video/upload`, {
-        method: 'POST',
-        body: formData,
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud.cloudName}/video/upload`);
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) {
+            bf.progress = Math.round((e.loaded / e.total) * 100);
+            renderBulkFileList();
+          }
+        });
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const data = JSON.parse(xhr.responseText);
+            bf.url = data.secure_url;
+            bf.done = true;
+            bf.uploading = false;
+            bf.progress = 100;
+            resolve();
+          } else { reject(new Error('Upload failed')); }
+        });
+        xhr.addEventListener('error', () => reject(new Error('Network error')));
+        xhr.send(formData);
       });
-
-      if (!resp.ok) throw new Error('Upload failed');
-      const data = await resp.json();
-      bf.url = data.secure_url;
-      bf.done = true;
-      bf.uploading = false;
     } catch (e) {
       bf.uploading = false;
+      bf.progress = 0;
       toast(`Erro ao enviar ${bf.name}: ${e.message}`, 'err');
     }
     renderBulkFileList();
@@ -1531,7 +1550,14 @@ function exportMonthlyReport() {
   let analyticsEntries = [];
   try {
     const raw = document.getElementById('analytics-list').dataset.raw;
-    if (raw) analyticsEntries = JSON.parse(raw);
+    if (raw) {
+      const all = JSON.parse(raw);
+      analyticsEntries = all.filter(a => {
+        if (!a.posted_at) return false;
+        const d = new Date(a.posted_at);
+        return d.getUTCFullYear() === now.getFullYear() && d.getUTCMonth() === now.getMonth();
+      });
+    }
   } catch {}
 
   let totalPlays = 0, totalLikes = 0, totalReach = 0, totalComments = 0, totalShares = 0, totalSaved = 0;
@@ -1654,8 +1680,8 @@ function renderHashtagRanking(analytics) {
   const hashMap = {};
 
   for (const a of entries) {
-    const caption = a.caption || '';
-    const tags = caption.match(/#[\wÀ-ɏ]+/g);
+    const source = (a.hashtags || '') + ' ' + (a.caption || '');
+    const tags = source.match(/#[\wÀ-ɏ]+/g);
     if (!tags) continue;
     const reach = a.reach || 0;
     const plays = a.plays || 0;
