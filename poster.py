@@ -7,7 +7,6 @@ from datetime import datetime, timezone, timedelta
 
 
 GRAPH_API = "https://graph.instagram.com/v21.0"
-FB_GRAPH_API = "https://graph.facebook.com/v21.0"
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "posts.json")
 LOGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "logs.json")
 MAX_LOGS = 50
@@ -56,33 +55,26 @@ def send_whatsapp(message):
 def check_token_health(account_name, token):
     try:
         resp = requests.get(
-            f"{FB_GRAPH_API}/debug_token",
-            params={"input_token": token, "access_token": token},
+            f"{GRAPH_API}/me",
+            params={"fields": "id,username", "access_token": token},
             timeout=15,
         )
-        if resp.status_code != 200:
-            send_whatsapp(
-                f"⚠️ InstaAutoPost: Token da conta '{account_name}' pode estar invalido "
-                f"(debug_token retornou {resp.status_code})"
-            )
-            return
-        data = resp.json().get("data", {})
-        expires_at = data.get("expires_at", 0)
-        if expires_at == 0:
-            return
-        expires = datetime.fromtimestamp(expires_at, tz=timezone.utc)
-        now = datetime.now(timezone.utc)
-        days_left = (expires - now).days
-        if days_left <= 7:
-            brt_expiry = expires + timedelta(hours=-3)
-            send_whatsapp(
-                f"🔑 InstaAutoPost: Token da conta '{account_name}' expira em {days_left} dia(s)!\n"
-                f"Expira em {brt_expiry.strftime('%d/%m/%Y %H:%M')} BRT.\n"
-                f"Renove o token agora!"
-            )
-            print(f"[TOKEN] {account_name}: expira em {days_left} dias - alerta enviado")
+        if resp.status_code == 200:
+            username = resp.json().get("username", account_name)
+            print(f"[TOKEN] {account_name} (@{username}): OK")
         else:
-            print(f"[TOKEN] {account_name}: OK ({days_left} dias restantes)")
+            error_msg = ""
+            try:
+                err_data = resp.json().get("error", {})
+                error_msg = err_data.get("message", "")
+            except Exception:
+                pass
+            send_whatsapp(
+                f"🔑 InstaAutoPost: Token da conta '{account_name}' INVALIDO!\n"
+                f"Erro: {error_msg or resp.status_code}\n"
+                f"Renove o token agora ou os posts vao falhar!"
+            )
+            print(f"[TOKEN] {account_name}: FALHOU ({resp.status_code}) {error_msg}")
     except Exception as e:
         print(f"[TOKEN] Erro ao verificar token de {account_name}: {e}")
 
