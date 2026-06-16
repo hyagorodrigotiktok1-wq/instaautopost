@@ -1,5 +1,18 @@
 [
   {
+    "timestamp": "2026-06-16T14:15:34.943896+00:00",
+    "timestamp_brt": "16/06/2026 11:15",
+    "posted": 1,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 1,
+    "total_pending": 1,
+    "details": [
+      "[OK] mqfmxxx5qakn4 -> @default (media 18469126063108878)",
+      "[COOLDOWN] mqfmylhmntxfq: aguardando 120min para @default"
+    ]
+  },
+  {
     "timestamp": "2026-06-16T13:45:29.665780+00:00",
     "timestamp_brt": "16/06/2026 10:45",
     "posted": 0,
@@ -692,21 +705,6 @@
   {
     "timestamp": "2026-06-16T01:45:21.989303+00:00",
     "timestamp_brt": "15/06/2026 22:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 4,
-    "total_pending": 4,
-    "details": [
-      "[SKIP] mqfmremg155at agendado para depois",
-      "[SKIP] mqfms5dm81v44 agendado para depois",
-      "[SKIP] mqfmxxx5qakn4 agendado para depois",
-      "[SKIP] mqfmylhmntxfq agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-16T01:30:34.420161+00:00",
-    "timestamp_brt": "15/06/2026 22:30",
     "posted": 0,
     "failed": 0,
     "retried": 0,
