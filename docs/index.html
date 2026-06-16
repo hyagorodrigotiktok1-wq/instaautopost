@@ -171,6 +171,14 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .hashtag-name{font-size:14px;font-weight:600;color:var(--accent);flex:1}
 .hashtag-bar{height:6px;border-radius:3px;background:var(--accent);transition:width .3s}
 .hashtag-stats{font-size:11px;color:var(--text2);text-align:right;min-width:120px}
+.reorder-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.reorder-btns button{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:24px;height:20px;border-radius:4px;cursor:pointer;font-size:11px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center}
+.reorder-btns button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.heatmap{display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;font-size:11px}
+.heatmap-label{color:var(--text2);display:flex;align-items:center;justify-content:center}
+.heatmap-cell{border-radius:4px;display:flex;align-items:center;justify-content:center;height:32px;font-size:10px;font-weight:600;cursor:default}
+.report-preview{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+.report-preview canvas{max-width:100%;border-radius:8px}
 @media(max-width:600px){.analytics-metrics{grid-template-columns:repeat(2,1fr)}}
 
 /* RESPONSIVE */
@@ -356,6 +364,23 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Quais hashtags geram mais alcance? Baseado nos reels dos ultimos 30 dias.</p>
       <div id="hashtag-ranking">
         <div class="empty"><p>Carregando...</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Melhores Horarios</h2>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Quando seus reels performam melhor? Baseado no alcance medio por dia/hora.</p>
+      <div id="best-times">
+        <div class="empty"><p>Carregando...</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2>Relatorio Mensal</h2>
+        <button class="btn btn-primary btn-sm" onclick="exportMonthlyReport()">Baixar PNG</button>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Resumo visual do mes para compartilhar ou guardar.</p>
+      <div class="report-preview" id="report-preview">
+        <p style="color:var(--text2);font-size:13px">Clique em "Baixar PNG" para gerar o relatorio.</p>
       </div>
     </div>
   </div>
@@ -1001,12 +1026,20 @@ function renderQueue() {
       ? `<button class="btn btn-ghost btn-sm" onclick="editPost('${post.id}')">Editar</button>
          <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
       : post.status === 'failed'
-      ? `<button class="btn btn-ghost btn-sm" onclick="retryPost('${post.id}')">Tentar de novo</button>
+      ? `<button class="btn btn-ghost btn-sm" onclick="retryPost('${post.id}')">Repostar</button>
          <button class="btn btn-danger btn-sm" onclick="deletePost('${post.id}')">X</button>`
       : `<button class="btn btn-ghost btn-sm" onclick="deletePost('${post.id}')">X</button>`;
 
+    const idx = posts.indexOf(post);
+    const reorder = post.status === 'pending'
+      ? `<div class="reorder-btns">
+           <button onclick="movePost(${idx},-1)" title="Subir">▲</button>
+           <button onclick="movePost(${idx},1)" title="Descer">▼</button>
+         </div>` : '';
+
     const thumb = getVideoThumb(post.video_url);
     return `<div class="post-item">
+      ${reorder}
       ${thumb ? `<img class="post-thumb" src="${thumb}" alt="" onerror="this.style.display='none'" loading="lazy">` : ''}
       <div class="post-info">
         <div class="post-caption">${esc(post.caption)}</div>
@@ -1291,8 +1324,11 @@ async function loadAnalytics() {
   try {
     const data = await ghFetch(ANALYTICS_PATH);
     const analytics = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    const entries = Object.values(analytics);
+    document.getElementById('analytics-list').dataset.raw = JSON.stringify(entries);
     renderAnalytics(analytics);
     renderHashtagRanking(analytics);
+    renderBestTimes(analytics);
   } catch (e) {
     if (e.message.includes('404') || e.message.includes('Not Found')) {
       list.innerHTML = '<div class="empty"><p>Nenhum dado ainda. Os analytics aparecem apos os reels serem postados.</p></div>';
@@ -1334,6 +1370,269 @@ function renderAnalytics(analytics) {
       <div style="font-size:10px;color:var(--text2);margin-top:8px;text-align:right">Atualizado: ${esc(a.updated_brt || '-')}</div>
     </div>`;
   }).join('');
+}
+
+// ===== REORDER =====
+
+async function movePost(idx, dir) {
+  const target = idx + dir;
+  if (target < 0 || target >= posts.length) return;
+  const temp = posts[idx];
+  posts[idx] = posts[target];
+  posts[target] = temp;
+  try {
+    await savePosts();
+    renderQueue();
+    toast('Ordem atualizada', 'ok');
+  } catch (e) {
+    posts[target] = posts[idx];
+    posts[idx] = temp;
+    toast('Erro: ' + e.message, 'err');
+  }
+}
+
+// ===== BEST TIMES =====
+
+function renderBestTimes(analytics) {
+  const container = document.getElementById('best-times');
+  const entries = Object.values(analytics);
+  if (entries.length < 3) {
+    container.innerHTML = '<div class="empty"><p>Precisa de pelo menos 3 reels postados para analisar.</p></div>';
+    return;
+  }
+
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const grid = {};
+  for (let d = 0; d < 7; d++) {
+    for (let h = 0; h < 24; h++) {
+      grid[`${d}-${h}`] = { total: 0, count: 0 };
+    }
+  }
+
+  for (const a of entries) {
+    if (!a.posted_at) continue;
+    try {
+      const dt = new Date(a.posted_at);
+      const brt = new Date(dt.getTime() - 3 * 60 * 60 * 1000);
+      const key = `${brt.getUTCDay()}-${brt.getUTCHours()}`;
+      if (grid[key]) {
+        grid[key].total += (a.reach || a.plays || 0);
+        grid[key].count++;
+      }
+    } catch {}
+  }
+
+  const hours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+  let maxAvg = 0;
+  const cells = {};
+  for (const h of hours) {
+    for (let d = 0; d < 7; d++) {
+      const g = grid[`${d}-${h}`];
+      const avg = g.count > 0 ? g.total / g.count : 0;
+      cells[`${d}-${h}`] = avg;
+      if (avg > maxAvg) maxAvg = avg;
+    }
+  }
+
+  const best = [];
+  for (const h of hours) {
+    for (let d = 0; d < 7; d++) {
+      const g = grid[`${d}-${h}`];
+      if (g.count > 0) best.push({ day: days[d], hour: h, avg: Math.round(g.total / g.count), count: g.count });
+    }
+  }
+  best.sort((a, b) => b.avg - a.avg);
+
+  let html = '<div class="heatmap">';
+  html += '<div class="heatmap-label"></div>';
+  for (let d = 0; d < 7; d++) html += `<div class="heatmap-label">${days[d]}</div>`;
+
+  for (const h of hours) {
+    html += `<div class="heatmap-label">${h}h</div>`;
+    for (let d = 0; d < 7; d++) {
+      const val = cells[`${d}-${h}`];
+      const intensity = maxAvg > 0 ? val / maxAvg : 0;
+      const g = grid[`${d}-${h}`];
+      let bg, color;
+      if (g.count === 0) { bg = 'var(--bg3)'; color = 'var(--text2)'; }
+      else if (intensity > 0.7) { bg = 'var(--ok)'; color = '#000'; }
+      else if (intensity > 0.4) { bg = 'var(--warn)'; color = '#000'; }
+      else { bg = 'rgba(88,166,255,.2)'; color = 'var(--text2)'; }
+      const label = g.count > 0 ? Math.round(val >= 1000 ? val/1000 : val) + (val >= 1000 ? 'k' : '') : '';
+      html += `<div class="heatmap-cell" style="background:${bg};color:${color}" title="${days[d]} ${h}h - alcance medio: ${Math.round(val)} (${g.count} reels)">${label}</div>`;
+    }
+  }
+  html += '</div>';
+
+  if (best.length > 0) {
+    html += '<div style="margin-top:16px;font-size:13px"><strong>Top 3 melhores momentos:</strong></div>';
+    html += '<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">';
+    for (const b of best.slice(0, 3)) {
+      html += `<div style="background:var(--bg3);padding:8px 14px;border-radius:8px;font-size:13px">
+        <strong>${b.day} ${b.hour}h</strong> <span style="color:var(--ok)">alcance ${b.avg >= 1000 ? (b.avg/1000).toFixed(1)+'k' : b.avg}</span>
+        <span style="color:var(--text2);font-size:11px">(${b.count} reel${b.count>1?'s':''})</span>
+      </div>`;
+    }
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+// ===== MONTHLY REPORT =====
+
+function exportMonthlyReport() {
+  const container = document.getElementById('report-preview');
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+
+  const bg = '#0d1117';
+  const accent = '#7c3aed';
+  const ok = '#3fb950';
+  const text = '#e6edf3';
+  const text2 = '#8b949e';
+
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 1080, 1920);
+
+  ctx.fillStyle = accent;
+  ctx.fillRect(0, 0, 1080, 8);
+
+  ctx.fillStyle = text;
+  ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('InstaAutoPost', 540, 100);
+
+  const now = new Date();
+  const months = ['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  ctx.font = '32px -apple-system, sans-serif';
+  ctx.fillStyle = accent;
+  ctx.fillText(`Relatorio ${months[now.getMonth()]} ${now.getFullYear()}`, 540, 160);
+
+  const posted = posts.filter(p => p.status === 'posted');
+  const pending = posts.filter(p => p.status === 'pending');
+  const failed = posts.filter(p => p.status === 'failed');
+
+  let analyticsEntries = [];
+  try {
+    const raw = document.getElementById('analytics-list').dataset.raw;
+    if (raw) analyticsEntries = JSON.parse(raw);
+  } catch {}
+
+  let totalPlays = 0, totalLikes = 0, totalReach = 0, totalComments = 0, totalShares = 0, totalSaved = 0;
+  let bestReel = null, bestPlays = 0;
+  for (const a of analyticsEntries) {
+    totalPlays += a.plays || 0;
+    totalLikes += a.likes || 0;
+    totalReach += a.reach || 0;
+    totalComments += a.comments || 0;
+    totalShares += a.shares || 0;
+    totalSaved += a.saved || 0;
+    if ((a.plays || 0) > bestPlays) {
+      bestPlays = a.plays || 0;
+      bestReel = a;
+    }
+  }
+
+  const fmt = n => n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'k' : String(n);
+
+  let y = 240;
+  ctx.fillStyle = '#161b22';
+  ctx.beginPath();
+  ctx.roundRect(60, y, 960, 200, 20);
+  ctx.fill();
+
+  ctx.fillStyle = text;
+  ctx.font = 'bold 28px -apple-system, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Resumo', 100, y + 50);
+
+  const stats = [
+    { label: 'Postados', value: posted.length, color: ok },
+    { label: 'Na fila', value: pending.length, color: '#58a6ff' },
+    { label: 'Falhas', value: failed.length, color: '#f85149' },
+  ];
+  const sw = 280;
+  stats.forEach((s, i) => {
+    const sx = 100 + i * sw;
+    ctx.fillStyle = s.color;
+    ctx.font = 'bold 56px -apple-system, sans-serif';
+    ctx.fillText(String(s.value), sx, y + 130);
+    ctx.fillStyle = text2;
+    ctx.font = '24px -apple-system, sans-serif';
+    ctx.fillText(s.label, sx, y + 170);
+  });
+
+  y += 240;
+  ctx.fillStyle = '#161b22';
+  ctx.beginPath();
+  ctx.roundRect(60, y, 960, 480, 20);
+  ctx.fill();
+
+  ctx.fillStyle = text;
+  ctx.font = 'bold 28px -apple-system, sans-serif';
+  ctx.fillText('Metricas', 100, y + 50);
+
+  const metrics = [
+    { label: 'Plays', value: fmt(totalPlays), color: '#58a6ff' },
+    { label: 'Curtidas', value: fmt(totalLikes), color: '#f85149' },
+    { label: 'Comentarios', value: fmt(totalComments), color: ok },
+    { label: 'Compartilhamentos', value: fmt(totalShares), color: accent },
+    { label: 'Alcance', value: fmt(totalReach), color: '#d29922' },
+    { label: 'Salvos', value: fmt(totalSaved), color: text },
+  ];
+  metrics.forEach((m, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const mx = 100 + col * 460;
+    const my = y + 100 + row * 130;
+    ctx.fillStyle = m.color;
+    ctx.font = 'bold 52px -apple-system, sans-serif';
+    ctx.fillText(m.value, mx, my);
+    ctx.fillStyle = text2;
+    ctx.font = '24px -apple-system, sans-serif';
+    ctx.fillText(m.label, mx, my + 40);
+  });
+
+  y += 520;
+  if (bestReel) {
+    ctx.fillStyle = '#161b22';
+    ctx.beginPath();
+    ctx.roundRect(60, y, 960, 240, 20);
+    ctx.fill();
+
+    ctx.fillStyle = '#d29922';
+    ctx.font = 'bold 28px -apple-system, sans-serif';
+    ctx.fillText('Melhor Reel', 100, y + 50);
+
+    ctx.fillStyle = text;
+    ctx.font = '26px -apple-system, sans-serif';
+    const caption = (bestReel.caption || 'Sem legenda').substring(0, 60);
+    ctx.fillText(`"${caption}"`, 100, y + 110);
+
+    ctx.fillStyle = ok;
+    ctx.font = 'bold 36px -apple-system, sans-serif';
+    ctx.fillText(`${fmt(bestPlays)} plays`, 100, y + 175);
+    ctx.fillStyle = text2;
+    ctx.font = '26px -apple-system, sans-serif';
+    ctx.fillText(`${fmt(bestReel.likes || 0)} curtidas  |  ${fmt(bestReel.reach || 0)} alcance`, 100, y + 215);
+  }
+
+  ctx.fillStyle = text2;
+  ctx.font = '20px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Gerado em ${new Date().toLocaleDateString('pt-BR')} | InstaAutoPost`, 540, 1880);
+
+  container.innerHTML = '';
+  container.appendChild(canvas);
+
+  const link = document.createElement('a');
+  link.download = `relatorio-${months[now.getMonth()].toLowerCase()}-${now.getFullYear()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  toast('Relatorio baixado!', 'ok');
 }
 
 function renderHashtagRanking(analytics) {
