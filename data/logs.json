@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-06-16T03:15:30.264331+00:00",
+    "timestamp_brt": "16/06/2026 00:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 4,
+    "total_pending": 4,
+    "details": [
+      "[SKIP] mqfmremg155at agendado para depois",
+      "[SKIP] mqfms5dm81v44 agendado para depois",
+      "[SKIP] mqfmxxx5qakn4 agendado para depois",
+      "[SKIP] mqfmylhmntxfq agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-16T03:00:32.819094+00:00",
     "timestamp_brt": "16/06/2026 00:00",
     "posted": 0,
