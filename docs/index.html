@@ -1012,12 +1012,12 @@ function renderStats() {
 
 function renderQueue() {
   const list = document.getElementById('post-list');
-  let filtered = currentFilter === 'all' ? posts : posts.filter(p => p.status === currentFilter);
+  let filtered = currentFilter === 'all' ? posts.filter(p => p.status !== 'posted') : posts.filter(p => p.status === currentFilter);
 
   if (!filtered.length) {
     list.innerHTML = `<div class="empty">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4m0 4h.01"/></svg>
-      <p>${currentFilter === 'all' ? 'Nenhum post na fila. Clique em <strong>+ Novo</strong> para comecar.' : 'Nenhum post com este status.'}</p>
+      <p>${currentFilter === 'all' ? 'Nenhum post pendente. Clique em <strong>+ Novo</strong> para agendar.' : 'Nenhum post com este status.'}</p>
     </div>`;
     return;
   }
