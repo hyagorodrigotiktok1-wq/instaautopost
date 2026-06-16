@@ -125,14 +125,19 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .cal-post.failed{border-left:2px solid var(--err)}
 
 /* BULK */
-.bulk-files{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:300px;overflow-y:auto}
-.bulk-file{display:flex;align-items:center;gap:10px;background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--border);font-size:13px}
-.bulk-file .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bulk-file .size{color:var(--text2);font-size:11px;flex-shrink:0}
-.bulk-file .remove{color:var(--err);cursor:pointer;background:none;border:none;font-size:16px;padding:0 4px}
-.bulk-file-fields{margin-top:6px;display:flex;flex-direction:column;gap:4px}
-.bulk-file-fields textarea{min-height:50px;font-size:12px;padding:6px 8px}
-.bulk-file-fields input{font-size:12px;padding:6px 8px}
+.bulk-files{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+.bulk-file{background:var(--bg);padding:16px;border-radius:var(--radius);border:1px solid var(--border);font-size:13px}
+.bulk-file-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bulk-file-header .num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.bulk-file-header .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.bulk-file-header .size{color:var(--text2);font-size:11px;flex-shrink:0}
+.bulk-file-header .status{font-size:11px;flex-shrink:0}
+.bulk-file-header .remove{color:var(--err);cursor:pointer;background:none;border:none;font-size:18px;padding:0 4px}
+.bulk-file-fields{display:flex;flex-direction:column;gap:8px}
+.bulk-file-fields label{margin:0;font-size:11px;color:var(--text2)}
+.bulk-file-fields textarea{min-height:60px}
+.bulk-file-fields .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:600px){.bulk-file-fields .row{grid-template-columns:1fr}}
 .bulk-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .bulk-preview-item{display:flex;gap:8px;align-items:center;padding:8px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:12px}
 .bulk-preview-item .num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
@@ -1073,22 +1078,29 @@ function renderBulkFileList() {
   const list = document.getElementById('bulk-file-list');
   if (!bulkFiles.length) { list.innerHTML = ''; return; }
   list.innerHTML = bulkFiles.map((f, i) => {
-    const defaultDate = f.date || '';
-    return `<div class="bulk-file" style="flex-direction:column;align-items:stretch">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-weight:600;color:var(--accent);flex-shrink:0">#${i+1}</span>
-      <span class="name">${esc(f.name)}</span>
-      <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
-      <span style="font-size:11px;color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
-      <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
-    </div>
-    <div class="bulk-file-fields">
-      <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="2">${esc(f.caption || '')}</textarea>
-      <input placeholder="#hashtags" id="b-hash-${i}" value="${esc(f.hashtags || '')}">
-      <label style="margin:0;font-size:11px">Data e hora</label>
-      <input type="datetime-local" id="b-date-${i}" value="${defaultDate}">
-    </div>
-  </div>`;
+    return `<div class="bulk-file">
+      <div class="bulk-file-header">
+        <div class="num">${i+1}</div>
+        <span class="name">${esc(f.name)}</span>
+        <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
+        <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? 'Enviando...' : 'Aguardando'}</span>
+        <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
+      </div>
+      <div class="bulk-file-fields">
+        <label>Legenda</label>
+        <textarea placeholder="Legenda deste video..." id="b-cap-${i}" rows="3">${esc(f.caption || '')}</textarea>
+        <div class="row">
+          <div>
+            <label>Hashtags</label>
+            <input placeholder="#hashtags #reels" id="b-hash-${i}" value="${esc(f.hashtags || '')}">
+          </div>
+          <div>
+            <label>Data e hora</label>
+            <input type="datetime-local" id="b-date-${i}" value="${f.date || ''}">
+          </div>
+        </div>
+      </div>
+    </div>`;
   }).join('');
 }
 
