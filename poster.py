@@ -21,7 +21,7 @@ ANALYTICS_FILE = os.path.join(DATA_DIR, "analytics.json")
 ARCHIVE_FILE = os.path.join(DATA_DIR, "archive.json")
 MAX_LOGS = 50
 MAX_RETRIES = 3
-COOLDOWN_MINUTES = 120
+COOLDOWN_MINUTES = 30
 ARCHIVE_DAYS = 30
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
 
