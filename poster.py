@@ -175,9 +175,13 @@ def create_reel(user_id, token, video_url, caption, cover_url=None, thumb_offset
         payload["thumb_offset"] = str(thumb_offset)
     resp = requests.post(f"{GRAPH_API}/{user_id}/media", data=payload, timeout=30)
     if resp.status_code != 200:
-        err_body = resp.text[:300]
+        err_body = resp.text[:500]
         print(f"[CREATE_REEL] Erro {resp.status_code}: {err_body}")
-        resp.raise_for_status()
+        try:
+            api_msg = resp.json().get("error", {}).get("message", "")
+        except Exception:
+            api_msg = ""
+        raise RuntimeError(f"[{resp.status_code}] {api_msg or err_body}")
     return resp.json()["id"]
 
 
@@ -205,7 +209,14 @@ def publish(user_id, token, container_id):
         data={"creation_id": container_id, "access_token": token},
         timeout=30,
     )
-    resp.raise_for_status()
+    if resp.status_code != 200:
+        err_body = resp.text[:500]
+        print(f"[PUBLISH] Erro {resp.status_code}: {err_body}")
+        try:
+            api_msg = resp.json().get("error", {}).get("message", "")
+        except Exception:
+            api_msg = ""
+        raise RuntimeError(f"[{resp.status_code}] {api_msg or err_body}")
     return resp.json()["id"]
 
 
@@ -220,6 +231,7 @@ def fetch_insights(media_id, token):
             timeout=15,
         )
         if resp.status_code != 200:
+            print(f"[INSIGHTS] {media_id}: HTTP {resp.status_code} - {resp.text[:200]}")
             return None
         data = resp.json().get("data", [])
         result = {}
@@ -710,9 +722,11 @@ def main():
         print("No Instagram accounts configured.")
         return
 
-    # 1. Check token health
+    # 1. Check token health — skip accounts with invalid tokens
+    healthy_accounts = set()
     for name, acct in accounts.items():
-        check_token_health(name, acct["token"], acct["user_id"])
+        if check_token_health(name, acct["token"], acct["user_id"]):
+            healthy_accounts.add(name)
 
     # 2. Auto-refresh tokens
     if os.environ.get("FB_APP_ID") and os.environ.get("FB_APP_SECRET"):
@@ -764,6 +778,12 @@ def main():
             modified = True
             failed_count += 1
             log_details.append(f"[FAIL] {post['id']}: conta '{account_name}' nao configurada")
+            continue
+
+        if account_name not in healthy_accounts:
+            skipped_count += 1
+            log_details.append(f"[SKIP] {post['id']}: token de @{account_name} invalido")
+            print(f"[SKIP] {post['id']}: token de @{account_name} invalido, pulando")
             continue
 
         if is_duplicate(post, posts):
@@ -868,6 +888,14 @@ def main():
         "details": log_details,
     }
     save_log(log_entry)
+
+    if posted_count > 0:
+        pending = sum(1 for p in posts if p["status"] == "pending")
+        send_whatsapp(
+            f"✅ InstaAutoPost: {posted_count} post(s) publicado(s)\n"
+            f"Falhas: {failed_count} | Pendentes: {pending}\n"
+            f"Respostas: {replies_count} comentario(s)"
+        )
 
     print(f"\nDone. {posted_count} posted, {failed_count} failed, "
           f"{retried_count} retrying, "
