@@ -13,7 +13,7 @@ except ImportError:
     HAS_NACL = False
 
 
-GRAPH_API = "https://graph.instagram.com/v21.0"
+GRAPH_API = "https://graph.facebook.com/v21.0"
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_FILE = os.path.join(DATA_DIR, "posts.json")
 LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
@@ -46,10 +46,10 @@ def get_accounts():
     return accounts
 
 
-def check_token_health(account_name, token):
+def check_token_health(account_name, token, user_id):
     try:
         resp = requests.get(
-            f"{GRAPH_API}/me",
+            f"{GRAPH_API}/{user_id}",
             params={"fields": "id,username", "access_token": token},
             timeout=15,
         )
@@ -708,7 +708,7 @@ def main():
 
     # 1. Check token health
     for name, acct in accounts.items():
-        check_token_health(name, acct["token"])
+        check_token_health(name, acct["token"], acct["user_id"])
 
     # 2. Auto-refresh tokens
     if os.environ.get("FB_APP_ID") and os.environ.get("FB_APP_SECRET"):
