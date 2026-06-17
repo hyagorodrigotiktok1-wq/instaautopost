@@ -1,5 +1,24 @@
 [
   {
+    "timestamp": "2026-06-17T03:00:34.065133+00:00",
+    "timestamp_brt": "17/06/2026 00:00",
+    "posted": 0,
+    "failed": 1,
+    "retried": 0,
+    "skipped": 6,
+    "total_pending": 6,
+    "replies": 10,
+    "details": [
+      "[FAIL] mqgrbgpld3ggv: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
+      "[SKIP] mqgrbgpllim8n agendado para depois",
+      "[SKIP] mqgrbgpl8q7ls agendado para depois",
+      "[SKIP] mqgrbgpli38e4 agendado para depois",
+      "[SKIP] mqgrbgpl3j13o agendado para depois",
+      "[SKIP] mqgrbgplshjmg agendado para depois",
+      "[SKIP] mqgrbgplbvfwk agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-17T02:45:25.645028+00:00",
     "timestamp_brt": "16/06/2026 23:45",
     "posted": 0,
@@ -1124,19 +1143,6 @@
     "total_pending": 0,
     "details": [
       "[OK] mqfmylhmntxfq -> @conservadora (media 18089500556626853)"
-    ]
-  },
-  {
-    "timestamp": "2026-06-16T14:15:34.943896+00:00",
-    "timestamp_brt": "16/06/2026 11:15",
-    "posted": 1,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 1,
-    "total_pending": 1,
-    "details": [
-      "[OK] mqfmxxx5qakn4 -> @default (media 18469126063108878)",
-      "[COOLDOWN] mqfmylhmntxfq: aguardando 120min para @default"
     ]
   }
 ]
