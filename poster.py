@@ -25,8 +25,8 @@ COOLDOWN_MINUTES = 30
 ARCHIVE_DAYS = 30
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
 REPLIES_FILE = os.path.join(DATA_DIR, "replied_comments.json")
-MAX_REPLIES_PER_CYCLE = 10
-REPLY_COOLDOWN_SECONDS = 8
+MAX_REPLIES_PER_CYCLE = 15
+REPLY_COOLDOWN_SECONDS = 4
 
 
 def get_accounts():
