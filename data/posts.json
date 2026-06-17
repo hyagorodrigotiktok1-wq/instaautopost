@@ -396,8 +396,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 1/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
-    "retry_count": 1
+    "error": "Tentativa 2/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
+    "retry_count": 2
   },
   {
     "id": "mqgrbgpllim8n",
