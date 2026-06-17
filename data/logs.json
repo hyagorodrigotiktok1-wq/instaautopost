@@ -1,5 +1,28 @@
 [
   {
+    "timestamp": "2026-06-17T14:45:30.737004+00:00",
+    "timestamp_brt": "17/06/2026 11:45",
+    "posted": 2,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 9,
+    "total_pending": 9,
+    "replies": 10,
+    "details": [
+      "[OK] mqgrbgpld3ggv -> @conservadora (media 18144406969518422)",
+      "[OK] mqgrbgpllim8n -> @default (media 18030272378816918)",
+      "[COOLDOWN] mqgrbgpl8q7ls: aguardando 30min para @conservadora",
+      "[SKIP] mqi5tq1rw2o0q agendado para depois",
+      "[SKIP] mqi5tq1rywgge agendado para depois",
+      "[SKIP] mqgrbgpli38e4 agendado para depois",
+      "[SKIP] mqgrbgpl3j13o agendado para depois",
+      "[SKIP] mqgrbgplshjmg agendado para depois",
+      "[SKIP] mqgrbgplbvfwk agendado para depois",
+      "[SKIP] mqi6dcowimtha agendado para depois",
+      "[SKIP] mqi6dcowp39gw agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-17T14:15:30.538267+00:00",
     "timestamp_brt": "17/06/2026 11:15",
     "posted": 0,
@@ -852,26 +875,6 @@
     "details": [
       "[FAIL] mqgrbgplex76a: 400 Client Error: Bad Request for url: https://graph.instagram.com/v21.0/17841425314368072/media",
       "[FAIL] mqgrbgpld3ggv: 400 Client Error: Bad Request for url: https://graph.instagram.com/v21.0/26733837469650960/media",
-      "[SKIP] mqgrbgpllim8n agendado para depois",
-      "[SKIP] mqgrbgpl8q7ls agendado para depois",
-      "[SKIP] mqgrbgpli38e4 agendado para depois",
-      "[SKIP] mqgrbgpl3j13o agendado para depois",
-      "[SKIP] mqgrbgplshjmg agendado para depois",
-      "[SKIP] mqgrbgplbvfwk agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-17T02:00:42.714344+00:00",
-    "timestamp_brt": "16/06/2026 23:00",
-    "posted": 0,
-    "failed": 0,
-    "retried": 2,
-    "skipped": 6,
-    "total_pending": 8,
-    "replies": 0,
-    "details": [
-      "[RETRY] mqgrbgplex76a: tentativa 2",
-      "[RETRY] mqgrbgpld3ggv: tentativa 2",
       "[SKIP] mqgrbgpllim8n agendado para depois",
       "[SKIP] mqgrbgpl8q7ls agendado para depois",
       "[SKIP] mqgrbgpli38e4 agendado para depois",
