@@ -1,5 +1,21 @@
 [
   {
+    "timestamp": "2026-06-17T11:30:30.436568+00:00",
+    "timestamp_brt": "17/06/2026 08:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 4,
+    "total_pending": 4,
+    "replies": 0,
+    "details": [
+      "[SKIP] mqgrbgpli38e4 agendado para depois",
+      "[SKIP] mqgrbgpl3j13o agendado para depois",
+      "[SKIP] mqgrbgplshjmg agendado para depois",
+      "[SKIP] mqgrbgplbvfwk agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-17T11:15:32.572879+00:00",
     "timestamp_brt": "17/06/2026 08:15",
     "posted": 0,
@@ -893,27 +909,6 @@
     "skipped": 8,
     "total_pending": 8,
     "details": [
-      "[SKIP] mqgrbgplex76a agendado para depois",
-      "[SKIP] mqgrbgpld3ggv agendado para depois",
-      "[SKIP] mqgrbgpllim8n agendado para depois",
-      "[SKIP] mqgrbgpl8q7ls agendado para depois",
-      "[SKIP] mqgrbgpli38e4 agendado para depois",
-      "[SKIP] mqgrbgpl3j13o agendado para depois",
-      "[SKIP] mqgrbgplshjmg agendado para depois",
-      "[SKIP] mqgrbgplbvfwk agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-16T23:00:35.141010+00:00",
-    "timestamp_brt": "16/06/2026 20:00",
-    "posted": 2,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 8,
-    "total_pending": 8,
-    "details": [
-      "[OK] mqh4x3uq1how0 -> @default (media 18140300683549406)",
-      "[OK] mqh4x3uqengy0 -> @conservadora (media 18066488054433843)",
       "[SKIP] mqgrbgplex76a agendado para depois",
       "[SKIP] mqgrbgpld3ggv agendado para depois",
       "[SKIP] mqgrbgpllim8n agendado para depois",
