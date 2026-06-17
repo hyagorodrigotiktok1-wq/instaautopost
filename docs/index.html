@@ -1935,6 +1935,8 @@ function setDefaultDate() {
   document.getElementById('f-date').value = utcToBRTInput(now.toISOString());
 }
 
+const ARCHIVE_PATH = 'data/archive.json';
+
 // INIT
 loadConfig();
 loadPosts();
@@ -2144,8 +2146,6 @@ function applyAutoInterval() {
 }
 
 // ===== ARCHIVE =====
-
-const ARCHIVE_PATH = 'data/archive.json';
 
 async function loadArchive() {
   const list = document.getElementById('archive-list');
