@@ -381,10 +381,10 @@
     "hashtags": "#BastidoresDoBrasil #STF #AndreMendonca #GilmarMendes #Justiça #PoliticaBrasileira #Brasil",
     "cover_url": null,
     "scheduled_at": "2026-06-17T00:00:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": null
+    "error": "Duplicata detectada: mesmo video ja publicado nesta conta"
   },
   {
     "id": "mqgrbgplex76a",
