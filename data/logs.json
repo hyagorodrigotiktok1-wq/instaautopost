@@ -1,5 +1,23 @@
 [
   {
+    "timestamp": "2026-06-17T06:30:32.820284+00:00",
+    "timestamp_brt": "17/06/2026 03:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 6,
+    "total_pending": 6,
+    "replies": 0,
+    "details": [
+      "[SKIP] mqgrbgpllim8n agendado para depois",
+      "[SKIP] mqgrbgpl8q7ls agendado para depois",
+      "[SKIP] mqgrbgpli38e4 agendado para depois",
+      "[SKIP] mqgrbgpl3j13o agendado para depois",
+      "[SKIP] mqgrbgplshjmg agendado para depois",
+      "[SKIP] mqgrbgplbvfwk agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-17T06:15:30.879304+00:00",
     "timestamp_brt": "17/06/2026 03:15",
     "posted": 0,
@@ -1007,33 +1025,6 @@
     "details": [
       "[COOLDOWN] mqgsfzc4s19o4: aguardando 29min para @default",
       "[COOLDOWN] mqgsfzc47puas: aguardando 29min para @conservadora",
-      "[SKIP] mqgrbgplzbujc agendado para depois",
-      "[SKIP] mqgrbgplv3sz7 agendado para depois",
-      "[SKIP] mqgrbgplfypbj agendado para depois",
-      "[SKIP] mqgrbgplb10jd agendado para depois",
-      "[SKIP] mqgrbgplyinat agendado para depois",
-      "[SKIP] mqgrbgplcrykh agendado para depois",
-      "[SKIP] mqgrbgplex76a agendado para depois",
-      "[SKIP] mqgrbgpld3ggv agendado para depois",
-      "[SKIP] mqgrbgpllim8n agendado para depois",
-      "[SKIP] mqgrbgpl8q7ls agendado para depois",
-      "[SKIP] mqgrbgpli38e4 agendado para depois",
-      "[SKIP] mqgrbgpl3j13o agendado para depois",
-      "[SKIP] mqgrbgplshjmg agendado para depois",
-      "[SKIP] mqgrbgplbvfwk agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-16T17:45:33.898662+00:00",
-    "timestamp_brt": "16/06/2026 14:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 16,
-    "total_pending": 16,
-    "details": [
-      "[COOLDOWN] mqgsfzc4s19o4: aguardando 45min para @default",
-      "[COOLDOWN] mqgsfzc47puas: aguardando 45min para @conservadora",
       "[SKIP] mqgrbgplzbujc agendado para depois",
       "[SKIP] mqgrbgplv3sz7 agendado para depois",
       "[SKIP] mqgrbgplfypbj agendado para depois",
