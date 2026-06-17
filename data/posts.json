@@ -393,11 +393,11 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-17T01:00:00.000Z",
-    "status": "failed",
+    "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": "400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
-    "retry_count": 2
+    "error": null,
+    "retry_count": 0
   },
   {
     "id": "mqgrbgpllim8n",
