@@ -13,7 +13,7 @@ except ImportError:
     HAS_NACL = False
 
 
-GRAPH_API = "https://graph.facebook.com/v21.0"
+GRAPH_API = "https://graph.instagram.com/v21.0"
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_FILE = os.path.join(DATA_DIR, "posts.json")
 LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
@@ -46,10 +46,10 @@ def get_accounts():
     return accounts
 
 
-def check_token_health(account_name, token, user_id):
+def check_token_health(account_name, token, user_id=None):
     try:
         resp = requests.get(
-            f"{GRAPH_API}/{user_id}",
+            f"{GRAPH_API}/me",
             params={"fields": "id,username", "access_token": token},
             timeout=15,
         )
@@ -173,7 +173,10 @@ def create_reel(user_id, token, video_url, caption, cover_url=None, thumb_offset
     if thumb_offset is not None:
         payload["thumb_offset"] = str(thumb_offset)
     resp = requests.post(f"{GRAPH_API}/{user_id}/media", data=payload, timeout=30)
-    resp.raise_for_status()
+    if resp.status_code != 200:
+        err_body = resp.text[:300]
+        print(f"[CREATE_REEL] Erro {resp.status_code}: {err_body}")
+        resp.raise_for_status()
     return resp.json()["id"]
 
 
