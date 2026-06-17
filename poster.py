@@ -13,7 +13,7 @@ except ImportError:
     HAS_NACL = False
 
 
-GRAPH_API = "https://graph.instagram.com/v21.0"
+GRAPH_API = "https://graph.facebook.com/v21.0"
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_FILE = os.path.join(DATA_DIR, "posts.json")
 LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
@@ -48,8 +48,9 @@ def get_accounts():
 
 def check_token_health(account_name, token, user_id=None):
     try:
+        endpoint = f"{GRAPH_API}/{user_id}" if user_id else f"{GRAPH_API}/me"
         resp = requests.get(
-            f"{GRAPH_API}/me",
+            endpoint,
             params={"fields": "id,username", "access_token": token},
             timeout=15,
         )
