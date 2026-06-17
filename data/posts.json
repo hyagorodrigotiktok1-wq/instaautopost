@@ -549,10 +549,9 @@
     "hashtags": "#DonaldTrump #EduardoBolsonaro #Política #Brasil #Eleições #CenárioPolítico",
     "cover_url": null,
     "scheduled_at": "2026-06-17T23:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-17T23:00:40.074449+00:00",
+    "media_id": "18342874939222841"
   },
   {
     "id": "mqijwxzpym76q",
@@ -562,10 +561,9 @@
     "hashtags": "#DonaldTrump #EduardoBolsonaro #Política #Brasil #Eleições #CenárioPolítico",
     "cover_url": null,
     "scheduled_at": "2026-06-17T23:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-17T23:00:40.074449+00:00",
+    "media_id": "18397207981095134"
   },
   {
     "id": "mqgrbgplshjmg",
