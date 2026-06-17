@@ -410,8 +410,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 1/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/17841425314368072/media",
-    "retry_count": 1
+    "error": "Tentativa 2/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/17841425314368072/media",
+    "retry_count": 2
   },
   {
     "id": "mqgrbgpl8q7ls",
@@ -424,8 +424,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 1/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
-    "retry_count": 1
+    "error": "Tentativa 2/3: 400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/26733837469650960/media",
+    "retry_count": 2
   },
   {
     "id": "mqgrbgpli38e4",
