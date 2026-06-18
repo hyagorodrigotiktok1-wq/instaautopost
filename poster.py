@@ -563,7 +563,7 @@ GENERIC_REPLIES = [
 ]
 
 SKIP_PATTERNS = [
-    r"@\w+",
+    r"^@\w+(\s+@\w+)*$",
     r"https?://",
     r"compre\s",
     r"ganhe\s+dinheiro",
