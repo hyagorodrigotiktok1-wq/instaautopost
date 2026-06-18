@@ -688,7 +688,7 @@ function loadConfig() {
   if (cloud.cloudName) document.getElementById('s-cloud-name').value = cloud.cloudName;
   if (cloud.uploadPreset) document.getElementById('s-upload-preset').value = cloud.uploadPreset;
 
-  const accs = JSON.parse(localStorage.getItem('iap_accounts') || '["default"]');
+  const accs = JSON.parse(localStorage.getItem('iap_accounts') || '["default","conservadora","flaviobolsonaro"]');
   updateAccountDropdown(accs);
   document.getElementById('s-accounts').value = accs.join(', ');
 }
