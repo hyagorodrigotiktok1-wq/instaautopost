@@ -843,9 +843,11 @@ function initUploadZone() {
 
 function validateVideo(file) {
   return new Promise((resolve) => {
+    const timeout = setTimeout(() => { resolve({ ok: true, issues: [], duration: 0, w: 0, h: 0 }); }, 10000);
     const video = document.createElement('video');
     video.preload = 'metadata';
     video.onloadedmetadata = () => {
+      clearTimeout(timeout);
       URL.revokeObjectURL(video.src);
       const duration = video.duration;
       const w = video.videoWidth;
@@ -857,7 +859,7 @@ function validateVideo(file) {
       if (w < 500) issues.push(`Resolucao muito baixa (${w}x${h}). Minimo 500px de largura`);
       resolve({ ok: issues.length === 0, issues, duration, w, h });
     };
-    video.onerror = () => { URL.revokeObjectURL(video.src); resolve({ ok: true, issues: [], duration: 0, w: 0, h: 0 }); };
+    video.onerror = () => { clearTimeout(timeout); URL.revokeObjectURL(video.src); resolve({ ok: true, issues: [], duration: 0, w: 0, h: 0 }); };
     video.src = URL.createObjectURL(file);
   });
 }
@@ -939,6 +941,14 @@ function uploadToCloudinary(file, cloud) {
     toast('Erro de rede ao enviar video', 'err');
   });
 
+  xhr.addEventListener('timeout', () => {
+    zone.classList.remove('uploading');
+    bar.style.background = 'var(--err)';
+    status.textContent = 'Upload demorou demais';
+    toast('Timeout: video muito grande ou conexao lenta', 'err');
+  });
+
+  xhr.timeout = 300000;
   xhr.send(formData);
 }
 
