@@ -186,6 +186,7 @@ def create_reel(user_id, token, video_url, caption, cover_url=None, thumb_offset
 
 
 def wait_for_container(container_id, token, max_wait=300):
+    elapsed = 0
     for _ in range(max_wait // 10):
         resp = requests.get(
             f"{GRAPH_API}/{container_id}",
@@ -195,12 +196,15 @@ def wait_for_container(container_id, token, max_wait=300):
         resp.raise_for_status()
         status = resp.json().get("status_code")
         if status == "FINISHED":
+            print(f"[CONTAINER] {container_id}: FINISHED ({elapsed}s)")
             return True
         if status == "ERROR":
             detail = resp.json().get("status", "unknown error")
             raise RuntimeError(f"Container error: {detail}")
+        elapsed += 10
+        print(f"[CONTAINER] {container_id}: {status or 'IN_PROGRESS'} ({elapsed}s/{max_wait}s)")
         time.sleep(10)
-    raise TimeoutError("Video processing took too long")
+    raise TimeoutError(f"Video processing took too long ({max_wait}s)")
 
 
 def publish(user_id, token, container_id):
@@ -664,7 +668,7 @@ def reply_to_comment(comment_id, token, message):
         return False
 
 
-def auto_reply_comments(posts, accounts):
+def auto_reply_comments(posts, accounts, healthy_accounts=None):
     replied_ids = load_replied()
     media_list = get_recent_media_ids(posts, max_age_days=3)
 
@@ -677,6 +681,8 @@ def auto_reply_comments(posts, accounts):
         if total_replied >= MAX_REPLIES_PER_CYCLE:
             break
         if account_name not in accounts:
+            continue
+        if healthy_accounts is not None and account_name not in healthy_accounts:
             continue
         token = accounts[account_name]["token"]
         comments = fetch_comments(media_id, token)
@@ -773,11 +779,9 @@ def main():
 
         account_name = post.get("account", "default")
         if account_name not in accounts:
-            post["status"] = "failed"
-            post["error"] = f"Account '{account_name}' not found in secrets"
-            modified = True
-            failed_count += 1
-            log_details.append(f"[FAIL] {post['id']}: conta '{account_name}' nao configurada")
+            skipped_count += 1
+            log_details.append(f"[SKIP] {post['id']}: conta '{account_name}' nao encontrada nos secrets")
+            print(f"[SKIP] {post['id']}: conta '{account_name}' nao encontrada nos secrets")
             continue
 
         if account_name not in healthy_accounts:
@@ -866,7 +870,7 @@ def main():
             json.dump(analytics, f, ensure_ascii=False, indent=2)
 
     # 6. Auto-reply to comments
-    replies_count = auto_reply_comments(posts, accounts)
+    replies_count = auto_reply_comments(posts, accounts, healthy_accounts)
 
     # 7. Check for missed/overdue posts
     check_missed_posts(posts, now)
