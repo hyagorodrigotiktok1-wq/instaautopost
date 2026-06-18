@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-18T03:30:32.200618+00:00",
+    "timestamp_brt": "18/06/2026 00:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 3,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-18T03:15:28.869078+00:00",
     "timestamp_brt": "18/06/2026 00:15",
     "posted": 0,
@@ -746,27 +757,6 @@
       "[OK] mqgrbgpl8q7ls -> @conservadora (media 18124127737737254)",
       "[OK] mqi5tq1rw2o0q -> @default (media 18598436089021039)",
       "[COOLDOWN] mqi5tq1rywgge: aguardando 30min para @conservadora",
-      "[SKIP] mqgrbgpli38e4 agendado para depois",
-      "[SKIP] mqgrbgpl3j13o agendado para depois",
-      "[SKIP] mqgrbgplshjmg agendado para depois",
-      "[SKIP] mqgrbgplbvfwk agendado para depois",
-      "[SKIP] mqi6dcowimtha agendado para depois",
-      "[SKIP] mqi6dcowp39gw agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-17T15:00:49.635389+00:00",
-    "timestamp_brt": "17/06/2026 12:00",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 9,
-    "total_pending": 9,
-    "replies": 1,
-    "details": [
-      "[COOLDOWN] mqgrbgpl8q7ls: aguardando 14min para @conservadora",
-      "[COOLDOWN] mqi5tq1rw2o0q: aguardando 14min para @default",
-      "[COOLDOWN] mqi5tq1rywgge: aguardando 14min para @conservadora",
       "[SKIP] mqgrbgpli38e4 agendado para depois",
       "[SKIP] mqgrbgpl3j13o agendado para depois",
       "[SKIP] mqgrbgplshjmg agendado para depois",
