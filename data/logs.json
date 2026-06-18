@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-18T07:30:34.874362+00:00",
+    "timestamp_brt": "18/06/2026 04:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 1,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-18T07:15:23.660253+00:00",
     "timestamp_brt": "18/06/2026 04:15",
     "posted": 0,
@@ -638,24 +649,6 @@
     "total_pending": 4,
     "replies": 10,
     "details": [
-      "[SKIP] mqi6dcowimtha agendado para depois",
-      "[SKIP] mqi6dcowp39gw agendado para depois",
-      "[SKIP] mqgrbgplshjmg agendado para depois",
-      "[SKIP] mqgrbgplbvfwk agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-17T19:00:38.056462+00:00",
-    "timestamp_brt": "17/06/2026 16:00",
-    "posted": 2,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 4,
-    "total_pending": 4,
-    "replies": 7,
-    "details": [
-      "[OK] mqifhhxu47sdh -> @default (media 18191566990334938)",
-      "[OK] mqifhhxu0x0co -> @conservadora (media 17957010888149418)",
       "[SKIP] mqi6dcowimtha agendado para depois",
       "[SKIP] mqi6dcowp39gw agendado para depois",
       "[SKIP] mqgrbgplshjmg agendado para depois",
