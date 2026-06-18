@@ -851,7 +851,7 @@ function validateVideo(file) {
       const w = video.videoWidth;
       const h = video.videoHeight;
       const issues = [];
-      if (duration > 900) issues.push(`Duracao ${Math.round(duration)}s (max 15min para Reels)`);
+      if (duration > 240) issues.push(`Duracao ${Math.round(duration)}s (max 4min)`);
       if (duration < 3) issues.push(`Duracao ${duration.toFixed(1)}s (min 3s)`);
       if (w > h * 1.2) issues.push(`Video horizontal (${w}x${h}). Reels precisa ser vertical 9:16`);
       if (w < 500) issues.push(`Resolucao muito baixa (${w}x${h}). Minimo 500px de largura`);
