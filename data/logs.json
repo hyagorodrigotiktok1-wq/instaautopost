@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-06-19T03:45:26.370485+00:00",
+    "timestamp_brt": "19/06/2026 00:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 3,
+    "total_pending": 3,
+    "replies": 0,
+    "details": [
+      "[SKIP] mqk479uze0jgh agendado para depois",
+      "[SKIP] mqk479uzici7v agendado para depois",
+      "[SKIP] mqk479uz9ifzb agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-19T03:30:34.389365+00:00",
     "timestamp_brt": "19/06/2026 00:30",
     "posted": 0,
@@ -1024,36 +1039,6 @@
       "[SKIP] mqjno92j2o1pb agendado para depois",
       "[SKIP] mqjj8w52e4xox agendado para depois",
       "[SKIP] mqjj8w52xd5xd agendado para depois",
-      "[SKIP] mqjm4r3ojc8ri agendado para depois",
-      "[SKIP] mqjm4r3oulu6w agendado para depois",
-      "[SKIP] mqjm4r3orhl2s agendado para depois",
-      "[SKIP] mqjm7e5bwxnsb agendado para depois",
-      "[SKIP] mqjm7e5bx392x agendado para depois",
-      "[SKIP] mqjm7e5b7bhxp agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-18T15:15:31.050161+00:00",
-    "timestamp_brt": "18/06/2026 12:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 18,
-    "total_pending": 18,
-    "replies": 1,
-    "details": [
-      "[SKIP] mqjly7l0vlypv agendado para depois",
-      "[SKIP] mqjly7l0qiaoa agendado para depois",
-      "[SKIP] mqjly7l06vzxx agendado para depois",
-      "[SKIP] mqjmah1vjvhow agendado para depois",
-      "[SKIP] mqjmah1vh5cw6 agendado para depois",
-      "[SKIP] mqjmah1vhztbu agendado para depois",
-      "[SKIP] mqji6edu44879 agendado para depois",
-      "[SKIP] mqji6eduidb8c agendado para depois",
-      "[SKIP] mqjk1flavio1 agendado para depois",
-      "[SKIP] mqjj8w52e4xox agendado para depois",
-      "[SKIP] mqjj8w52xd5xd agendado para depois",
-      "[SKIP] mqjk2flavio2 agendado para depois",
       "[SKIP] mqjm4r3ojc8ri agendado para depois",
       "[SKIP] mqjm4r3oulu6w agendado para depois",
       "[SKIP] mqjm4r3orhl2s agendado para depois",
