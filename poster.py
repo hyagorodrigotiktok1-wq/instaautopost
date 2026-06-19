@@ -810,6 +810,11 @@ def main():
         if post.get("hashtags"):
             caption += "\n\n" + post["hashtags"]
 
+        MAX_CAPTION = 2200
+        if len(caption) > MAX_CAPTION:
+            print(f"[TRIM] {post['id']}: legenda com {len(caption)} chars, cortando para {MAX_CAPTION}")
+            caption = caption[:MAX_CAPTION - 3] + "..."
+
         retry_count = post.get("retry_count", 0)
         try:
             print(f"[POST] {post['id']} -> @{account_name}" +
