@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-06-19T05:30:29.815568+00:00",
+    "timestamp_brt": "19/06/2026 02:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 3,
+    "total_pending": 3,
+    "replies": 1,
+    "details": [
+      "[SKIP] mqk479uze0jgh agendado para depois",
+      "[SKIP] mqk479uzici7v agendado para depois",
+      "[SKIP] mqk479uz9ifzb agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-19T05:15:29.578692+00:00",
     "timestamp_brt": "19/06/2026 02:15",
     "posted": 0,
@@ -909,35 +924,6 @@
     "total_pending": 14,
     "replies": 5,
     "details": [
-      "[SKIP] mqji6edu44879 agendado para depois",
-      "[SKIP] mqji6eduidb8c agendado para depois",
-      "[SKIP] mqjk1flavio1 agendado para depois",
-      "[SKIP] mqjno92jy5xhi agendado para depois",
-      "[SKIP] mqjno92jwyovw agendado para depois",
-      "[SKIP] mqjno92j2o1pb agendado para depois",
-      "[SKIP] mqjj8w52e4xox agendado para depois",
-      "[SKIP] mqjj8w52xd5xd agendado para depois",
-      "[SKIP] mqjm4r3ojc8ri agendado para depois",
-      "[SKIP] mqjm4r3oulu6w agendado para depois",
-      "[SKIP] mqjm4r3orhl2s agendado para depois",
-      "[SKIP] mqjm7e5bwxnsb agendado para depois",
-      "[SKIP] mqjm7e5bx392x agendado para depois",
-      "[SKIP] mqjm7e5b7bhxp agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-18T17:00:41.518399+00:00",
-    "timestamp_brt": "18/06/2026 14:00",
-    "posted": 3,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 14,
-    "total_pending": 14,
-    "replies": 3,
-    "details": [
-      "[OK] mqjmah1vjvhow -> @default (media 18011489417880657)",
-      "[OK] mqjmah1vh5cw6 -> @conservadora (media 18211131826337508)",
-      "[OK] mqjmah1vhztbu -> @flaviobolsonaro (media 18103025408035140)",
       "[SKIP] mqji6edu44879 agendado para depois",
       "[SKIP] mqji6eduidb8c agendado para depois",
       "[SKIP] mqjk1flavio1 agendado para depois",
