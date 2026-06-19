@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-06-19T09:30:33.891758+00:00",
+    "timestamp_brt": "19/06/2026 06:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 3,
+    "total_pending": 3,
+    "replies": 1,
+    "details": [
+      "[SKIP] mqk479uze0jgh agendado para depois",
+      "[SKIP] mqk479uzici7v agendado para depois",
+      "[SKIP] mqk479uz9ifzb agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-19T09:15:30.586412+00:00",
     "timestamp_brt": "19/06/2026 06:15",
     "posted": 0,
@@ -774,26 +789,6 @@
     "total_pending": 6,
     "replies": 11,
     "details": [
-      "[SKIP] mqjm4r3ojc8ri agendado para depois",
-      "[SKIP] mqjm4r3oulu6w agendado para depois",
-      "[SKIP] mqjm4r3orhl2s agendado para depois",
-      "[SKIP] mqjm7e5bwxnsb agendado para depois",
-      "[SKIP] mqjm7e5bx392x agendado para depois",
-      "[SKIP] mqjm7e5b7bhxp agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-18T21:00:39.161123+00:00",
-    "timestamp_brt": "18/06/2026 18:00",
-    "posted": 2,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 6,
-    "total_pending": 6,
-    "replies": 8,
-    "details": [
-      "[OK] mqjj8w52e4xox -> @default (media 18106486522996715)",
-      "[OK] mqjj8w52xd5xd -> @conservadora (media 17928514722343642)",
       "[SKIP] mqjm4r3ojc8ri agendado para depois",
       "[SKIP] mqjm4r3oulu6w agendado para depois",
       "[SKIP] mqjm4r3orhl2s agendado para depois",
