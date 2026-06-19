@@ -1077,10 +1077,9 @@
     "hashtags": "#JairBolsonaro #Saudade #BrasilSemMedo #DeusPatriaFamilia #Esperança #Patriotas #VoltaCapitão #OposiçãoDeVerdade #DireitaUnida #NossaBandeiraJamaisSeraVermelha #FechadoComBolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T17:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T17:00:38.879851+00:00",
+    "media_id": "18062154656718678"
   },
   {
     "id": "mql19l3bmrkbd",
@@ -1090,10 +1089,9 @@
     "hashtags": "#JairBolsonaro #Saudade #BrasilSemMedo #DeusPatriaFamilia #Esperança #Patriotas #VoltaCapitão #OposiçãoDeVerdade #DireitaUnida #NossaBandeiraJamaisSeraVermelha #FechadoComBolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T17:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T17:00:38.879851+00:00",
+    "media_id": "18325189474248335"
   },
   {
     "id": "mql19l3bvsygg",
@@ -1103,9 +1101,8 @@
     "hashtags": "#JairBolsonaro #Saudade #BrasilSemMedo #DeusPatriaFamilia #Esperança #Patriotas #VoltaCapitão #OposiçãoDeVerdade #DireitaUnida #NossaBandeiraJamaisSeraVermelha #FechadoComBolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T17:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T17:00:38.879851+00:00",
+    "media_id": "18326346850278439"
   }
 ]
