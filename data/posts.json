@@ -1188,7 +1188,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": null
+    "error": "Tentativa 1/3: [400] The caption was too long.",
+    "retry_count": 1
   },
   {
     "id": "mqldmiomg6jqx",
@@ -1201,7 +1202,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": null
+    "error": "Tentativa 1/3: [400] The caption was too long.",
+    "retry_count": 1
   },
   {
     "id": "mqldmiomrf6qt",
@@ -1214,7 +1216,8 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": null
+    "error": "Tentativa 1/3: [400] The caption was too long.",
+    "retry_count": 1
   },
   {
     "id": "mql9se41uwmj9",
