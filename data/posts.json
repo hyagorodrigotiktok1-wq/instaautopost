@@ -1185,10 +1185,10 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T21:00:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 2/3: [400] The caption was too long.",
+    "error": "[400] The caption was too long.",
     "retry_count": 2
   },
   {
@@ -1199,10 +1199,10 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T21:00:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 2/3: [400] The caption was too long.",
+    "error": "[400] The caption was too long.",
     "retry_count": 2
   },
   {
@@ -1213,10 +1213,10 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-19T21:00:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 2/3: [400] The caption was too long.",
+    "error": "[400] The caption was too long.",
     "retry_count": 2
   },
   {
