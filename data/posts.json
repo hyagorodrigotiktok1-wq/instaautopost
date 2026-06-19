@@ -933,10 +933,9 @@
     "hashtags": "#PTMaster #Master #Vorcaro #pf",
     "cover_url": null,
     "scheduled_at": "2026-06-19T10:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T10:00:36.874676+00:00",
+    "media_id": "18067143200419934"
   },
   {
     "id": "mqk479uzici7v",
@@ -946,10 +945,9 @@
     "hashtags": "#PTMaster #Master #Vorcaro #pf",
     "cover_url": null,
     "scheduled_at": "2026-06-19T10:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T10:00:36.874676+00:00",
+    "media_id": "17933255892300937"
   },
   {
     "id": "mqk479uz9ifzb",
@@ -959,9 +957,8 @@
     "hashtags": "#PTMaster #Master #Vorcaro #pf",
     "cover_url": null,
     "scheduled_at": "2026-06-19T10:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-19T10:00:36.874676+00:00",
+    "media_id": "18005675594747809"
   }
 ]
