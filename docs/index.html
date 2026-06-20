@@ -573,14 +573,14 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-content">Troque o token de curta duracao por um <strong>Long-Lived Token</strong> (dura 60 dias):<br>
-        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id={APP_ID}&client_secret={APP_SECRET}&fb_exchange_token={SHORT_TOKEN}</code></div>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v22.0/oauth/access_token?grant_type=fb_exchange_token&client_id={APP_ID}&client_secret={APP_SECRET}&fb_exchange_token={SHORT_TOKEN}</code></div>
       </div>
       <div class="step">
         <div class="step-num">5</div>
         <div class="step-content">Descubra seu <strong>Instagram User ID</strong>:<br>
-        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/me/accounts?access_token={TOKEN}</code><br>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v22.0/me/accounts?access_token={TOKEN}</code><br>
         Pegue o <code>id</code> da Pagina, depois:<br>
-        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v21.0/{PAGE_ID}?fields=instagram_business_account&access_token={TOKEN}</code></div>
+        <code style="display:block;margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;word-break:break-all;font-size:12px">GET https://graph.facebook.com/v22.0/{PAGE_ID}?fields=instagram_business_account&access_token={TOKEN}</code></div>
       </div>
       <div class="step">
         <div class="step-num">6</div>

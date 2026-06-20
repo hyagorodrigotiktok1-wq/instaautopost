@@ -13,7 +13,7 @@ except ImportError:
     HAS_NACL = False
 
 
-GRAPH_API = "https://graph.facebook.com/v21.0"
+GRAPH_API = "https://graph.facebook.com/v22.0"
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_FILE = os.path.join(DATA_DIR, "posts.json")
 LOGS_FILE = os.path.join(DATA_DIR, "logs.json")
@@ -24,6 +24,7 @@ MAX_RETRIES = 3
 COOLDOWN_MINUTES = 30
 ARCHIVE_DAYS = 30
 NON_RETRYABLE = ["not found in secrets", "Duplicata detectada"]
+RATE_LIMIT_CODES = [4, 32, 17, 613]
 REPLIES_FILE = os.path.join(DATA_DIR, "replied_comments.json")
 MAX_REPLIES_PER_CYCLE = 30
 REPLY_COOLDOWN_SECONDS = 4
@@ -155,6 +156,13 @@ def is_duplicate(post, posts):
                 and p.get("account", "default") == post.get("account", "default")):
             return True
     return False
+
+
+def is_rate_limited(error_str):
+    for code in RATE_LIMIT_CODES:
+        if f"code: {code}" in error_str or f'"code":{code}' in error_str or f'"code": {code}' in error_str:
+            return True
+    return "rate limit" in error_str.lower() or "too many calls" in error_str.lower()
 
 
 def is_retryable(error_str):
@@ -812,8 +820,15 @@ def main():
 
         MAX_CAPTION = 2200
         if len(caption) > MAX_CAPTION:
-            print(f"[TRIM] {post['id']}: legenda com {len(caption)} chars, cortando para {MAX_CAPTION}")
+            original_len = len(caption)
+            print(f"[TRIM] {post['id']}: legenda com {original_len} chars, cortando para {MAX_CAPTION}")
             caption = caption[:MAX_CAPTION - 3] + "..."
+            send_whatsapp(
+                f"✂️ Legenda cortada\n"
+                f"Post: {post['id']}\n"
+                f"Conta: @{account_name}\n"
+                f"Original: {original_len} chars → {MAX_CAPTION}"
+            )
 
         retry_count = post.get("retry_count", 0)
         try:
@@ -839,7 +854,16 @@ def main():
 
         except Exception as e:
             error_str = str(e)
-            if is_retryable(error_str) and retry_count < MAX_RETRIES - 1:
+            if is_rate_limited(error_str):
+                post["status"] = "pending"
+                post["retry_count"] = retry_count
+                post["error"] = f"Rate limit atingido, reagendado"
+                retried_count += 1
+                log_details.append(f"[RATE-LIMIT] {post['id']}: aguardando próximo ciclo")
+                print(f"[RATE-LIMIT] {post['id']}: rate limit detectado, pulando restante do ciclo")
+                modified = True
+                break
+            elif is_retryable(error_str) and retry_count < MAX_RETRIES - 1:
                 post["status"] = "pending"
                 post["retry_count"] = retry_count + 1
                 post["error"] = f"Tentativa {retry_count + 1}/{MAX_RETRIES}: {error_str[:200]}"
