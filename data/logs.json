@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-20T03:15:26.074172+00:00",
+    "timestamp_brt": "20/06/2026 00:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-20T03:00:33.624152+00:00",
     "timestamp_brt": "20/06/2026 00:00",
     "posted": 0,
@@ -830,24 +841,6 @@
       "[COOLDOWN] mqkz9apwqjbb3: aguardando 0min para @default",
       "[COOLDOWN] mqkz9apw4iilo: aguardando 0min para @conservadora",
       "[COOLDOWN] mqkz9apw8r0ja: aguardando 0min para @flaviobolsonaro",
-      "[SKIP] mql19l3btlidx agendado para depois",
-      "[SKIP] mql19l3bmrkbd agendado para depois",
-      "[SKIP] mql19l3bvsygg agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-19T14:45:28.413985+00:00",
-    "timestamp_brt": "19/06/2026 11:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 6,
-    "total_pending": 6,
-    "replies": 0,
-    "details": [
-      "[SKIP] mqkz9apwqjbb3 agendado para depois",
-      "[SKIP] mqkz9apw4iilo agendado para depois",
-      "[SKIP] mqkz9apw8r0ja agendado para depois",
       "[SKIP] mql19l3btlidx agendado para depois",
       "[SKIP] mql19l3bmrkbd agendado para depois",
       "[SKIP] mql19l3bvsygg agendado para depois"
