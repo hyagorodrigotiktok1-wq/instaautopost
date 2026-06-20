@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-20T10:00:39.132477+00:00",
+    "timestamp_brt": "20/06/2026 07:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 1,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-20T09:45:33.301972+00:00",
     "timestamp_brt": "20/06/2026 06:45",
     "posted": 0,
@@ -622,30 +633,6 @@
     "total_pending": 9,
     "replies": 0,
     "details": [
-      "[SKIP] mql9se41uwmj9 agendado para depois",
-      "[SKIP] mql9se413cpqo agendado para depois",
-      "[SKIP] mql9se41uyyjo agendado para depois",
-      "[SKIP] mqlaged1uuxof agendado para depois",
-      "[SKIP] mqlaged1c4vuk agendado para depois",
-      "[SKIP] mqlaged1mzmr7 agendado para depois",
-      "[SKIP] mql9odr1enb1h agendado para depois",
-      "[SKIP] mql9odr1jg9xq agendado para depois",
-      "[SKIP] mql9odr124khc agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-19T21:30:33.382154+00:00",
-    "timestamp_brt": "19/06/2026 18:30",
-    "posted": 0,
-    "failed": 3,
-    "retried": 0,
-    "skipped": 9,
-    "total_pending": 9,
-    "replies": 3,
-    "details": [
-      "[FAIL] mqldmiomnfgy0: [400] The caption was too long.",
-      "[FAIL] mqldmiomg6jqx: [400] The caption was too long.",
-      "[FAIL] mqldmiomrf6qt: [400] The caption was too long.",
       "[SKIP] mql9se41uwmj9 agendado para depois",
       "[SKIP] mql9se413cpqo agendado para depois",
       "[SKIP] mql9se41uyyjo agendado para depois",
