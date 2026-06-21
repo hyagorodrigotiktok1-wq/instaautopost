@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-21T08:00:38.107259+00:00",
+    "timestamp_brt": "21/06/2026 05:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-21T07:45:28.128344+00:00",
     "timestamp_brt": "21/06/2026 04:45",
     "posted": 0,
@@ -538,21 +549,6 @@
   {
     "timestamp": "2026-06-20T19:45:31.722708+00:00",
     "timestamp_brt": "20/06/2026 16:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 0,
-    "details": [
-      "[SKIP] mqmqezfqujgue agendado para depois",
-      "[SKIP] mqmqezfqxvw6b agendado para depois",
-      "[SKIP] mqmqezfqk2omi agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-20T19:30:36.009108+00:00",
-    "timestamp_brt": "20/06/2026 16:30",
     "posted": 0,
     "failed": 0,
     "retried": 0,
