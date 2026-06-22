@@ -1338,7 +1338,8 @@ function renderBulkFileList() {
         <div class="num">${i+1}</div>
         <span class="name">${esc(f.name)}</span>
         <span class="size">${(f.size / 1024 / 1024).toFixed(1)} MB</span>
-        <span class="status" style="color:${f.done ? 'var(--ok)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.uploading ? `Enviando ${f.progress || 0}%` : 'Aguardando'}</span>
+        <span class="status" style="color:${f.done ? 'var(--ok)' : f.failed ? 'var(--err)' : f.uploading ? 'var(--warn)' : 'var(--text2)'}">${f.done ? 'OK' : f.failed ? 'Falhou' : f.uploading ? `Enviando ${f.progress || 0}%` : 'Aguardando'}</span>
+        ${f.failed && !f.uploading ? `<button class="btn btn-ghost btn-sm" onclick="retryBulkUpload(${i})" style="margin:0 4px;padding:2px 8px;font-size:11px">Reenviar</button>` : ''}
         <button class="remove" onclick="removeBulkFile(${i})">&times;</button>
       </div>
       <div class="bulk-file-body">
@@ -1403,10 +1404,13 @@ async function uploadBulkFiles() {
           } else { reject(new Error('Upload failed')); }
         });
         xhr.addEventListener('error', () => reject(new Error('Network error')));
+        xhr.addEventListener('timeout', () => reject(new Error('Timeout - video grande ou conexao lenta')));
+        xhr.timeout = 600000;
         xhr.send(formData);
       });
     } catch (e) {
       bf.uploading = false;
+      bf.failed = true;
       bf.progress = 0;
       toast(`Erro ao enviar ${bf.name}: ${e.message}`, 'err');
     }
@@ -1418,6 +1422,49 @@ async function uploadBulkFiles() {
 function checkBulkReady() {
   const allDone = bulkFiles.length > 0 && bulkFiles.every(f => f.done);
   document.getElementById('bulk-schedule-btn').disabled = !allDone;
+}
+
+async function retryBulkUpload(idx) {
+  const bf = bulkFiles[idx];
+  if (!bf || bf.done || bf.uploading) return;
+  bf.failed = false;
+  bf.progress = 0;
+  saveBulkCaptions();
+  renderBulkFileList();
+  const cloud = getCloudConfig();
+  if (!cloud.cloudName || !cloud.uploadPreset) return toast('Configure o Cloudinary primeiro (aba Config)', 'err');
+  bf.uploading = true;
+  renderBulkFileList();
+  try {
+    await new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', bf.file);
+      formData.append('upload_preset', cloud.uploadPreset);
+      formData.append('resource_type', 'video');
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud.cloudName}/video/upload`);
+      xhr.upload.addEventListener('progress', e => {
+        if (e.lengthComputable) { bf.progress = Math.round((e.loaded / e.total) * 100); renderBulkFileList(); }
+      });
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const data = JSON.parse(xhr.responseText);
+          bf.url = data.secure_url; bf.done = true; bf.uploading = false; bf.progress = 100;
+          resolve();
+        } else { reject(new Error('Upload failed')); }
+      });
+      xhr.addEventListener('error', () => reject(new Error('Network error')));
+      xhr.addEventListener('timeout', () => reject(new Error('Timeout - video grande ou conexao lenta')));
+      xhr.timeout = 600000;
+      xhr.send(formData);
+    });
+    toast(`${bf.name} enviado com sucesso!`, 'ok');
+  } catch (e) {
+    bf.uploading = false; bf.failed = true; bf.progress = 0;
+    toast(`Erro ao reenviar ${bf.name}: ${e.message}`, 'err');
+  }
+  renderBulkFileList();
+  checkBulkReady();
 }
 
 async function bulkSchedule() {
