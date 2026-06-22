@@ -865,8 +865,8 @@ function validateVideo(file) {
 }
 
 async function handleFileSelect(file) {
-  const maxSize = 500 * 1024 * 1024;
-  if (file.size > maxSize) return toast('Video muito grande (max 500MB)', 'err');
+  const maxSize = 100 * 1024 * 1024;
+  if (file.size > maxSize) return toast('Video muito grande (max 100MB no Cloudinary free). Comprima antes de enviar.', 'err');
 
   const cloud = getCloudConfig();
   if (!cloud.cloudName || !cloud.uploadPreset) {
@@ -1291,7 +1291,7 @@ function initBulkUpload() {
 async function addBulkFiles(files) {
   let warnings = [];
   for (const f of files) {
-    if (f.size > 500 * 1024 * 1024) { toast(`${f.name} muito grande (max 500MB)`, 'err'); continue; }
+    if (f.size > 100 * 1024 * 1024) { toast(`${f.name} muito grande (max 100MB no Cloudinary free). Comprima antes de enviar.`, 'err'); continue; }
     const check = await validateVideo(f);
     if (!check.ok) warnings.push(`${f.name}: ${check.issues.join(', ')}`);
     bulkFiles.push({ file: f, name: f.name, size: f.size, url: null, uploading: false, done: false, duration: check.duration, resolution: check.w && check.h ? `${check.w}x${check.h}` : '', blobUrl: URL.createObjectURL(f) });
