@@ -1869,10 +1869,9 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-24T15:15:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-24T15:45:33.251238+00:00",
+    "media_id": "18533731867072582"
   },
   {
     "id": "mqs7o4fqxleuj",
@@ -1882,10 +1881,9 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-24T15:15:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-24T15:45:33.251238+00:00",
+    "media_id": "17903377893286051"
   },
   {
     "id": "mqs7o4fqveums",
@@ -1895,9 +1893,8 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-24T15:15:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-24T15:45:33.251238+00:00",
+    "media_id": "18072268445700251"
   }
 ]
