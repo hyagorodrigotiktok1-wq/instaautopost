@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-24T07:45:29.915305+00:00",
+    "timestamp_brt": "24/06/2026 04:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-24T07:30:38.660979+00:00",
     "timestamp_brt": "24/06/2026 04:30",
     "posted": 0,
@@ -549,16 +560,5 @@
       "[SKIP] mqr114ktuyk8l agendado para depois",
       "[SKIP] mqr114kt1iteq agendado para depois"
     ]
-  },
-  {
-    "timestamp": "2026-06-23T19:15:32.528416+00:00",
-    "timestamp_brt": "23/06/2026 16:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 1,
-    "details": []
   }
 ]
