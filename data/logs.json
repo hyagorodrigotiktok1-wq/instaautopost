@@ -1,5 +1,23 @@
 [
   {
+    "timestamp": "2026-06-24T13:30:37.435163+00:00",
+    "timestamp_brt": "24/06/2026 10:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 6,
+    "total_pending": 6,
+    "replies": 2,
+    "details": [
+      "[SKIP] mqs23rm12108k agendado para depois",
+      "[SKIP] mqs23rm1fvf9o agendado para depois",
+      "[SKIP] mqs23rm1z5u8f agendado para depois",
+      "[SKIP] mqs25rhom1lsm agendado para depois",
+      "[SKIP] mqs25rhot35br agendado para depois",
+      "[SKIP] mqs25rho32gke agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-24T13:15:30.801611+00:00",
     "timestamp_brt": "24/06/2026 10:15",
     "posted": 0,
@@ -560,17 +578,6 @@
     "skipped": 0,
     "total_pending": 0,
     "replies": 0,
-    "details": []
-  },
-  {
-    "timestamp": "2026-06-24T01:00:34.820015+00:00",
-    "timestamp_brt": "23/06/2026 22:00",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 1,
     "details": []
   }
 ]
