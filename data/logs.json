@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-25T03:30:33.809761+00:00",
+    "timestamp_brt": "25/06/2026 00:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-25T03:15:28.522986+00:00",
     "timestamp_brt": "25/06/2026 00:15",
     "posted": 0,
@@ -556,21 +567,6 @@
       "[COOLDOWN] mqs7o4fpws7o1: aguardando 15min para @default",
       "[COOLDOWN] mqs7o4fqxleuj: aguardando 15min para @conservadora",
       "[COOLDOWN] mqs7o4fqveums: aguardando 15min para @flaviobolsonaro"
-    ]
-  },
-  {
-    "timestamp": "2026-06-24T15:00:51.722742+00:00",
-    "timestamp_brt": "24/06/2026 12:00",
-    "posted": 3,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 1,
-    "details": [
-      "[OK] mqs25rhom1lsm -> @default (media 18013344359908774)",
-      "[OK] mqs25rhot35br -> @conservadora (media 17940986868053410)",
-      "[OK] mqs25rho32gke -> @flaviobolsonaro (media 17940425466056997)"
     ]
   }
 ]
