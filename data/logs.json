@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-25T02:45:25.011774+00:00",
+    "timestamp_brt": "24/06/2026 23:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-25T02:30:28.680379+00:00",
     "timestamp_brt": "24/06/2026 23:30",
     "posted": 0,
@@ -564,21 +575,6 @@
     "skipped": 3,
     "total_pending": 3,
     "replies": 0,
-    "details": [
-      "[SKIP] mqs25rhom1lsm agendado para depois",
-      "[SKIP] mqs25rhot35br agendado para depois",
-      "[SKIP] mqs25rho32gke agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-24T14:15:33.722830+00:00",
-    "timestamp_brt": "24/06/2026 11:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 2,
     "details": [
       "[SKIP] mqs25rhom1lsm agendado para depois",
       "[SKIP] mqs25rhot35br agendado para depois",
