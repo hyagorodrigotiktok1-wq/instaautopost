@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-25T02:15:30.834569+00:00",
+    "timestamp_brt": "24/06/2026 23:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 1,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-25T02:00:33.085515+00:00",
     "timestamp_brt": "24/06/2026 23:00",
     "posted": 0,
@@ -576,24 +587,6 @@
       "[OK] mqs23rm12108k -> @default (media 18208394437355035)",
       "[OK] mqs23rm1fvf9o -> @conservadora (media 18119884870703026)",
       "[OK] mqs23rm1z5u8f -> @flaviobolsonaro (media 17881066989458042)",
-      "[SKIP] mqs25rhom1lsm agendado para depois",
-      "[SKIP] mqs25rhot35br agendado para depois",
-      "[SKIP] mqs25rho32gke agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-24T13:45:30.466202+00:00",
-    "timestamp_brt": "24/06/2026 10:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 6,
-    "total_pending": 6,
-    "replies": 4,
-    "details": [
-      "[SKIP] mqs23rm12108k agendado para depois",
-      "[SKIP] mqs23rm1fvf9o agendado para depois",
-      "[SKIP] mqs23rm1z5u8f agendado para depois",
       "[SKIP] mqs25rhom1lsm agendado para depois",
       "[SKIP] mqs25rhot35br agendado para depois",
       "[SKIP] mqs25rho32gke agendado para depois"
