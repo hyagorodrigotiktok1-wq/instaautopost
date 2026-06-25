@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-25T03:15:28.522986+00:00",
+    "timestamp_brt": "25/06/2026 00:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-25T03:00:36.475090+00:00",
     "timestamp_brt": "25/06/2026 00:00",
     "posted": 0,
@@ -560,21 +571,6 @@
       "[OK] mqs25rhom1lsm -> @default (media 18013344359908774)",
       "[OK] mqs25rhot35br -> @conservadora (media 17940986868053410)",
       "[OK] mqs25rho32gke -> @flaviobolsonaro (media 17940425466056997)"
-    ]
-  },
-  {
-    "timestamp": "2026-06-24T14:45:27.042536+00:00",
-    "timestamp_brt": "24/06/2026 11:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 2,
-    "details": [
-      "[SKIP] mqs25rhom1lsm agendado para depois",
-      "[SKIP] mqs25rhot35br agendado para depois",
-      "[SKIP] mqs25rho32gke agendado para depois"
     ]
   }
 ]
