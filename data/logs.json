@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-25T03:45:27.822775+00:00",
+    "timestamp_brt": "25/06/2026 00:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-25T03:30:33.809761+00:00",
     "timestamp_brt": "25/06/2026 00:30",
     "posted": 0,
@@ -552,21 +563,6 @@
       "[COOLDOWN] mqs7o4fpws7o1: aguardando 0min para @default",
       "[COOLDOWN] mqs7o4fqxleuj: aguardando 0min para @conservadora",
       "[COOLDOWN] mqs7o4fqveums: aguardando 0min para @flaviobolsonaro"
-    ]
-  },
-  {
-    "timestamp": "2026-06-24T15:15:36.756445+00:00",
-    "timestamp_brt": "24/06/2026 12:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 0,
-    "details": [
-      "[COOLDOWN] mqs7o4fpws7o1: aguardando 15min para @default",
-      "[COOLDOWN] mqs7o4fqxleuj: aguardando 15min para @conservadora",
-      "[COOLDOWN] mqs7o4fqveums: aguardando 15min para @flaviobolsonaro"
     ]
   }
 ]
