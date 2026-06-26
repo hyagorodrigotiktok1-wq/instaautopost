@@ -239,8 +239,10 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
 /* RESPONSIVE */
 @media(max-width:600px){
-  .nav{padding:0 10px}.nav h1{font-size:15px}
-  .nav-tab{padding:6px 10px;font-size:13px}
+  .nav{padding:8px 10px;height:auto;flex-direction:column;align-items:flex-start;gap:6px}
+  .nav h1{font-size:15px}
+  .nav-tabs{width:100%;margin-left:0;flex-wrap:wrap;gap:3px}
+  .nav-tab{padding:5px 9px;font-size:12px}
   .container{padding:14px 10px 80px}
   .post-item{flex-direction:column}
   .post-actions{align-self:flex-end}
