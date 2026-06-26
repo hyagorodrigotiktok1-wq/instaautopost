@@ -1,5 +1,23 @@
 [
   {
+    "timestamp": "2026-06-26T17:00:42.380265+00:00",
+    "timestamp_brt": "26/06/2026 14:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 6,
+    "total_pending": 6,
+    "replies": 0,
+    "details": [
+      "[COOLDOWN] mqv69lwk3fqfy: aguardando 14min para @default",
+      "[COOLDOWN] mqv69lwkyjq59: aguardando 14min para @conservadora",
+      "[COOLDOWN] mqv69lwk54q5d: aguardando 14min para @flaviobolsonaro",
+      "[SKIP] mqv6agiduh4xm agendado para depois",
+      "[SKIP] mqv6agie4egzx agendado para depois",
+      "[SKIP] mqv6b0d2jxaye agendado para depois"
+    ]
+  },
+  {
     "timestamp": "2026-06-26T16:45:31.240618+00:00",
     "timestamp_brt": "26/06/2026 13:45",
     "posted": 3,
@@ -534,17 +552,6 @@
   {
     "timestamp": "2026-06-26T04:45:26.622525+00:00",
     "timestamp_brt": "26/06/2026 01:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
-  },
-  {
-    "timestamp": "2026-06-26T04:30:33.387165+00:00",
-    "timestamp_brt": "26/06/2026 01:30",
     "posted": 0,
     "failed": 0,
     "retried": 0,
