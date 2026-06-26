@@ -1977,9 +1977,10 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "18086964554109535"
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   },
   {
     "id": "mqv5hlabbjf5t",
@@ -1989,9 +1990,10 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "17931953625339370"
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   },
   {
     "id": "mqv5hlabqtrnj",
@@ -2001,8 +2003,48 @@
     "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "17977040772049430"
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mqv69lwk3fqfy",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782492889/yrzwwcripwyxqd2vxglc.mp4",
+    "caption": "A VERDADE SOBRE O NORDESTE! Rodrigo Valadares abre o jogo e propõe Impeachment de Alexandre de Moraes\n\n📝 [POLÍTICA] O deputado federal Rodrigo Valadares (PL) afirma sua pré-candidatura ao Senado por Sergipe e revela a estratégia da direita para consolidar o avanço do bolsonarismo na região Nordeste.\n\nEm entrevista exclusiva à RedeTV!, o parlamentar destaca que o eleitor nordestino possui valores conservadores e que a rejeição à esquerda está crescendo. Valadares faz um desafio aberto a outros pré-candidatos e assume um compromisso público polêmico: a defesa do impeachment do ministro do Supremo Tribunal Federal (STF), Alexandre de Moraes.\n\nEle também alerta os eleitores sobre \"candidaturas fakes\" de direita que, segundo ele, surgem apenas para confundir o povo e trair o movimento.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-26T17:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mqv69lwkyjq59",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782492889/yrzwwcripwyxqd2vxglc.mp4",
+    "caption": "A VERDADE SOBRE O NORDESTE! Rodrigo Valadares abre o jogo e propõe Impeachment de Alexandre de Moraes\n\n📝 [POLÍTICA] O deputado federal Rodrigo Valadares (PL) afirma sua pré-candidatura ao Senado por Sergipe e revela a estratégia da direita para consolidar o avanço do bolsonarismo na região Nordeste.\n\nEm entrevista exclusiva à RedeTV!, o parlamentar destaca que o eleitor nordestino possui valores conservadores e que a rejeição à esquerda está crescendo. Valadares faz um desafio aberto a outros pré-candidatos e assume um compromisso público polêmico: a defesa do impeachment do ministro do Supremo Tribunal Federal (STF), Alexandre de Moraes.\n\nEle também alerta os eleitores sobre \"candidaturas fakes\" de direita que, segundo ele, surgem apenas para confundir o povo e trair o movimento.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-26T17:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mqv69lwk54q5d",
+    "account": "flaviobolsonaro",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782492889/yrzwwcripwyxqd2vxglc.mp4",
+    "caption": "A VERDADE SOBRE O NORDESTE! Rodrigo Valadares abre o jogo e propõe Impeachment de Alexandre de Moraes\n\n📝 [POLÍTICA] O deputado federal Rodrigo Valadares (PL) afirma sua pré-candidatura ao Senado por Sergipe e revela a estratégia da direita para consolidar o avanço do bolsonarismo na região Nordeste.\n\nEm entrevista exclusiva à RedeTV!, o parlamentar destaca que o eleitor nordestino possui valores conservadores e que a rejeição à esquerda está crescendo. Valadares faz um desafio aberto a outros pré-candidatos e assume um compromisso público polêmico: a defesa do impeachment do ministro do Supremo Tribunal Federal (STF), Alexandre de Moraes.\n\nEle também alerta os eleitores sobre \"candidaturas fakes\" de direita que, segundo ele, surgem apenas para confundir o povo e trair o movimento.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-26T17:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   }
 ]
