@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-27T05:00:34.052143+00:00",
+    "timestamp_brt": "27/06/2026 02:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-27T04:45:24.119217+00:00",
     "timestamp_brt": "27/06/2026 01:45",
     "posted": 0,
@@ -582,16 +593,5 @@
       "[OK] mqv5hlabbjf5t -> @conservadora (media 17931953625339370)",
       "[OK] mqv5hlabqtrnj -> @flaviobolsonaro (media 17977040772049430)"
     ]
-  },
-  {
-    "timestamp": "2026-06-26T16:30:30.398638+00:00",
-    "timestamp_brt": "26/06/2026 13:30",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
