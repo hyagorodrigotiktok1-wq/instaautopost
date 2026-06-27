@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-27T05:45:23.507716+00:00",
+    "timestamp_brt": "27/06/2026 02:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-27T05:30:31.808224+00:00",
     "timestamp_brt": "27/06/2026 02:30",
     "posted": 0,
@@ -560,24 +571,6 @@
       "[OK] mqv69lwk3fqfy -> @default (media 17999553305775517)",
       "[OK] mqv69lwkyjq59 -> @conservadora (media 18105920116996411)",
       "[OK] mqv69lwk54q5d -> @flaviobolsonaro (media 18060325109742970)",
-      "[SKIP] mqv6agiduh4xm agendado para depois",
-      "[SKIP] mqv6agie4egzx agendado para depois",
-      "[SKIP] mqv6b0d2jxaye agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-26T17:15:26.860225+00:00",
-    "timestamp_brt": "26/06/2026 14:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 6,
-    "total_pending": 6,
-    "replies": 0,
-    "details": [
-      "[COOLDOWN] mqv69lwk3fqfy: aguardando 0min para @default",
-      "[COOLDOWN] mqv69lwkyjq59: aguardando 0min para @conservadora",
-      "[COOLDOWN] mqv69lwk54q5d: aguardando 0min para @flaviobolsonaro",
       "[SKIP] mqv6agiduh4xm agendado para depois",
       "[SKIP] mqv6agie4egzx agendado para depois",
       "[SKIP] mqv6b0d2jxaye agendado para depois"
