@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-06-27T07:15:30.157680+00:00",
+    "timestamp_brt": "27/06/2026 04:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-06-27T07:00:32.000634+00:00",
     "timestamp_brt": "27/06/2026 04:00",
     "posted": 0,
@@ -542,19 +553,6 @@
     "replies": 0,
     "details": [
       "[OK] mqv6b0d2jxaye -> @flaviobolsonaro (media 18209803870341726)"
-    ]
-  },
-  {
-    "timestamp": "2026-06-26T18:45:23.847401+00:00",
-    "timestamp_brt": "26/06/2026 15:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 1,
-    "total_pending": 1,
-    "replies": 0,
-    "details": [
-      "[SKIP] mqv6b0d2jxaye agendado para depois"
     ]
   }
 ]
