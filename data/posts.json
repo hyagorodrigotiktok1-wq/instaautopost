@@ -2157,10 +2157,9 @@
     "hashtags": "#lula #bolsonaro #direitaconservadora #politica #noticias",
     "cover_url": null,
     "scheduled_at": "2026-06-29T16:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T16:00:35.933796+00:00",
+    "media_id": "18095831555248640"
   },
   {
     "id": "mqzeh8w8wem0b",
@@ -2170,10 +2169,9 @@
     "hashtags": "#lula #bolsonaro #direitaconservadora #politica #noticias",
     "cover_url": null,
     "scheduled_at": "2026-06-29T16:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T16:00:35.933796+00:00",
+    "media_id": "18041204513607676"
   },
   {
     "id": "mqzeh8w81lqn1",
@@ -2183,9 +2181,8 @@
     "hashtags": "#lula #bolsonaro #direitaconservadora #politica #noticias",
     "cover_url": null,
     "scheduled_at": "2026-06-29T16:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T16:00:35.933796+00:00",
+    "media_id": "17868779592562597"
   }
 ]
