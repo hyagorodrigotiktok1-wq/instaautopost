@@ -2193,10 +2193,9 @@
     "hashtags": "#lula #boslonaro #foryou #viral",
     "cover_url": null,
     "scheduled_at": "2026-06-29T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T19:00:31.575820+00:00",
+    "media_id": "17870260227625290"
   },
   {
     "id": "mqzioppzb8ew6",
@@ -2206,10 +2205,9 @@
     "hashtags": "#lula #boslonaro #foryou #viral",
     "cover_url": null,
     "scheduled_at": "2026-06-29T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T19:00:31.575820+00:00",
+    "media_id": "18147327715457375"
   },
   {
     "id": "mqzioppzs52cz",
@@ -2219,9 +2217,8 @@
     "hashtags": "#lula #boslonaro #foryou #viral",
     "cover_url": null,
     "scheduled_at": "2026-06-29T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-29T19:00:31.575820+00:00",
+    "media_id": "17994363296993872"
   }
 ]
