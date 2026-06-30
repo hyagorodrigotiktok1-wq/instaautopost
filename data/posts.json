@@ -2373,5 +2373,44 @@
     "posted_at": null,
     "media_id": null,
     "error": null
+  },
+  {
+    "id": "mr0t2zy2onhy6",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782833570/lv7gmpcbnbefxppxqvnh.mp4",
+    "caption": "A conta da reeleição já começou a aparecer. Mais “bondades”, mais exceções fiscais, mais pressão sobre juros, inflação e contas públicas. Lula faz campanha. O Brasil paga a fatura. E os sinais de desgaste da economia preocupam cada vez mais.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-30T19:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr0t2zy2k4prv",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782833570/lv7gmpcbnbefxppxqvnh.mp4",
+    "caption": "A conta da reeleição já começou a aparecer. Mais “bondades”, mais exceções fiscais, mais pressão sobre juros, inflação e contas públicas. Lula faz campanha. O Brasil paga a fatura. E os sinais de desgaste da economia preocupam cada vez mais.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-30T19:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr0t2zy2uy5el",
+    "account": "flaviobolsonaro",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782833570/lv7gmpcbnbefxppxqvnh.mp4",
+    "caption": "A conta da reeleição já começou a aparecer. Mais “bondades”, mais exceções fiscais, mais pressão sobre juros, inflação e contas públicas. Lula faz campanha. O Brasil paga a fatura. E os sinais de desgaste da economia preocupam cada vez mais.",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-30T19:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   }
 ]
