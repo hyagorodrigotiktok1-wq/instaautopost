@@ -2229,10 +2229,9 @@
     "hashtags": "#foralula #direita #bolsonaro #flaviobolsonaro #direitaconservadora",
     "cover_url": null,
     "scheduled_at": "2026-06-30T12:45:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-30T12:45:27.859827+00:00",
+    "media_id": "18059913050725354"
   },
   {
     "id": "mr0mp5j6u1pt2",
@@ -2242,10 +2241,9 @@
     "hashtags": "#foralula #direita #bolsonaro #flaviobolsonaro #direitaconservadora",
     "cover_url": null,
     "scheduled_at": "2026-06-30T12:45:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-30T12:45:27.859827+00:00",
+    "media_id": "18006112640934994"
   },
   {
     "id": "mr0mp5j6nb44y",
@@ -2255,9 +2253,8 @@
     "hashtags": "#foralula #direita #bolsonaro #flaviobolsonaro #direitaconservadora",
     "cover_url": null,
     "scheduled_at": "2026-06-30T12:45:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-06-30T12:45:27.859827+00:00",
+    "media_id": "17952132275998952"
   }
 ]
