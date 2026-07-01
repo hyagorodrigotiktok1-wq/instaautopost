@@ -2733,10 +2733,9 @@
     "hashtags": "#politica #foralula #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-01T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T19:00:34.405618+00:00",
+    "media_id": "17888414607572266"
   },
   {
     "id": "mr2f06fpw236d",
@@ -2746,10 +2745,9 @@
     "hashtags": "#politica #foralula #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-01T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T19:00:34.405618+00:00",
+    "media_id": "17896684959474925"
   },
   {
     "id": "mr2f06fp5bt53",
@@ -2759,9 +2757,8 @@
     "hashtags": "#politica #foralula #flaviobolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-01T19:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T19:00:34.405618+00:00",
+    "media_id": "18332213242254618"
   }
 ]
