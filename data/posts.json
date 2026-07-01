@@ -2769,10 +2769,9 @@
     "hashtags": "#brasil #politica #noticia #viral",
     "cover_url": null,
     "scheduled_at": "2026-07-01T20:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T20:00:35.457027+00:00",
+    "media_id": "18134665801579003"
   },
   {
     "id": "mr2hiov4im2e8",
@@ -2782,10 +2781,9 @@
     "hashtags": "#brasil #politica #noticia #viral",
     "cover_url": null,
     "scheduled_at": "2026-07-01T20:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T20:00:35.457027+00:00",
+    "media_id": "18087565928547595"
   },
   {
     "id": "mr2hiov4pgsn3",
@@ -2795,9 +2793,8 @@
     "hashtags": "#brasil #politica #noticia #viral",
     "cover_url": null,
     "scheduled_at": "2026-07-01T20:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T20:00:35.457027+00:00",
+    "media_id": "18094064156191652"
   }
 ]
