@@ -2616,5 +2616,44 @@
     "status": "posted",
     "posted_at": "2026-07-01T01:00:33.927749+00:00",
     "media_id": "17991423101812220"
+  },
+  {
+    "id": "mr26jdosx9cgx",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782916583/jg1vdv7mvedrdn7my1ht.mp4",
+    "caption": "Milei cancela participação na Cúpula do Mercosul\nO presidente argentino Javier Milei cancelou sua participação na reunião de cúpula do Mercosul, realizada no Paraguai. A decisão, que evita um novo encontro com o presidente Luiz Inácio Lula da Silva, repercutiu na imprensa internacional e foi vinculada ao recente encontro entre Milei e o senador brasileiro Flávio Bolsonaro, reforçando a proximidade política entre os líderes. A justificativa oficial do governo argentino é de que Milei permanecerá em Buenos Aires para acompanhar a posse do novo chefe de gabinete da presidência, Diego Santilli.",
+    "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T15:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr26jdos7p5d3",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782916583/jg1vdv7mvedrdn7my1ht.mp4",
+    "caption": "Milei cancela participação na Cúpula do Mercosul\nO presidente argentino Javier Milei cancelou sua participação na reunião de cúpula do Mercosul, realizada no Paraguai. A decisão, que evita um novo encontro com o presidente Luiz Inácio Lula da Silva, repercutiu na imprensa internacional e foi vinculada ao recente encontro entre Milei e o senador brasileiro Flávio Bolsonaro, reforçando a proximidade política entre os líderes. A justificativa oficial do governo argentino é de que Milei permanecerá em Buenos Aires para acompanhar a posse do novo chefe de gabinete da presidência, Diego Santilli.",
+    "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T15:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr26jdos4a0nt",
+    "account": "flaviobolsonaro",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782916583/jg1vdv7mvedrdn7my1ht.mp4",
+    "caption": "Milei cancela participação na Cúpula do Mercosul\nO presidente argentino Javier Milei cancelou sua participação na reunião de cúpula do Mercosul, realizada no Paraguai. A decisão, que evita um novo encontro com o presidente Luiz Inácio Lula da Silva, repercutiu na imprensa internacional e foi vinculada ao recente encontro entre Milei e o senador brasileiro Flávio Bolsonaro, reforçando a proximidade política entre os líderes. A justificativa oficial do governo argentino é de que Milei permanecerá em Buenos Aires para acompanhar a posse do novo chefe de gabinete da presidência, Diego Santilli.",
+    "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T15:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   }
 ]
