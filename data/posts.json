@@ -2625,10 +2625,9 @@
     "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T15:00:36.191510+00:00",
+    "media_id": "17944800987035645"
   },
   {
     "id": "mr26jdos7p5d3",
@@ -2638,10 +2637,9 @@
     "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T15:00:36.191510+00:00",
+    "media_id": "17921249352387708"
   },
   {
     "id": "mr26jdos4a0nt",
@@ -2651,9 +2649,8 @@
     "hashtags": "#JavierMilei #Lula #Mercosul #PoliticaInternacional #Argentina #Brasil #FlavioBolsonaro #Geopolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T15:00:36.191510+00:00",
+    "media_id": "18154910983438470"
   }
 ]
