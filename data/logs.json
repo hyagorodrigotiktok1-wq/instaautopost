@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-01T09:45:24.792625+00:00",
+    "timestamp_brt": "01/07/2026 06:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 1,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-01T09:30:33.202714+00:00",
     "timestamp_brt": "01/07/2026 06:30",
     "posted": 0,
@@ -640,30 +651,6 @@
   {
     "timestamp": "2026-06-30T21:30:32.548478+00:00",
     "timestamp_brt": "30/06/2026 18:30",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 12,
-    "total_pending": 12,
-    "replies": 0,
-    "details": [
-      "[SKIP] mr0t8hw0le8d1 agendado para depois",
-      "[SKIP] mr0t8hw0feeu7 agendado para depois",
-      "[SKIP] mr0t8hw0xypi3 agendado para depois",
-      "[SKIP] mr112ahs7mb51 agendado para depois",
-      "[SKIP] mr112ahsqjhv2 agendado para depois",
-      "[SKIP] mr112ahsdrugt agendado para depois",
-      "[SKIP] mr113m8if4fl2 agendado para depois",
-      "[SKIP] mr113m8ia5dwu agendado para depois",
-      "[SKIP] mr113m8il21le agendado para depois",
-      "[SKIP] mr115lzg99ryn agendado para depois",
-      "[SKIP] mr115lzgbzj4u agendado para depois",
-      "[SKIP] mr115lzgwj661 agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-30T21:15:27.087984+00:00",
-    "timestamp_brt": "30/06/2026 18:15",
     "posted": 0,
     "failed": 0,
     "retried": 0,
