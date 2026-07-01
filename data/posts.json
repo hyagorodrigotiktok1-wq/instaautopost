@@ -2652,5 +2652,44 @@
     "status": "posted",
     "posted_at": "2026-07-01T15:00:36.191510+00:00",
     "media_id": "18154910983438470"
+  },
+  {
+    "id": "mr2c7cmbdk0ug",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782926130/ikhjzobxfdvnm6sqzs20.mov",
+    "caption": "URGENTE!\nJovem se arrepende de ter votado no Lula e faz desabafo emocionante:\n\" como alguém com um salário mínimo sobrevive nesse país?\"\nE... furou a bolha\n\n\nVia:@pedroponciobr",
+    "hashtags": "#foralula #flaviobolsonaro #direita",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T17:30:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr2c7cmbgxlq6",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782926130/ikhjzobxfdvnm6sqzs20.mov",
+    "caption": "URGENTE!\nJovem se arrepende de ter votado no Lula e faz desabafo emocionante:\n\" como alguém com um salário mínimo sobrevive nesse país?\"\nE... furou a bolha\n\n\nVia:@pedroponciobr",
+    "hashtags": "#foralula #flaviobolsonaro #direita",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T17:30:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr2c7cmbjqur6",
+    "account": "flaviobolsonaro",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782926130/ikhjzobxfdvnm6sqzs20.mov",
+    "caption": "URGENTE!\nJovem se arrepende de ter votado no Lula e faz desabafo emocionante:\n\" como alguém com um salário mínimo sobrevive nesse país?\"\nE... furou a bolha\n\n\nVia:@pedroponciobr",
+    "hashtags": "#foralula #flaviobolsonaro #direita",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T17:30:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   }
 ]
