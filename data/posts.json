@@ -2553,10 +2553,9 @@
     "hashtags": "#PesquisaEleitoral #Lula #Bolsonaro #GovernoFederal #AnalisePolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T00:00:36.848255+00:00",
+    "media_id": "18272254576288831"
   },
   {
     "id": "mr113m8ia5dwu",
@@ -2566,10 +2565,9 @@
     "hashtags": "#PesquisaEleitoral #Lula #Bolsonaro #GovernoFederal #AnalisePolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T00:00:36.848255+00:00",
+    "media_id": "18135814672575455"
   },
   {
     "id": "mr113m8il21le",
@@ -2579,10 +2577,9 @@
     "hashtags": "#PesquisaEleitoral #Lula #Bolsonaro #GovernoFederal #AnalisePolitica",
     "cover_url": null,
     "scheduled_at": "2026-07-01T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-01T00:00:36.848255+00:00",
+    "media_id": "18106375781081871"
   },
   {
     "id": "mr115lzg99ryn",
