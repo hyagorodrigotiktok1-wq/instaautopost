@@ -2760,5 +2760,44 @@
     "status": "posted",
     "posted_at": "2026-07-01T19:00:34.405618+00:00",
     "media_id": "18332213242254618"
+  },
+  {
+    "id": "mr2hiov4imdf8",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782935042/szv7shuu9qwwxvuovlmk.mp4",
+    "caption": "Quem rouba está solto e te governa.",
+    "hashtags": "#brasil #politica #noticia #viral",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T20:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr2hiov4im2e8",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782935042/szv7shuu9qwwxvuovlmk.mp4",
+    "caption": "Quem rouba está solto e te governa.",
+    "hashtags": "#brasil #politica #noticia #viral",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T20:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
+  },
+  {
+    "id": "mr2hiov4pgsn3",
+    "account": "flaviobolsonaro",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782935042/szv7shuu9qwwxvuovlmk.mp4",
+    "caption": "Quem rouba está solto e te governa.",
+    "hashtags": "#brasil #politica #noticia #viral",
+    "cover_url": null,
+    "scheduled_at": "2026-07-01T20:00:00.000Z",
+    "status": "pending",
+    "posted_at": null,
+    "media_id": null,
+    "error": null
   }
 ]
