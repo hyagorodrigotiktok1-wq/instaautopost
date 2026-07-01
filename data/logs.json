@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-01T04:30:36.357838+00:00",
+    "timestamp_brt": "01/07/2026 01:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-01T04:15:31.789804+00:00",
     "timestamp_brt": "01/07/2026 01:15",
     "posted": 0,
@@ -976,36 +987,6 @@
     "skipped": 18,
     "total_pending": 18,
     "replies": 0,
-    "details": [
-      "[SKIP] mr0sva15r12qd agendado para depois",
-      "[SKIP] mr0sva150a964 agendado para depois",
-      "[SKIP] mr0sva15e69xu agendado para depois",
-      "[SKIP] mr0syiic7b855 agendado para depois",
-      "[SKIP] mr0syiicqawiu agendado para depois",
-      "[SKIP] mr0syiicucn25 agendado para depois",
-      "[SKIP] mr0t2zy2onhy6 agendado para depois",
-      "[SKIP] mr0t2zy2k4prv agendado para depois",
-      "[SKIP] mr0t2zy2uy5el agendado para depois",
-      "[SKIP] mr0t5d59cg06e agendado para depois",
-      "[SKIP] mr0t5d59iv2j5 agendado para depois",
-      "[SKIP] mr0t5d59bgzhi agendado para depois",
-      "[SKIP] mr0t6c25cigtw agendado para depois",
-      "[SKIP] mr0t6c26hbl27 agendado para depois",
-      "[SKIP] mr0t6c266lgpa agendado para depois",
-      "[SKIP] mr0t8hw0le8d1 agendado para depois",
-      "[SKIP] mr0t8hw0feeu7 agendado para depois",
-      "[SKIP] mr0t8hw0xypi3 agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-30T16:00:36.752108+00:00",
-    "timestamp_brt": "30/06/2026 13:00",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 18,
-    "total_pending": 18,
-    "replies": 1,
     "details": [
       "[SKIP] mr0sva15r12qd agendado para depois",
       "[SKIP] mr0sva150a964 agendado para depois",
