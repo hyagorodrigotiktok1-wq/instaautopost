@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-01T07:30:32.263636+00:00",
+    "timestamp_brt": "01/07/2026 04:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-01T07:15:28.398800+00:00",
     "timestamp_brt": "01/07/2026 04:15",
     "posted": 0,
@@ -794,30 +805,6 @@
     "total_pending": 9,
     "replies": 0,
     "details": [
-      "[SKIP] mr0t5d59cg06e agendado para depois",
-      "[SKIP] mr0t5d59iv2j5 agendado para depois",
-      "[SKIP] mr0t5d59bgzhi agendado para depois",
-      "[SKIP] mr0t6c25cigtw agendado para depois",
-      "[SKIP] mr0t6c26hbl27 agendado para depois",
-      "[SKIP] mr0t6c266lgpa agendado para depois",
-      "[SKIP] mr0t8hw0le8d1 agendado para depois",
-      "[SKIP] mr0t8hw0feeu7 agendado para depois",
-      "[SKIP] mr0t8hw0xypi3 agendado para depois"
-    ]
-  },
-  {
-    "timestamp": "2026-06-30T19:00:34.207715+00:00",
-    "timestamp_brt": "30/06/2026 16:00",
-    "posted": 3,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 9,
-    "total_pending": 9,
-    "replies": 0,
-    "details": [
-      "[OK] mr0t2zy2onhy6 -> @default (media 18095982068255382)",
-      "[OK] mr0t2zy2k4prv -> @conservadora (media 18155422210490208)",
-      "[OK] mr0t2zy2uy5el -> @flaviobolsonaro (media 17899808670464091)",
       "[SKIP] mr0t5d59cg06e agendado para depois",
       "[SKIP] mr0t5d59iv2j5 agendado para depois",
       "[SKIP] mr0t5d59bgzhi agendado para depois",
