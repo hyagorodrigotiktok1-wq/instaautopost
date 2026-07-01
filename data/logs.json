@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-01T13:15:25.817324+00:00",
+    "timestamp_brt": "01/07/2026 10:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-01T13:00:38.424935+00:00",
     "timestamp_brt": "01/07/2026 10:00",
     "posted": 0,
@@ -540,21 +551,6 @@
       "[OK] mr115lzg99ryn -> @default (media 18604076344029053)",
       "[OK] mr115lzgbzj4u -> @conservadora (media 18108900805991089)",
       "[OK] mr115lzgwj661 -> @flaviobolsonaro (media 17991423101812220)"
-    ]
-  },
-  {
-    "timestamp": "2026-07-01T00:45:22.963732+00:00",
-    "timestamp_brt": "30/06/2026 21:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 0,
-    "details": [
-      "[SKIP] mr115lzg99ryn agendado para depois",
-      "[SKIP] mr115lzgbzj4u agendado para depois",
-      "[SKIP] mr115lzgwj661 agendado para depois"
     ]
   }
 ]
