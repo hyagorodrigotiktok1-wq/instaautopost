@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-07-01T01:00:33.927749+00:00",
+    "timestamp_brt": "30/06/2026 22:00",
+    "posted": 3,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": [
+      "[OK] mr115lzg99ryn -> @default (media 18604076344029053)",
+      "[OK] mr115lzgbzj4u -> @conservadora (media 18108900805991089)",
+      "[OK] mr115lzgwj661 -> @flaviobolsonaro (media 17991423101812220)"
+    ]
+  },
+  {
     "timestamp": "2026-07-01T00:45:22.963732+00:00",
     "timestamp_brt": "30/06/2026 21:45",
     "posted": 0,
@@ -1047,16 +1062,5 @@
       "[OK] mr0mp5j6u1pt2 -> @conservadora (media 18006112640934994)",
       "[OK] mr0mp5j6nb44y -> @flaviobolsonaro (media 17952132275998952)"
     ]
-  },
-  {
-    "timestamp": "2026-06-30T12:30:34.081549+00:00",
-    "timestamp_brt": "30/06/2026 09:30",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
