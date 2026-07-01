@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-01T03:45:25.189435+00:00",
+    "timestamp_brt": "01/07/2026 00:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-01T03:30:33.315063+00:00",
     "timestamp_brt": "01/07/2026 00:30",
     "posted": 0,
@@ -1047,16 +1058,5 @@
       "[SKIP] mr0syiicqawiu agendado para depois",
       "[SKIP] mr0syiicucn25 agendado para depois"
     ]
-  },
-  {
-    "timestamp": "2026-06-30T15:15:30.871804+00:00",
-    "timestamp_brt": "30/06/2026 12:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
