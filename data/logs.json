@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-02T06:15:22.939271+00:00",
+    "timestamp_brt": "02/07/2026 03:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-02T06:00:40.956929+00:00",
     "timestamp_brt": "02/07/2026 03:00",
     "posted": 0,
@@ -556,21 +567,6 @@
       "[OK] mr2ckraxi3th3 -> @default (media 17942528250251906)",
       "[OK] mr2ckraxf1e47 -> @conservadora (media 18108173095779775)",
       "[OK] mr2ckrax9pt31 -> @flaviobolsonaro (media 18134734504575483)"
-    ]
-  },
-  {
-    "timestamp": "2026-07-01T17:45:24.421835+00:00",
-    "timestamp_brt": "01/07/2026 14:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 3,
-    "total_pending": 3,
-    "replies": 0,
-    "details": [
-      "[SKIP] mr2ckraxi3th3 agendado para depois",
-      "[SKIP] mr2ckraxf1e47 agendado para depois",
-      "[SKIP] mr2ckrax9pt31 agendado para depois"
     ]
   }
 ]
