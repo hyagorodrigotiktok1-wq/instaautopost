@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-02T05:45:26.177929+00:00",
+    "timestamp_brt": "02/07/2026 02:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-02T05:30:30.845203+00:00",
     "timestamp_brt": "02/07/2026 02:30",
     "posted": 0,
@@ -568,16 +579,5 @@
       "[SKIP] mr2ckraxf1e47 agendado para depois",
       "[SKIP] mr2ckrax9pt31 agendado para depois"
     ]
-  },
-  {
-    "timestamp": "2026-07-01T17:15:24.805050+00:00",
-    "timestamp_brt": "01/07/2026 14:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
