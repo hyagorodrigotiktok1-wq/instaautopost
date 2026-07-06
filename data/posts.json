@@ -2805,10 +2805,9 @@
     "hashtags": "#Lula #JaquesWagner #Bahia #Alagoinhas #DiscursoLula #PoliticaBrasileira #RuiCosta #JerônimoRodrigues",
     "cover_url": null,
     "scheduled_at": "2026-07-06T13:30:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T13:30:49.943190+00:00",
+    "media_id": "17879725518478047"
   },
   {
     "id": "mr98zoto3cabn",
@@ -2818,10 +2817,9 @@
     "hashtags": "#Lula #JaquesWagner #Bahia #Alagoinhas #DiscursoLula #PoliticaBrasileira #RuiCosta #JerônimoRodrigues",
     "cover_url": null,
     "scheduled_at": "2026-07-06T13:30:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T13:30:49.943190+00:00",
+    "media_id": "17937355452295311"
   },
   {
     "id": "mr98zotovp37e",
@@ -2831,9 +2829,8 @@
     "hashtags": "#Lula #JaquesWagner #Bahia #Alagoinhas #DiscursoLula #PoliticaBrasileira #RuiCosta #JerônimoRodrigues",
     "cover_url": null,
     "scheduled_at": "2026-07-06T13:30:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T13:30:49.943190+00:00",
+    "media_id": "18120455251828430"
   }
 ]
