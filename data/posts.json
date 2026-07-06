@@ -2841,10 +2841,9 @@
     "hashtags": "#BancoMaster #PoliciaFederal #STF #AlexandreDeMoraes #DiasToffoli #Investigacao #NoticiasPolitica #Metropoles",
     "cover_url": null,
     "scheduled_at": "2026-07-06T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T15:00:56.729305+00:00",
+    "media_id": "18299021758304822"
   },
   {
     "id": "mr9antvu366ay",
@@ -2854,10 +2853,9 @@
     "hashtags": "#BancoMaster #PoliciaFederal #STF #AlexandreDeMoraes #DiasToffoli #Investigacao #NoticiasPolitica #Metropoles",
     "cover_url": null,
     "scheduled_at": "2026-07-06T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T15:00:56.729305+00:00",
+    "media_id": "18095392484523877"
   },
   {
     "id": "mr9antvuevsbx",
@@ -2867,9 +2865,8 @@
     "hashtags": "#BancoMaster #PoliciaFederal #STF #AlexandreDeMoraes #DiasToffoli #Investigacao #NoticiasPolitica #Metropoles",
     "cover_url": null,
     "scheduled_at": "2026-07-06T15:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-06T15:00:56.729305+00:00",
+    "media_id": "18125469910632932"
   }
 ]
