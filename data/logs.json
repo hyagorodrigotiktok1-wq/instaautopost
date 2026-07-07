@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-07T01:45:21.172182+00:00",
+    "timestamp_brt": "06/07/2026 22:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-07T01:30:47.821019+00:00",
     "timestamp_brt": "06/07/2026 22:30",
     "posted": 0,
@@ -557,16 +568,5 @@
       "[OK] mr98zoto3cabn -> @conservadora (media 17937355452295311)",
       "[OK] mr98zotovp37e -> @flaviobolsonaro (media 18120455251828430)"
     ]
-  },
-  {
-    "timestamp": "2026-07-06T13:15:39.735878+00:00",
-    "timestamp_brt": "06/07/2026 10:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
