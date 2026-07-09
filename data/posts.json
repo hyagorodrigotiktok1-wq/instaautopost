@@ -2913,10 +2913,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-09T14:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-09T14:00:57.046653+00:00",
+    "media_id": "18603734722047454"
   },
   {
     "id": "mrditpokvtess",
@@ -2926,10 +2925,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-09T14:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-09T14:00:57.046653+00:00",
+    "media_id": "17895906831542868"
   },
   {
     "id": "mrditpokxg29b",
@@ -2939,9 +2937,8 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-09T14:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-09T14:00:57.046653+00:00",
+    "media_id": "18124215142679922"
   }
 ]
