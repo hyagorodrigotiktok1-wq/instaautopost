@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-10T01:30:43.454414+00:00",
+    "timestamp_brt": "09/07/2026 22:30",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-10T01:15:22.860735+00:00",
     "timestamp_brt": "09/07/2026 22:15",
     "posted": 0,
@@ -556,16 +567,5 @@
       "[SKIP] mrditpokvtess agendado para depois",
       "[SKIP] mrditpokxg29b agendado para depois"
     ]
-  },
-  {
-    "timestamp": "2026-07-09T12:47:12.188901+00:00",
-    "timestamp_brt": "09/07/2026 09:47",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
