@@ -88,6 +88,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .toast-err{background:var(--err);color:#fff}
 .toast-warn{background:var(--warn);color:#fff}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.iap-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px}
+.iap-modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:340px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.iap-modal p{margin:0 0 20px;font-size:14px;line-height:1.6;color:var(--text);white-space:pre-wrap}
+.iap-modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.iap-modal-btns button{padding:8px 20px;border-radius:8px;border:none;font-size:14px;cursor:pointer;font-weight:500}
+.iap-btn-cancel{background:var(--bg3);color:var(--text2)}
+.iap-btn-ok{background:var(--accent);color:#fff}
 
 /* FILTERS */
 .filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
@@ -880,7 +887,7 @@ async function handleFileSelect(file) {
   if (!check.ok) {
     const msg = check.issues.join('. ');
     toast('⚠️ ' + msg, 'err');
-    if (!confirm('Problemas detectados:\n\n' + check.issues.join('\n') + '\n\nEnviar mesmo assim?')) return;
+    if (!await showConfirm('Problemas detectados:\n\n' + check.issues.join('\n') + '\n\nEnviar mesmo assim?', 'Enviar mesmo assim')) return;
   }
 
   const info = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB` + (check.duration ? `, ${Math.round(check.duration)}s, ${check.w}x${check.h}` : '') + ')';
@@ -1097,7 +1104,7 @@ function cancelEdit() {
 }
 
 async function deletePost(id) {
-  if (!confirm('Remover este post da fila?')) return;
+  if (!await showConfirm('Remover este post da fila?', 'Remover', 'Cancelar')) return;
   posts = posts.filter(p => p.id !== id);
   try {
     await savePosts();
@@ -1300,7 +1307,7 @@ async function addBulkFiles(files) {
   }
   if (warnings.length) {
     toast(`⚠️ ${warnings.length} video(s) com problemas`, 'warn');
-    if (!confirm('Problemas detectados:\n\n' + warnings.join('\n') + '\n\nContinuar mesmo assim?')) {
+    if (!await showConfirm('Problemas detectados:\n\n' + warnings.join('\n') + '\n\nContinuar mesmo assim?', 'Continuar mesmo assim')) {
       bulkFiles = bulkFiles.filter(f => f.done || f.uploading);
       renderBulkFileList();
       return;
@@ -1969,6 +1976,18 @@ function toast(msg, type = 'ok') {
   el.textContent = msg;
   document.getElementById('toasts').appendChild(el);
   setTimeout(() => el.remove(), 3500);
+}
+
+function showConfirm(msg, okLabel = 'Confirmar', cancelLabel = 'Cancelar') {
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.className = 'iap-overlay';
+    overlay.innerHTML = `<div class="iap-modal"><p></p><div class="iap-modal-btns"><button class="iap-btn-cancel">${cancelLabel}</button><button class="iap-btn-ok">${okLabel}</button></div></div>`;
+    overlay.querySelector('p').textContent = msg;
+    overlay.querySelector('.iap-btn-cancel').onclick = () => { overlay.remove(); resolve(false); };
+    overlay.querySelector('.iap-btn-ok').onclick = () => { overlay.remove(); resolve(true); };
+    document.body.appendChild(overlay);
+  });
 }
 
 // NAV
