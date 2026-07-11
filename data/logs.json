@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-11T12:00:46.275875+00:00",
+    "timestamp_brt": "11/07/2026 09:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-11T11:45:28.329367+00:00",
     "timestamp_brt": "11/07/2026 08:45",
     "posted": 0,
@@ -545,16 +556,5 @@
       "[SKIP] mrfkyt9kcpq0a agendado para depois",
       "[SKIP] mrfkyt9kzbw1g agendado para depois"
     ]
-  },
-  {
-    "timestamp": "2026-07-10T23:30:47.108603+00:00",
-    "timestamp_brt": "10/07/2026 20:30",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
