@@ -2949,10 +2949,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-11T00:00:48.714513+00:00",
+    "media_id": "17897657979500314"
   },
   {
     "id": "mrfkyt9kcpq0a",
@@ -2962,10 +2961,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-11T00:00:48.714513+00:00",
+    "media_id": "18039012800814400"
   },
   {
     "id": "mrfkyt9kzbw1g",
@@ -2975,9 +2973,8 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-11T00:00:48.714513+00:00",
+    "media_id": "17919821646181685"
   }
 ]
