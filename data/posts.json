@@ -3021,10 +3021,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-14T01:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-14T01:00:47.314504+00:00",
+    "media_id": "18103203878232578"
   },
   {
     "id": "mrjy130s1pl5x",
@@ -3034,10 +3033,9 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-14T01:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-14T01:00:47.314504+00:00",
+    "media_id": "18068114486442992"
   },
   {
     "id": "mrjy130sjciti",
@@ -3047,9 +3045,8 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-14T01:00:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-14T01:00:47.314504+00:00",
+    "media_id": "17990038703825609"
   }
 ]
