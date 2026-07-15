@@ -2901,10 +2901,9 @@
     "hashtags": "#foryou #viral #bolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-15T21:20:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-15T21:30:44.844071+00:00",
+    "media_id": "17978444580098684"
   },
   {
     "id": "mrmkyxekjhj18",
@@ -2914,10 +2913,9 @@
     "hashtags": "#foryou #viral #bolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-15T21:20:00.000Z",
-    "status": "pending",
-    "posted_at": null,
-    "media_id": null,
-    "error": null
+    "status": "posted",
+    "posted_at": "2026-07-15T21:30:44.844071+00:00",
+    "media_id": "18117877657856971"
   },
   {
     "id": "mrmkyxek38jdl",
@@ -2930,6 +2928,7 @@
     "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": null
+    "error": "Tentativa 1/3: [400] User access is restricted",
+    "retry_count": 1
   }
 ]

@@ -1,5 +1,20 @@
 [
   {
+    "timestamp": "2026-07-15T21:30:44.844071+00:00",
+    "timestamp_brt": "15/07/2026 18:30",
+    "posted": 2,
+    "failed": 0,
+    "retried": 1,
+    "skipped": 0,
+    "total_pending": 1,
+    "replies": 0,
+    "details": [
+      "[OK] mrmkyxej4vqg7 -> @default (media 17978444580098684)",
+      "[OK] mrmkyxekjhj18 -> @conservadora (media 18117877657856971)",
+      "[RETRY] mrmkyxek38jdl: tentativa 1"
+    ]
+  },
+  {
     "timestamp": "2026-07-15T21:15:23.921882+00:00",
     "timestamp_brt": "15/07/2026 18:15",
     "posted": 0,
@@ -530,17 +545,6 @@
   {
     "timestamp": "2026-07-15T09:15:27.222326+00:00",
     "timestamp_brt": "15/07/2026 06:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
-  },
-  {
-    "timestamp": "2026-07-15T09:00:49.179165+00:00",
-    "timestamp_brt": "15/07/2026 06:00",
     "posted": 0,
     "failed": 0,
     "retried": 0,
