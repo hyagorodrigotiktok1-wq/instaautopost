@@ -1,5 +1,18 @@
 [
   {
+    "timestamp": "2026-07-15T22:00:47.100596+00:00",
+    "timestamp_brt": "15/07/2026 19:00",
+    "posted": 0,
+    "failed": 1,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": [
+      "[FAIL] mrmkyxek38jdl: [400] User access is restricted"
+    ]
+  },
+  {
     "timestamp": "2026-07-15T21:45:29.917758+00:00",
     "timestamp_brt": "15/07/2026 18:45",
     "posted": 0,
@@ -536,17 +549,6 @@
   {
     "timestamp": "2026-07-15T09:45:22.734594+00:00",
     "timestamp_brt": "15/07/2026 06:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
-  },
-  {
-    "timestamp": "2026-07-15T09:30:44.926017+00:00",
-    "timestamp_brt": "15/07/2026 06:30",
     "posted": 0,
     "failed": 0,
     "retried": 0,
