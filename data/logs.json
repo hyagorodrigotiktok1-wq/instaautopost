@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-16T13:00:53.602265+00:00",
+    "timestamp_brt": "16/07/2026 10:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-16T12:45:28.658608+00:00",
     "timestamp_brt": "16/07/2026 09:45",
     "posted": 0,
@@ -539,20 +550,6 @@
     "details": [
       "[FAIL] mrmkyxek38jdl: [400] User access is restricted",
       "[FAIL] mrmr3h0cljhpf: [400] User access is restricted"
-    ]
-  },
-  {
-    "timestamp": "2026-07-16T00:30:42.746204+00:00",
-    "timestamp_brt": "15/07/2026 21:30",
-    "posted": 0,
-    "failed": 0,
-    "retried": 2,
-    "skipped": 0,
-    "total_pending": 2,
-    "replies": 0,
-    "details": [
-      "[RETRY] mrmkyxek38jdl: tentativa 2",
-      "[RETRY] mrmr3h0cljhpf: tentativa 2"
     ]
   }
 ]
