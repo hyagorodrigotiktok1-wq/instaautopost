@@ -2898,11 +2898,11 @@
     "caption": "Não desistiremos de você, meu capitão! @jairbolsonaro @carlosbolsonaro @flaviobolsonaro @bolsonarosp",
     "hashtags": "#foryou #viral #bolsonaro",
     "cover_url": null,
-    "scheduled_at": "2026-07-15T21:20:00.000Z",
-    "status": "failed",
+    "scheduled_at": "2026-07-16T00:07:00.000Z",
+    "status": "pending",
     "posted_at": null,
     "media_id": null,
-    "error": "[400] User access is restricted",
-    "retry_count": 2
+    "error": null,
+    "retry_count": 0
   }
 ]
