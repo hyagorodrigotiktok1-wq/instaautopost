@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-16T09:45:27.283164+00:00",
+    "timestamp_brt": "16/07/2026 06:45",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-16T09:30:49.906274+00:00",
     "timestamp_brt": "16/07/2026 06:30",
     "posted": 0,
@@ -556,16 +567,5 @@
       "[OK] mrmkyxekjhj18 -> @conservadora (media 18117877657856971)",
       "[RETRY] mrmkyxek38jdl: tentativa 1"
     ]
-  },
-  {
-    "timestamp": "2026-07-15T21:15:23.921882+00:00",
-    "timestamp_brt": "15/07/2026 18:15",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
   }
 ]
