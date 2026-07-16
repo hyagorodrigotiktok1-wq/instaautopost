@@ -300,5 +300,29 @@
     "status": "posted",
     "posted_at": "2026-06-16T19:45:25.826628+00:00",
     "media_id": "18082315178645554"
+  },
+  {
+    "id": "mqh1f7l1glt8j",
+    "account": "default",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781638251/fgtfqco4kys3oyu4z8tz.mp4",
+    "caption": "Após condenar o presidente Jair Bolsonaro por um golpe de Estado que nunca existiu, nos deparamos com mais essa decisão.\nEduardo Bolsonaro está há mais de um ano exilado nos Estados Unidos, longe da família, dos amigos e de sua atuação política no Brasil, sem saber quando poderá voltar ao seu próprio país.\nHoje, o STF inicia um julgamento que pode condená-lo por \"coação\". Absurdo!",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-16T20:00:00.000Z",
+    "status": "posted",
+    "posted_at": "2026-06-16T20:15:29.031134+00:00",
+    "media_id": "17945304246230180"
+  },
+  {
+    "id": "mqh1f7l2alt7n",
+    "account": "conservadora",
+    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781638251/fgtfqco4kys3oyu4z8tz.mp4",
+    "caption": "Após condenar o presidente Jair Bolsonaro por um golpe de Estado que nunca existiu, nos deparamos com mais essa decisão.\nEduardo Bolsonaro está há mais de um ano exilado nos Estados Unidos, longe da família, dos amigos e de sua atuação política no Brasil, sem saber quando poderá voltar ao seu próprio país.\nHoje, o STF inicia um julgamento que pode condená-lo por \"coação\". Absurdo!",
+    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
+    "cover_url": null,
+    "scheduled_at": "2026-06-16T20:00:00.000Z",
+    "status": "posted",
+    "posted_at": "2026-06-16T20:15:29.031134+00:00",
+    "media_id": "18068956217698159"
   }
 ]
