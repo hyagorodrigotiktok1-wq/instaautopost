@@ -2899,10 +2899,10 @@
     "hashtags": "#foryou #viral #bolsonaro",
     "cover_url": null,
     "scheduled_at": "2026-07-16T00:07:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 2/3: [400] User access is restricted",
+    "error": "[400] User access is restricted",
     "retry_count": 2
   },
   {
@@ -2937,10 +2937,10 @@
     "hashtags": "",
     "cover_url": null,
     "scheduled_at": "2026-07-16T00:10:00.000Z",
-    "status": "pending",
+    "status": "failed",
     "posted_at": null,
     "media_id": null,
-    "error": "Tentativa 2/3: [400] User access is restricted",
+    "error": "[400] User access is restricted",
     "retry_count": 2
   }
 ]
