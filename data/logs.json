@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-07-16T10:15:25.891367+00:00",
+    "timestamp_brt": "16/07/2026 07:15",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-07-16T10:00:47.752862+00:00",
     "timestamp_brt": "16/07/2026 07:00",
     "posted": 0,
@@ -549,19 +560,6 @@
     "replies": 0,
     "details": [
       "[FAIL] mrmkyxek38jdl: [400] User access is restricted"
-    ]
-  },
-  {
-    "timestamp": "2026-07-15T21:45:29.917758+00:00",
-    "timestamp_brt": "15/07/2026 18:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 1,
-    "skipped": 0,
-    "total_pending": 1,
-    "replies": 0,
-    "details": [
-      "[RETRY] mrmkyxek38jdl: tentativa 2"
     ]
   }
 ]
