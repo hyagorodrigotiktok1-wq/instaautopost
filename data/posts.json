@@ -1,41 +1,5 @@
 [
   {
-    "id": "mqmdig2uh18aq",
-    "account": "default",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781960854/cr3lz8b6vrialnqaxijm.mp4",
-    "caption": "a verdade é essa, só não enxerga quem não quer!\n\ncréditos: @alberi_felipe",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-20T14:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-20T14:00:35.943168+00:00",
-    "media_id": "18101581274034176"
-  },
-  {
-    "id": "mqmdig2u2fwuv",
-    "account": "conservadora",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781960854/cr3lz8b6vrialnqaxijm.mp4",
-    "caption": "a verdade é essa, só não enxerga quem não quer!\n\ncréditos: @alberi_felipe",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-20T14:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-20T14:00:35.943168+00:00",
-    "media_id": "18146053843513220"
-  },
-  {
-    "id": "mqmdig2uj4a7i",
-    "account": "flaviobolsonaro",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781960854/cr3lz8b6vrialnqaxijm.mp4",
-    "caption": "a verdade é essa, só não enxerga quem não quer!\n\ncréditos: @alberi_felipe",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-20T14:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-20T14:00:35.943168+00:00",
-    "media_id": "18425208634132200"
-  },
-  {
     "id": "mqmqe0fpaxmgn",
     "account": "default",
     "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1781982513/umy8uc3rxpafzzjnonmh.mp4",
