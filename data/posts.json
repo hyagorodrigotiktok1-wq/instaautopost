@@ -1,41 +1,5 @@
 [
   {
-    "id": "mqv5hlab66cgd",
-    "account": "default",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782491580/qjkjgcprgukseqamafvy.mp4",
-    "caption": "e ai, você concorda com essa opinião do Nikolas Ferreira?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "18086964554109535"
-  },
-  {
-    "id": "mqv5hlabbjf5t",
-    "account": "conservadora",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782491580/qjkjgcprgukseqamafvy.mp4",
-    "caption": "e ai, você concorda com essa opinião do Nikolas Ferreira?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "17931953625339370"
-  },
-  {
-    "id": "mqv5hlabqtrnj",
-    "account": "flaviobolsonaro",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782491580/qjkjgcprgukseqamafvy.mp4",
-    "caption": "e ai, você concorda com essa opinião do Nikolas Ferreira?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-06-26T16:45:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-06-26T16:45:31.240618+00:00",
-    "media_id": "17977040772049430"
-  },
-  {
     "id": "mqv69lwk3fqfy",
     "account": "default",
     "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782492889/yrzwwcripwyxqd2vxglc.mp4",
