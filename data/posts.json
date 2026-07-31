@@ -1,41 +1,5 @@
 [
   {
-    "id": "mr115lzg99ryn",
-    "account": "default",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782847116/mvxkymp8lfzhfrla05mj.mp4",
-    "caption": "e ai, vocês concordam com o larapio?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-07-01T01:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-01T01:00:33.927749+00:00",
-    "media_id": "18604076344029053"
-  },
-  {
-    "id": "mr115lzgbzj4u",
-    "account": "conservadora",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782847116/mvxkymp8lfzhfrla05mj.mp4",
-    "caption": "e ai, vocês concordam com o larapio?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-07-01T01:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-01T01:00:33.927749+00:00",
-    "media_id": "18108900805991089"
-  },
-  {
-    "id": "mr115lzgwj661",
-    "account": "flaviobolsonaro",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782847116/mvxkymp8lfzhfrla05mj.mp4",
-    "caption": "e ai, vocês concordam com o larapio?",
-    "hashtags": "#politica #direitaconservadora #brasil #bolsonaro #flaviobolsonaro",
-    "cover_url": null,
-    "scheduled_at": "2026-07-01T01:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-01T01:00:33.927749+00:00",
-    "media_id": "17991423101812220"
-  },
-  {
     "id": "mr26jdosx9cgx",
     "account": "default",
     "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1782916583/jg1vdv7mvedrdn7my1ht.mp4",
