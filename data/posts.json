@@ -1,41 +1,5 @@
 [
   {
-    "id": "mrfkyt9jweq1r",
-    "account": "default",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1783726902/mpm0e3oorwuhmwqr5ocp.mov",
-    "caption": "Siga @Rodrigovaladares_",
-    "hashtags": "",
-    "cover_url": null,
-    "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-11T00:00:48.714513+00:00",
-    "media_id": "17897657979500314"
-  },
-  {
-    "id": "mrfkyt9kcpq0a",
-    "account": "conservadora",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1783726902/mpm0e3oorwuhmwqr5ocp.mov",
-    "caption": "Siga @Rodrigovaladares_",
-    "hashtags": "",
-    "cover_url": null,
-    "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-11T00:00:48.714513+00:00",
-    "media_id": "18039012800814400"
-  },
-  {
-    "id": "mrfkyt9kzbw1g",
-    "account": "flaviobolsonaro",
-    "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1783726902/mpm0e3oorwuhmwqr5ocp.mov",
-    "caption": "Siga @Rodrigovaladares_",
-    "hashtags": "",
-    "cover_url": null,
-    "scheduled_at": "2026-07-11T00:00:00.000Z",
-    "status": "posted",
-    "posted_at": "2026-07-11T00:00:48.714513+00:00",
-    "media_id": "17919821646181685"
-  },
-  {
     "id": "mrjao9gtehp2r",
     "account": "default",
     "video_url": "https://res.cloudinary.com/dz6ijjsxj/video/upload/v1783951504/lzj00cl7wodejrze3bfv.mp4",
