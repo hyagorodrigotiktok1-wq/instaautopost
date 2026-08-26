@@ -1,5 +1,16 @@
 [
   {
+    "timestamp": "2026-08-26T05:00:23.279820+00:00",
+    "timestamp_brt": "26/08/2026 02:00",
+    "posted": 0,
+    "failed": 0,
+    "retried": 0,
+    "skipped": 0,
+    "total_pending": 0,
+    "replies": 0,
+    "details": []
+  },
+  {
     "timestamp": "2026-08-26T04:45:19.082419+00:00",
     "timestamp_brt": "26/08/2026 01:45",
     "posted": 0,
@@ -530,17 +541,6 @@
   {
     "timestamp": "2026-08-25T16:45:17.911762+00:00",
     "timestamp_brt": "25/08/2026 13:45",
-    "posted": 0,
-    "failed": 0,
-    "retried": 0,
-    "skipped": 0,
-    "total_pending": 0,
-    "replies": 0,
-    "details": []
-  },
-  {
-    "timestamp": "2026-08-25T16:30:20.803389+00:00",
-    "timestamp_brt": "25/08/2026 13:30",
     "posted": 0,
     "failed": 0,
     "retried": 0,
